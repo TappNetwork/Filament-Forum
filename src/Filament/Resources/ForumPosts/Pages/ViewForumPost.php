@@ -1,3 +1,3 @@
 <?php
 
-namespace Tapp\FilamentForum\Filament\Resources\ForumPostsResource\Pages; 
+namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages; 

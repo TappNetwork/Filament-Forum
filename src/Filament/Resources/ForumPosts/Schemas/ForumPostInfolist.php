@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentForum\Filament\Resources\ForumPostsResource\Schemas;
+namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Schemas;
 
 use Tapp\FilamentForum\Models\ForumPost;
 use Tapp\FilamentForum\Models\User;

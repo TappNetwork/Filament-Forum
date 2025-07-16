@@ -22,7 +22,7 @@ use Filament\Infolists\Infolist;
 use BackedEnum;
 use Tapp\FilamentForum\Filament\Tables\Components\ForumCardColumn;
 
-class ForumsResource extends Resource
+class ForumResource extends Resource
 {
     protected static ?string $model = Forum::class;
 

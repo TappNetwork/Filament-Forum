@@ -1,5 +1,5 @@
 @php
-    use Tapp\FilamentForum\Filament\Resources\ForumResource\ForumResource;
+    use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
     $record = $getRecord();
 @endphp
 
