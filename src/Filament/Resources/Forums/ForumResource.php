@@ -1,15 +1,15 @@
 <?php
 
-namespace Tapp\FilamentForum\Filament\Resources;
+namespace Tapp\FilamentForum\Filament\Resources\Forums;
 
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Fieldset;
-use Tapp\FilamentForum\Filament\Resources\ForumResource\Pages\ListForums;
-use Tapp\FilamentForum\Filament\Resources\ForumResource\Pages\ViewForum;
-use Tapp\FilamentForum\Filament\Resources\ForumResource\Pages\ManageForumPosts;
+use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ListForums;
+use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ViewForum;
+use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ManageForumPosts;
 use Tapp\FilamentForum\Models\Forum;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\Alignment;
@@ -22,7 +22,7 @@ use Filament\Infolists\Infolist;
 use BackedEnum;
 use Tapp\FilamentForum\Filament\Tables\Components\ForumCardColumn;
 
-class ForumResource extends Resource
+class ForumsResource extends Resource
 {
     protected static ?string $model = Forum::class;
 

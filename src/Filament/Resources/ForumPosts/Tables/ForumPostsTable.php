@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentForum\Filament\Resources\ForumResource\Resources\ForumPosts\Tables;
+namespace Tapp\FilamentForum\Filament\Resources\ForumPostsResource\Tables;
 
 use Tapp\FilamentForum\Filament\Tables\Components\ForumPostCardColumn;
 use Filament\Actions\BulkActionGroup;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentForum\Filament\Resources;
+namespace Tapp\FilamentForum\Filament\Resources\ForumPosts;
 
 use Filament\Resources\Resource;
 use Filament\Forms;
@@ -16,10 +16,10 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Tapp\FilamentForum\Filament\Resources\ForumPostResource\Pages\ListForumPosts;
-use Tapp\FilamentForum\Filament\Resources\ForumPostResource\Pages\CreateForumPost;
-use Tapp\FilamentForum\Filament\Resources\ForumPostResource\Pages\EditForumPost;
-use Tapp\FilamentForum\Filament\Resources\ForumPostResource\Pages\ViewForumPost;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages\ListForumPosts;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages\EditForumPost;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages\ViewForumPost;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages\CreateForumPost;
 use Tapp\FilamentForum\Models\ForumPost;
 use Kirschbaum\Commentions\Filament\Actions\CommentsAction;
 use Kirschbaum\Commentions\Filament\Infolists\Components\CommentsEntry;
@@ -28,6 +28,9 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use BackedEnum;
 use UnitEnum;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\Schemas\ForumPostForm;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\Schemas\ForumPostInfolist;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables\ForumPostsTable;
 
 class ForumPostResource extends Resource
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentForum\Filament\Resources\ForumResource\Resources\ForumPosts\Schemas;
+namespace Tapp\FilamentForum\Filament\Resources\ForumPostsResource\Schemas;
 
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;

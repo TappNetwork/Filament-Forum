@@ -1,9 +1,9 @@
 <?php
 
-namespace Tapp\FilamentForum\Filament\Resources\ForumResource\Pages;
+namespace Tapp\FilamentForum\Filament\Resources\Forums\Pages;
 
-use Tapp\FilamentForum\Filament\Resources\ForumResource;
-use Tapp\FilamentForum\Filament\Resources\ForumPostResource;
+use Tapp\FilamentForum\Filament\Resources\Forums\ForumsResource;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostsResource;
 use Tapp\FilamentForum\Models\ForumPost;
 use BackedEnum;
 use Filament\Actions\CreateAction;
@@ -12,13 +12,13 @@ use Filament\Tables\Table;
 
 class ManageForumPosts extends ManageRelatedRecords
 {
-    protected static string $resource = ForumResource::class;
+    protected static string $resource = ForumsResource::class;
 
     protected static string $relationship = 'forumPosts';
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $relatedResource = ForumPostResource::class;
+    protected static ?string $relatedResource = ForumPostsResource::class;
 
     public function table(Table $table): Table
     {
