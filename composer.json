@@ -1,0 +1,31 @@
+{
+    "name": "tapp/filament-forum",
+    "description": "Forum and comments package for Filament apps.",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Tapp\\FilamentForum\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.2",
+        "laravel/framework": ">=11.0",
+        "livewire/livewire": ">=3.5",
+        "kirschbaum-development/commentions": "^0.6",
+        "filament/filament": "^4.0",
+        "spatie/laravel-package-tools": "^1.0",
+        "filament/forms": "^4.0",
+        "filament/tables": "^4.0",
+        "filament/infolists": "^4.0",
+        "filament/support": "^4.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tapp\\FilamentForum\\FilamentForumServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
