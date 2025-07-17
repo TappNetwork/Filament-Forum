@@ -6,21 +6,17 @@ namespace Tapp\FilamentForum\Filament;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
-use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
 
-class ForumPlugin implements Plugin
+class ForumAdminPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'forum';
+        return 'forum-admin';
     }
 
     public function register(Panel $panel): void
     {
         $panel->resources([
-            ForumPostResource::class,
-            ForumResource::class,
         ]);
     }
 
@@ -38,4 +34,4 @@ class ForumPlugin implements Plugin
     {
         return filament(app(static::class)->getId());
     }
-}
+} 
