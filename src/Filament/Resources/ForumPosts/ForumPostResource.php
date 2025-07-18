@@ -20,6 +20,7 @@ use Filament\Forms\Components\Textarea;
 
 use Filament\Tables\Table;
 use Filament\Support\Icons\Heroicon;
+use Filament\Panel;
 
 class ForumPostResource extends Resource
 {
@@ -49,6 +50,11 @@ class ForumPostResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getSlug(?\Filament\Panel $panel = null): string
+    {
+        return 'forum-posts';
     }
 
     public static function getPages(): array
