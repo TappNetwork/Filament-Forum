@@ -31,7 +31,7 @@
             <div class="flex -space-x-2">
                 @foreach($record->getRecentUsers() as $user)
                     <img
-                        src="{{ $user->profile_photo }}"
+                        src="{{ $user->profile_photo ?? 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&color=7C3AED&background=EBF4FF' }}"
                         alt="{{ $user->name }}"
                         class="w-8 h-8 rounded-full border-2 border-white"
                     >
