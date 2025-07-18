@@ -13,7 +13,7 @@ use Tapp\FilamentForum\Models\ForumPost;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Infolists\Components\Section as InfolistSection;
@@ -32,18 +32,7 @@ class ForumPostResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Section::make()
-                    ->schema([
-                        TextInput::make('name')
-                            ->required()
-                            ->maxLength(255),
-                        Textarea::make('description')
-                            ->required()
-                            ->columnSpanFull(),
-                    ]),
-            ]);
+        return ForumPostForm::configure($schema);
     }
 
     public static function infolist(Schema $schema): Schema
