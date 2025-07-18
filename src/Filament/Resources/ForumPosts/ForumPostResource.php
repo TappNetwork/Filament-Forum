@@ -16,8 +16,7 @@ use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
-use Filament\Infolists\Components\Section as InfolistSection;
-use Filament\Infolists\Components\TextEntry;
+
 
 use Filament\Tables\Table;
 use Filament\Support\Icons\Heroicon;
@@ -37,15 +36,7 @@ class ForumPostResource extends Resource
 
     public static function infolist(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                InfolistSection::make(fn (\Tapp\FilamentForum\Models\ForumPost $record) => $record->user->name.' - '.$record->created_at->diffForHumans())
-                    ->schema([
-                        TextEntry::make('description')
-                            ->hiddenLabel()
-                            ->columnSpanFull(),
-                    ]),
-            ]);
+        return ForumPostInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table

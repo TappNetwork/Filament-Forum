@@ -22,7 +22,7 @@ class ForumPostsTable
         return $table
             ->recordUrl(null)
             ->modifyQueryUsing(function (Builder $query) {
-                return $query->with(['user']);
+                return $query->with(['user', 'forum']);
             })
             ->columns([
                 Stack::make([

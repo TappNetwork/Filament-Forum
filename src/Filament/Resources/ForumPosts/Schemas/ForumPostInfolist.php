@@ -3,22 +3,22 @@
 namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Schemas;
 
 use Tapp\FilamentForum\Models\ForumPost;
-use Tapp\FilamentForum\Models\User;
+use App\Models\User;
 use Filament\Actions\Action;
-use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
+use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Kirschbaum\Commentions\Filament\Infolists\Components\CommentsEntry;
 
 class ForumPostInfolist
 {
-    public static function configure(Infolist $infolist): Infolist
+    public static function configure(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
+        return $schema
+            ->components([
                 Section::make(fn (ForumPost $record) => $record->user->name.' - '.$record->created_at->diffForHumans())
                     ->headerActions([
                         Action::make('favorite')
