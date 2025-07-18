@@ -17,6 +17,8 @@ class ForumAdminPlugin implements Plugin
     public function register(Panel $panel): void
     {
         $panel->resources([
+            \Tapp\FilamentForum\Filament\Resources\Admin\ForumResource::class,
+            \Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource::class,
         ]);
     }
 

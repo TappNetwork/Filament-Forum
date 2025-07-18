@@ -29,7 +29,7 @@ class ForumPostInfolist
                             ->icon('heroicon-o-share')
                             ->action(function ($livewire) {
                                 $livewire->js(
-                                    'if (navigator.clipboard) {
+                                   'if (navigator.clipboard) {
                                         navigator.clipboard.writeText(window.location.href).then(function() {
                                             $tooltip("Copied to clipboard", { timeout: 1500 });
                                         }).catch(function() {
