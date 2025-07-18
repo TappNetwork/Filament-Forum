@@ -7,6 +7,7 @@ use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables\ForumPostsTable;
 use Tapp\FilamentForum\Models\ForumPost;
 use BackedEnum;
+use Filament\Actions\CreateAction;
 
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables\Table;
@@ -25,7 +26,10 @@ class ManageForumPosts extends ManageRelatedRecords
 
     public function table(Table $table): Table
     {
-        return ForumPostsTable::configure($table);
+        return ForumPostsTable::configure($table)
+            ->headerActions([
+                CreateAction::make(),
+            ]);
     }
 
     public function toggleFavorite($recordId)
