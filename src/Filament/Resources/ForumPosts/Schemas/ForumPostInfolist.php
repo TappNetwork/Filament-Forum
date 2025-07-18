@@ -29,8 +29,25 @@ class ForumPostInfolist
                             ->icon('heroicon-o-share')
                             ->action(function ($livewire) {
                                 $livewire->js(
-                                    'window.navigator.clipboard.writeText(window.location.href);
-                                    $tooltip("'.__('Copied to clipboard').'", { timeout: 1500 });'
+                                    'if (navigator.clipboard) {
+                                        navigator.clipboard.writeText(window.location.href).then(function() {
+                                            $tooltip("Copied to clipboard", { timeout: 1500 });
+                                        }).catch(function() {
+                                            $tooltip("Failed to copy", { timeout: 1500 });
+                                        });
+                                    } else {
+                                        var textArea = document.createElement("textarea");
+                                        textArea.value = window.location.href;
+                                        document.body.appendChild(textArea);
+                                        textArea.select();
+                                        try {
+                                            document.execCommand("copy");
+                                            $tooltip("Copied to clipboard", { timeout: 1500 });
+                                        } catch (err) {
+                                            $tooltip("Failed to copy", { timeout: 1500 });
+                                        }
+                                        document.body.removeChild(textArea);
+                                    }'
                                 );
                             }),
                     ])
