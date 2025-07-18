@@ -4,6 +4,7 @@ namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables;
 
 use Tapp\FilamentForum\Filament\Tables\Components\ForumPostCardColumn;
 use Filament\Actions\BulkActionGroup;
+
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;

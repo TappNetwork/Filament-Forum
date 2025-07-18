@@ -4,12 +4,13 @@ namespace Tapp\FilamentForum\Filament\Resources\Forums\Pages;
 
 use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables\ForumPostsTable;
 use Tapp\FilamentForum\Models\ForumPost;
 use BackedEnum;
-use Filament\Actions\CreateAction;
+
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
+
 
 class ManageForumPosts extends ManageRelatedRecords
 {
@@ -17,19 +18,14 @@ class ManageForumPosts extends ManageRelatedRecords
 
     protected static string $relationship = 'forumPosts';
 
+    /** @phpstan-ignore-next-line */
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $relatedResource = ForumPostResource::class;
 
     public function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                TextColumn::make('title'),
-            ])
-            ->headerActions([
-                CreateAction::make(),
-            ]);
+        return ForumPostsTable::configure($table);
     }
 
     public function toggleFavorite($recordId)
