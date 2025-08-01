@@ -3,9 +3,9 @@
 namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages;
 
 use Filament\Actions\EditAction;
-use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
 
 class ViewForumPost extends ViewRecord
 {
@@ -23,4 +23,4 @@ class ViewForumPost extends ViewRecord
         /** @phpstan-ignore-next-line */
         return $this->record->name;
     }
-} 
+}

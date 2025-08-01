@@ -2,9 +2,9 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages;
 
-use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
 
 class CreateForumPost extends CreateRecord
 {
@@ -16,4 +16,4 @@ class CreateForumPost extends CreateRecord
 
         return $data;
     }
-} 
+}

@@ -9,8 +9,7 @@
     },
     "require": {
         "php": ">=8.2",
-        "laravel/framework": ">=11.0",
-        "livewire/livewire": ">=3.5",
+        "laravel/framework": "^11.0|^12.0",
         "kirschbaum-development/commentions": "^0.6",
         "filament/filament": "^4.0",
         "spatie/laravel-package-tools": "^1.0",
@@ -20,6 +19,20 @@
         "filament/infolists": "^4.0",
         "filament/support": "^4.0"
     },
+    "require-dev": {
+        "larastan/larastan": "^2.9||^3.0",
+        "laravel/pint": "^1.14",
+        "nunomaduro/collision": "^8.1.1||^7.10.0",
+        "orchestra/testbench": "^10.0.0|^11.0.0",
+        "pestphp/pest": "^3.0||^2.34",
+        "pestphp/pest-plugin-arch": "^3.0||^2.7",
+        "pestphp/pest-plugin-laravel": "^3.0||^2.3",
+        "pestphp/pest-plugin-livewire": "3.x-dev",
+        "phpstan/extension-installer": "^1.3||^2.0",
+        "phpstan/phpstan-deprecation-rules": "^1.1||^2.0",
+        "phpstan/phpstan-phpunit": "^1.3||^2.0",
+        "spatie/laravel-ray": "^1.35"
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -28,5 +41,17 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "analyse": "vendor/bin/phpstan analyse",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    }
 }

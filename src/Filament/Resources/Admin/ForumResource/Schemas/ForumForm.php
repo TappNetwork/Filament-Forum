@@ -2,11 +2,11 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Schemas;
 
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class ForumForm
@@ -31,4 +31,4 @@ class ForumForm
                     ]),
             ]);
     }
-} 
+}

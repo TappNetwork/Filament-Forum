@@ -8,4 +8,4 @@ use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
 class CreateForum extends CreateRecord
 {
     protected static string $resource = ForumResource::class;
-} 
+}

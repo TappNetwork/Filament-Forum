@@ -2,16 +2,17 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Forums\Pages;
 
-use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables\Table;
-use Filament\Actions\CreateAction;
-use BackedEnum;
+use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
 
 class ViewForum extends ManageRelatedRecords
 {
     protected static string $resource = ForumResource::class;
+
     protected static string $relationship = 'posts';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public function table(Table $table): Table
@@ -21,4 +22,4 @@ class ViewForum extends ManageRelatedRecords
                 CreateAction::make(),
             ]);
     }
-} 
+}

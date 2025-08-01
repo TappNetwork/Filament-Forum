@@ -2,13 +2,13 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Schemas;
 
-use Filament\Schemas\Schema;
+use App\Models\User;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
-use Filament\Infolists\Components\TextEntry;
-use Kirschbaum\Commentions\Filament\Infolists\Components\CommentsEntry;
+use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
+use Kirschbaum\Commentions\Filament\Infolists\Components\CommentsEntry;
 
 class ForumPostInfolist
 {
@@ -47,4 +47,4 @@ class ForumPostInfolist
                     ]),
             ]);
     }
-} 
+}

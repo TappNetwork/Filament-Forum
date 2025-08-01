@@ -2,16 +2,15 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Schemas;
 
-use Tapp\FilamentForum\Models\ForumPost;
 use App\Models\User;
 use Filament\Actions\Action;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Kirschbaum\Commentions\Filament\Infolists\Components\CommentsEntry;
+use Tapp\FilamentForum\Models\ForumPost;
 
 class ForumPostInfolist
 {
@@ -29,7 +28,7 @@ class ForumPostInfolist
                             ->icon('heroicon-o-share')
                             ->action(function ($livewire) {
                                 $livewire->js(
-                                   'if (navigator.clipboard) {
+                                    'if (navigator.clipboard) {
                                         navigator.clipboard.writeText(window.location.href).then(function() {
                                             $tooltip("Copied to clipboard", { timeout: 1500 });
                                         }).catch(function() {
@@ -67,7 +66,7 @@ class ForumPostInfolist
                                 CommentsEntry::make('comments')
                                     ->mentionables(fn (Model $record) => User::all()),
                             ]),
-                    ])
+                    ]),
             ]);
     }
-} 
+}
