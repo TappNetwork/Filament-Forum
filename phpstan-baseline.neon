@@ -10,4 +10,5 @@ parameters:
 		- '#PHPDoc tag @use has invalid type#'
 		- '#Type .* in generic type .* is not subtype of template type#'
 		- '#Call to an undefined method Illuminate\\Contracts\\Auth\\Factory::#'
+		- '#Call to an undefined method Illuminate\\Foundation\\Auth\\User::#'
 		- '#File ends with a trailing whitespace#'
