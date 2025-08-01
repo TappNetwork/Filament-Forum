@@ -21,3 +21,4 @@ yarn-error.log
 /build
 /coverage
 .phpunit.result.cache
+composer.lock
