@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Tapp\FilamentForum;
 
-use Illuminate\Support\ServiceProvider;
 use Filament\Facades\Filament;
-use Tapp\FilamentForum\ForumPlugin;
+use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Livewire\Livewire;
+
 // The following linter errors may appear if Filament is not installed in the dev environment, but are not actual code issues in a Filament app.
 // @phpstan-ignore-next-line
 
@@ -43,4 +42,4 @@ class FilamentForumServiceProvider extends PackageServiceProvider
         //     ];
         // }
     }
-} 
+}

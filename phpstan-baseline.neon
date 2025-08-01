@@ -1,0 +1,13 @@
+parameters:
+	ignoreErrors:
+		- '#Unsafe usage of new static\(\)#'
+		- '#Method .* should return static\(.*\) but returns#'
+		- '#Call to static method all\(\) on an unknown class App\\Models\\User#'
+		- '#Call to static method make\(\) on an unknown class#'
+		- '#Access to an undefined property#'
+		- '#Call to an undefined static method#'
+		- '#Type string\|null of property .* is not the same as type#'
+		- '#PHPDoc tag @use has invalid type#'
+		- '#Type .* in generic type .* is not subtype of template type#'
+		- '#Call to an undefined method Illuminate\\Contracts\\Auth\\Factory::#'
+		- '#File ends with a trailing whitespace#'

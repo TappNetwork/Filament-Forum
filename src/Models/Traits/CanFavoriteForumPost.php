@@ -2,7 +2,6 @@
 
 namespace Tapp\FilamentForum\Models\Traits;
 
-use Tapp\FilamentForum\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -41,4 +40,4 @@ trait CanFavoriteForumPost
             $query->where('user_id', auth()->id());
         });
     }
-} 
+}
