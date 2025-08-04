@@ -14,7 +14,7 @@ class ViewForum extends ManageRelatedRecords
 
     protected static string $relationship = 'posts';
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public function table(Table $table): Table
     {
