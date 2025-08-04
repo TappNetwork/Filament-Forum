@@ -12,7 +12,13 @@ abstract class TestCase extends Orchestra
 {
     protected function setUp(): void
     {
-        parent::setUp();
+        // Check if the parent class has the $latestResponse property before calling setUp
+        if (property_exists(get_parent_class($this), 'latestResponse')) {
+            parent::setUp();
+        } else {
+            // For older versions of TestBench that don't have $latestResponse
+            $this->setUpTheTestEnvironment();
+        }
 
         // Load migrations after setup
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
