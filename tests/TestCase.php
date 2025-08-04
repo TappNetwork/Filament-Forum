@@ -1,15 +1,29 @@
 <?php
 
-namespace Tests;
+namespace Tapp\FilamentForum\Tests;
 
+use Filament\FilamentServiceProvider;
+use Filament\Support\SupportServiceProvider;
+use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Tapp\FilamentForum\FilamentForumServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Load migrations after setup
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+    }
+
     protected function getPackageProviders($app)
     {
         return [
+            LivewireServiceProvider::class,
+            FilamentServiceProvider::class,
+            SupportServiceProvider::class,
             FilamentForumServiceProvider::class,
         ];
     }
@@ -26,8 +40,5 @@ abstract class TestCase extends Orchestra
 
         // Set up auth configuration
         $app['config']->set('auth.providers.users.model', \Illuminate\Foundation\Auth\User::class);
-
-        // Run migrations
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 }
