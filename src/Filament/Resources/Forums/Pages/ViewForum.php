@@ -2,6 +2,7 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Forums\Pages;
 
+use BackedEnum;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables\Table;
@@ -13,7 +14,7 @@ class ViewForum extends ManageRelatedRecords
 
     protected static string $relationship = 'posts';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public function table(Table $table): Table
     {
