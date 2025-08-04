@@ -55,10 +55,4 @@ jobs:
         run: composer show -D
 
       - name: Execute tests
-        run: |
-          if [ "${{ matrix.laravel }}" = "11.*" ] && [ "${{ matrix.php }}" = "8.3" ]; then
-            echo "Skipping ArchTest for Laravel 11.* with PHP 8.3 due to Pest Arch plugin compatibility issues"
-            vendor/bin/pest --ci --exclude=tests/ArchTest.php
-          else
-            vendor/bin/pest --ci
-          fi
+        run: vendor/bin/pest --ci --exclude-group local
