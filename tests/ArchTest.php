@@ -4,11 +4,11 @@ arch('it will not use debugging functions')
     ->expect(['dd', 'dump', 'ray'])
     ->each->not->toBeUsed();
 
-arch()->preset()->php()
+arch('it will pass the php preset')->preset()->php()
     ->group('local');
 
-arch()->preset()->security()
+arch('it will pass the security preset')->preset()->security()
     ->group('local');
 
-arch()->preset()->laravel()
+arch('it will pass the laravel preset')->preset()->laravel()
     ->group('local');
