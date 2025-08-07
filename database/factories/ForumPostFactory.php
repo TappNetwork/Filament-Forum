@@ -3,7 +3,7 @@
 namespace Tapp\FilamentForum\Database\Factories;
 
 use Tapp\FilamentForum\Models\Forum;
-use App\Models\User;
+use Tapp\FilamentForum\Models\ForumPost;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -11,6 +11,13 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ForumPostFactory extends Factory
 {
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = ForumPost::class;
+
     /**
      * Define the model's default state.
      *
