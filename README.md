@@ -1,6 +1,12 @@
 # Filament Forum
 
-A forum and comments package for Filament apps.
+A forum package for Filament apps that provides both admin and frontend resources for managing forums and forum posts.
+
+## Requirements
+
+- PHP 8.1+
+- Laravel 10+
+- Filament 4.0+
 
 ## Installation
 
@@ -10,10 +16,74 @@ A forum and comments package for Filament apps.
    composer require tapp/filament-forum
    ```
 
-That's it! The plugin will auto-register with Filament and be ready to use in your Filament admin panel.
+2. **Publish the config file:**
 
----
+   ```bash
+   php artisan vendor:publish --tag="filament-forum-config"
+   ```
+
+3. **Register the Plugins:**
+
+   ### Admin Panel (Backend)
+   
+   Add the admin plugin to your `AdminPanelProvider.php`:
+
+   ```php
+   use Tapp\FilamentForum\Filament\ForumAdminPlugin;
+
+   public function panel(Panel $panel): Panel
+   {
+       return $panel
+           // ... other configuration
+           ->plugins([
+               ForumAdminPlugin::make(),
+               // ... other plugins
+           ]);
+   }
+   ```
+
+   ### Frontend Panel (User-facing)
+   
+   Add the frontend plugin to your `AppPanelProvider.php` (or any frontend panel):
+
+   ```php
+   use Tapp\FilamentForum\Filament\ForumPlugin;
+
+   public function panel(Panel $panel): Panel
+   {
+       return $panel
+           // ... other configuration
+           ->plugins([
+               ForumPlugin::make(),
+               // ... other plugins
+           ]);
+   }
+   ```
+
+That's it! The plugins will auto-register with Filament and be ready to use.
+
+## Features
+
+- **Admin Resources**: Full CRUD operations for forums and forum posts
+- **Frontend Resources**: User-friendly interface for browsing and participating in forums
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## Security Vulnerabilities
+
+If you discover any security-related issues, please email security@tappnetwork.com.
+
+## Credits
+
+-  [Tapp Network](https://github.com/TappNetwork)
+-  [All Contributors](../../contributors)
 
 ## License
 
-MIT 
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
