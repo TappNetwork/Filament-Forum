@@ -5,7 +5,7 @@
     "autoload": {
         "psr-4": {
             "Tapp\\FilamentForum\\": "src/",
-            "Tapp\\FilamentForum\\Database\\Factories": "database/factories/"
+            "Tapp\\FilamentForum\\Database\\Factories\\": "database/factories/"
         }
     },
     "require": {
