@@ -2,25 +2,18 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\ForumPosts;
 
-use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
+use BackedEnum;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Tables\Table;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages\CreateForumPost;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages\EditForumPost;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages\ViewForumPost;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\Schemas\ForumPostForm;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\Schemas\ForumPostInfolist;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables\ForumPostsTable;
+use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
 use Tapp\FilamentForum\Models\ForumPost;
-use BackedEnum;
-use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-
-
-use Filament\Tables\Table;
-use Filament\Support\Icons\Heroicon;
-use Filament\Panel;
 
 class ForumPostResource extends Resource
 {
@@ -65,4 +58,4 @@ class ForumPostResource extends Resource
             'edit' => EditForumPost::route('/{record}/edit'),
         ];
     }
-} 
+}

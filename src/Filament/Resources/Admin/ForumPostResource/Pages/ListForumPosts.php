@@ -3,9 +3,8 @@
 namespace Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages;
 
 use Filament\Actions\CreateAction;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource;
-use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource;
 
 class ListForumPosts extends ListRecords
 {
@@ -17,4 +16,4 @@ class ListForumPosts extends ListRecords
             CreateAction::make(),
         ];
     }
-} 
+}

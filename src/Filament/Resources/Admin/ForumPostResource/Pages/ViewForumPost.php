@@ -3,11 +3,9 @@
 namespace Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages;
 
 use Filament\Actions\EditAction;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource;
-use Filament\Actions;
-use Filament\Actions\Action;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource;
 
 class ViewForumPost extends ViewRecord
 {
@@ -20,9 +18,9 @@ class ViewForumPost extends ViewRecord
         ];
     }
 
-    public function getTitle(): string | Htmlable
+    public function getTitle(): string|Htmlable
     {
         /** @phpstan-ignore-next-line */
         return $this->record->name;
     }
-} 
+}

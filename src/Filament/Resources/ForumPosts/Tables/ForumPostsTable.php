@@ -2,18 +2,12 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables;
 
-use Tapp\FilamentForum\Filament\Tables\Components\ForumPostCardColumn;
-use Filament\Actions\BulkActionGroup;
-
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Support\Enums\Alignment;
+use Tapp\FilamentForum\Filament\Tables\Components\ForumPostCardColumn;
 
 class ForumPostsTable
 {
@@ -28,7 +22,7 @@ class ForumPostsTable
                 Stack::make([
                     ForumPostCardColumn::make('name'),
                 ])->alignment(Alignment::End)
-                ->space(1),
+                    ->space(1),
             ])
             ->filters([
                 //
@@ -41,15 +35,15 @@ class ForumPostsTable
                 //
             ])
             ->recordActions([
-                //Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
                 EditAction::make()
                     ->icon('heroicon-m-pencil-square')
                     ->iconButton(),
             ])
             ->toolbarActions([
-                //Tables\Actions\BulkActionGroup::make([
+                // Tables\Actions\BulkActionGroup::make([
                 //    Tables\Actions\DeleteBulkAction::make(),
-                //]),
+                // ]),
             ]);
     }
-} 
+}
