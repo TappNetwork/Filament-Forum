@@ -4,7 +4,7 @@ namespace Tapp\FilamentForum\Models;
 
 use Tapp\FilamentForum\Events\ForumPostCreated;
 use Database\Factories\ForumPostFactory;
-use Tapp\FilamentForum\Models\Traits\CanFavoriteForumPost;
+use Tapp\FilamentForum\Models\Traits\HasForumPosts;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,7 +18,7 @@ use App\Models\User;
 
 class ForumPost extends Model implements Commentable
 {
-    use CanFavoriteForumPost;
+    use HasForumPosts;
     use HasComments;
     /** @use HasFactory<ForumPostFactory> */
     use HasFactory;

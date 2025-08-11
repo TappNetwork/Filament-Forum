@@ -138,7 +138,8 @@ class ForumPostResource extends Resource
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make(),
-                    EditAction::make(),
+                    EditAction::make()
+                        ->visible(fn (ForumPost $record): bool => $record->canBeEditedBy()),
                     CommentsAction::make()
                         ->mentionables(User::all()),
                     DeleteAction::make(),
