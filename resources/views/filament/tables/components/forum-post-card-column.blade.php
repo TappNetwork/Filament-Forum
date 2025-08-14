@@ -16,7 +16,12 @@
                         class="w-10 h-10 rounded-full"
                     >
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-900">{{ $record->name }}</h3>
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            {{ $record->name }}
+                            @if($record->hasBeenEdited())
+                                <span class="text-sm text-gray-500 font-normal pl-2">edited</span>
+                            @endif
+                        </h3>
                         <p class="text-sm text-gray-500">
                             @if($record->getLastCommentTime())
                                 Last reply {{ $record->getLastCommentTime() }}
@@ -88,4 +93,4 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
