@@ -13,7 +13,7 @@ class ForumFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<\Tapp\FilamentForum\Models\Forum>
      */
     protected $model = Forum::class;
 

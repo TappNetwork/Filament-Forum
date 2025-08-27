@@ -14,7 +14,7 @@ class ForumPostFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<\Tapp\FilamentForum\Models\ForumPost>
      */
     protected $model = ForumPost::class;
 

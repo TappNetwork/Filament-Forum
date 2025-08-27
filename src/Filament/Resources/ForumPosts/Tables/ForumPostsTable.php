@@ -4,7 +4,6 @@ namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables;
 
 use Filament\Actions\EditAction;
 use Filament\Support\Enums\Alignment;
-use Filament\Support\Enums\Alignment;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
