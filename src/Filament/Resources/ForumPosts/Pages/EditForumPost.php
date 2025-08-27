@@ -22,9 +22,6 @@ class EditForumPost extends EditRecord
         ];
     }
 
-    /**
-     * @return ForumPost
-     */
     public function getRecord(): ForumPost
     {
         /** @var ForumPost */

@@ -2,37 +2,33 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Admin;
 
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Actions\EditAction;
+use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\ListForums;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\CreateForum;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\EditForum;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Schemas\ForumForm;
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\ListForums;
 use Tapp\FilamentForum\Models\Forum;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use UnitEnum;
-use BackedEnum;
 
 class ForumResource extends Resource
 {
     protected static ?string $model = Forum::class;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Forums';
+    protected static string|UnitEnum|null $navigationGroup = 'Forums';
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $slug = 'forums';
 
@@ -118,4 +114,4 @@ class ForumResource extends Resource
             'edit' => EditForum::route('/{record}/edit'),
         ];
     }
-} 
+}

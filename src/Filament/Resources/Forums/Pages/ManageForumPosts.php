@@ -2,16 +2,14 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Forums\Pages;
 
-use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
-use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
-use Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables\ForumPostsTable;
-use Tapp\FilamentForum\Models\ForumPost;
 use BackedEnum;
 use Filament\Actions\CreateAction;
-
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables\Table;
-
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
+use Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables\ForumPostsTable;
+use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
+use Tapp\FilamentForum\Models\ForumPost;
 
 class ManageForumPosts extends ManageRelatedRecords
 {
@@ -39,4 +37,4 @@ class ManageForumPosts extends ManageRelatedRecords
 
         $this->dispatch('favorite-toggled', recordId: $recordId, isFavorite: $forumPostrecord->isFavorite());
     }
-} 
+}

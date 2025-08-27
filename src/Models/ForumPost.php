@@ -2,24 +2,23 @@
 
 namespace Tapp\FilamentForum\Models;
 
-use Tapp\FilamentForum\Events\ForumPostCreated;
 use Database\Factories\ForumPostFactory;
-use Tapp\FilamentForum\Models\Traits\CanFavoriteForumPost;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Kirschbaum\Commentions\HasComments;
 use Kirschbaum\Commentions\Contracts\Commentable;
-use Tapp\FilamentForum\Models\ForumPostView;
-use App\Models\User;
+use Kirschbaum\Commentions\HasComments;
+use Tapp\FilamentForum\Events\ForumPostCreated;
+use Tapp\FilamentForum\Models\Traits\CanFavoriteForumPost;
 
 class ForumPost extends Model implements Commentable
 {
     use CanFavoriteForumPost;
     use HasComments;
+
     /** @use HasFactory<ForumPostFactory> */
     use HasFactory;
 

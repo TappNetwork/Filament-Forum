@@ -2,47 +2,42 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Admin;
 
-use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\ActionGroup;
-use Filament\Actions\ViewAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
-use Filament\Tables\Enums\RecordActionsPosition;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\ListForumPosts;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\CreateForumPost;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\EditForumPost;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\ViewForumPost;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Schemas\ForumPostForm;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Schemas\ForumPostInfolist;
-use Tapp\FilamentForum\Models\ForumPost;
 use App\Models\User;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Section;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Forms\Components\TextInput;
+use BackedEnum;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Resources\Resource;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\RecordActionsPosition;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Kirschbaum\Commentions\Filament\Actions\CommentsAction;
 use Kirschbaum\Commentions\Filament\Infolists\Components\CommentsEntry;
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\CreateForumPost;
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\EditForumPost;
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\ListForumPosts;
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\ViewForumPost;
+use Tapp\FilamentForum\Models\ForumPost;
 use UnitEnum;
-use BackedEnum;
 
 class ForumPostResource extends Resource
 {
     protected static ?string $model = ForumPost::class;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Forums';
+    protected static string|UnitEnum|null $navigationGroup = 'Forums';
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
     protected static ?string $slug = 'forum-posts';
 
@@ -168,4 +163,4 @@ class ForumPostResource extends Resource
             'view' => ViewForumPost::route('/{record}'),
         ];
     }
-} 
+}
