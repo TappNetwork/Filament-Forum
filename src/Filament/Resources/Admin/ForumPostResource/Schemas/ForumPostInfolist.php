@@ -8,8 +8,8 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
-use Tapp\FilamentForum\Models\ForumPost;
 use Kirschbaum\Commentions\Filament\Infolists\Components\CommentsEntry;
+use Tapp\FilamentForum\Models\ForumPost;
 
 class ForumPostInfolist
 {
