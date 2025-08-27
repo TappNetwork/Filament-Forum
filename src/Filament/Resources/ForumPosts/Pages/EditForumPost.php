@@ -4,8 +4,10 @@ namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Auth;
 use Kirschbaum\Commentions\Filament\Actions\CommentsAction;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
+use Tapp\FilamentForum\Models\ForumPost;
 
 class EditForumPost extends EditRecord
 {
@@ -15,7 +17,17 @@ class EditForumPost extends EditRecord
     {
         return [
             CommentsAction::make(),
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->visible(fn (): bool => Auth::check() && $this->getRecord()->user_id === Auth::id()),
         ];
+    }
+
+    /**
+     * @return ForumPost
+     */
+    public function getRecord(): ForumPost
+    {
+        /** @var ForumPost */
+        return $this->record;
     }
 }

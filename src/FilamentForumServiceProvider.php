@@ -18,10 +18,10 @@ class FilamentForumServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('filament-forum')
+            ->hasConfigFile()
             ->hasViews()
             ->hasAssets()
             ->hasMigrations([
-                // List your migration files here, e.g.:
                 'create_forums_table',
                 'create_forum_posts_table',
                 'create_favorite_forum_post_table',
