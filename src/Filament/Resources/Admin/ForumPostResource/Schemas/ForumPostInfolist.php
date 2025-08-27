@@ -9,6 +9,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
 use Kirschbaum\Commentions\Filament\Infolists\Components\CommentsEntry;
+use Tapp\FilamentForum\Models\ForumPost;
 
 class ForumPostInfolist
 {
@@ -36,6 +37,10 @@ class ForumPostInfolist
                                 TextEntry::make('created_at')
                                     ->hiddenLabel()
                                     ->since(),
+                                TextEntry::make('updated_at')
+                                    ->label('Last edited')
+                                    ->since()
+                                    ->visible(fn (ForumPost $record) => $record->hasBeenEdited()),
                             ])
                             ->columnSpan(1),
                     ]),

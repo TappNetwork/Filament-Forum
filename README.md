@@ -60,6 +60,19 @@ A forum package for Filament apps that provides both admin and frontend resource
    }
    ```
 
+4. Add `HasFavoriteForumPost` trait to your User model:
+
+```php
+use Tapp\FilamentForum\Models\Traits\HasFavoriteForumPost;
+
+class User extends Authenticatable
+{
+    // ...
+    use HasFavoriteForumPost;
+    // ...
+}
+```
+
 That's it! The plugins will auto-register with Filament and be ready to use.
 
 ## Features

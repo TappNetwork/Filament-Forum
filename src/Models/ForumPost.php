@@ -105,4 +105,9 @@ class ForumPost extends Model implements Commentable
             /** @phpstan-ignore-next-line */
             ->map(fn ($comment) => $comment->author);
     }
+
+    public function hasBeenEdited(): bool
+    {
+        return $this->created_at->ne($this->updated_at);
+    }
 }

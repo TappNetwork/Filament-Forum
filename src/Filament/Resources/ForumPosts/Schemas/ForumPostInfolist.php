@@ -18,7 +18,7 @@ class ForumPostInfolist
     {
         return $schema
             ->components([
-                Section::make(fn (ForumPost $record) => $record->user->name.' - '.$record->created_at->diffForHumans())
+                Section::make(fn (ForumPost $record) => $record->user->name.' - '.$record->created_at->diffForHumans().($record->hasBeenEdited() ? ' (edited)' : ''))
                     ->headerActions([
                         Action::make('favorite')
                             ->iconButton()
