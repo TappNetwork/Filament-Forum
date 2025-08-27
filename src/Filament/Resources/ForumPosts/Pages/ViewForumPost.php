@@ -21,9 +21,6 @@ class ViewForumPost extends ViewRecord
         ];
     }
 
-    /**
-     * @return ForumPost
-     */
     public function getRecord(): ForumPost
     {
         /** @var ForumPost */

@@ -2,8 +2,8 @@
 
 namespace Tapp\FilamentForum\Models\Traits;
 
-use Tapp\FilamentForum\Models\ForumPost;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Tapp\FilamentForum\Models\ForumPost;
 
 trait HasFavoriteForumPost
 {

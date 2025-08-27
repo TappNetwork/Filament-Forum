@@ -3,10 +3,9 @@
 namespace Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages;
 
 use Filament\Actions\DeleteAction;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource;
-use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Kirschbaum\Commentions\Filament\Actions\CommentsAction;
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource;
 
 class EditForumPost extends EditRecord
 {
@@ -19,4 +18,4 @@ class EditForumPost extends EditRecord
             DeleteAction::make(),
         ];
     }
-} 
+}

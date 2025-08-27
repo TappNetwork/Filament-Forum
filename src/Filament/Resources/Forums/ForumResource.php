@@ -2,25 +2,20 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Forums;
 
-use Filament\Tables\Columns\Layout\Stack;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
+use BackedEnum;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Components\Fieldset;
-use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ListForums;
-use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ViewForum;
-use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ManageForumPosts;
-use Tapp\FilamentForum\Models\Forum;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Section;
 use Filament\Support\Enums\Alignment;
-use Filament\Tables;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
-use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
-use Filament\Infolists\Infolist;
-use BackedEnum;
+use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ListForums;
+use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ManageForumPosts;
+use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ViewForum;
 use Tapp\FilamentForum\Filament\Tables\Components\ForumCardColumn;
+use Tapp\FilamentForum\Models\Forum;
 
 class ForumResource extends Resource
 {
@@ -37,7 +32,7 @@ class ForumResource extends Resource
                 Stack::make([
                     ForumCardColumn::make('name'),
                 ])->alignment(Alignment::End)
-                ->space(1),
+                    ->space(1),
             ])
             ->filters([
                 //
@@ -63,7 +58,7 @@ class ForumResource extends Resource
                         ->schema([
                             TextEntry::make('forumPosts.name')
                                 ->listWithLineBreaks(),
-                    ])->columnSpanFull(),
+                        ])->columnSpanFull(),
                 ])->columns([
                     'lg' => 1,
                     'xl' => 2,
@@ -94,4 +89,4 @@ class ForumResource extends Resource
     {
         return false;
     }
-} 
+}

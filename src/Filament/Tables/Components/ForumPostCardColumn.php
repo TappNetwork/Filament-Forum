@@ -7,4 +7,4 @@ use Filament\Tables\Columns\Column;
 class ForumPostCardColumn extends Column
 {
     protected string $view = 'filament-forum::filament.tables.components.forum-post-card-column';
-} 
+}

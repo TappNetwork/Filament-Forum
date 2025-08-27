@@ -2,9 +2,9 @@
 
 namespace Tapp\FilamentForum\Database\Factories;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Tapp\FilamentForum\Models\Forum;
 use Tapp\FilamentForum\Models\ForumPost;
-use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Tapp\FilamentForum\Models\ForumPost>
@@ -14,7 +14,7 @@ class ForumPostFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<\Tapp\FilamentForum\Models\ForumPost>
      */
     protected $model = ForumPost::class;
 
