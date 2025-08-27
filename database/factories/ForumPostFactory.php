@@ -2,9 +2,9 @@
 
 namespace Tapp\FilamentForum\Database\Factories;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Tapp\FilamentForum\Models\Forum;
 use Tapp\FilamentForum\Models\ForumPost;
-use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Tapp\FilamentForum\Models\ForumPost>

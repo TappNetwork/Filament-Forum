@@ -2,16 +2,12 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables;
 
-
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Table;
-use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Tapp\FilamentForum\Filament\Tables\Components\ForumPostCardColumn;
 use Tapp\FilamentForum\Models\ForumPost;
