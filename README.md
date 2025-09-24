@@ -16,13 +16,20 @@ A forum package for Filament apps that provides both admin and frontend resource
    composer require tapp/filament-forum
    ```
 
-2. **Publish the config file:**
+2. **Publish and run the migrations:**
+
+   ```bash
+   php artisan vendor:publish --tag="filament-forum-migrations"
+   php artisan migrate
+   ```
+
+3. **Publish the config file:**
 
    ```bash
    php artisan vendor:publish --tag="filament-forum-config"
    ```
 
-3. **Register the Plugins:**
+4. **Register the Plugins:**
 
    ### Admin Panel (Backend)
    
@@ -60,7 +67,7 @@ A forum package for Filament apps that provides both admin and frontend resource
    }
    ```
 
-4. Add `HasFavoriteForumPost` trait to your User model:
+5. Add `HasFavoriteForumPost` trait to your User model:
 
 ```php
 use Tapp\FilamentForum\Models\Traits\HasFavoriteForumPost;
