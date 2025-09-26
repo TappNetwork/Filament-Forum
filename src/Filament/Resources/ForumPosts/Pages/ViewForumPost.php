@@ -36,10 +36,10 @@ class ViewForumPost extends ViewRecord
     public function getBreadcrumbs(): array
     {
         $forumResource = config('filament-forum.resources.forumResource');
-        $forumRecord = $this->getRecord()->forum;
+        $forumRecord = $this->getParentRecord();
 
         return [
-            $forumResource::getUrl('index') => 'Forums',
+            $forumResource::getUrl('index') => config('filament-forum.frontend.forum.breadcrumb'),
             $forumResource::getUrl('forum-posts', ['record' => $forumRecord]) => config('filament-forum.frontend.forum-posts.breadcrumb'),
             '' => 'View',
         ];

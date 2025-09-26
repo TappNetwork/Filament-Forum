@@ -21,6 +21,11 @@ return [
     ],
 
     'frontend' => [
+        'forum' => [
+            'title' => 'Forums',
+            'breadcrumb' => 'Forums',
+        ],
+
         'forum-posts' => [
             'title' => 'Forum Posts',
             'breadcrumb' => 'Forum Posts',

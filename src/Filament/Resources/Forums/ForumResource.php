@@ -24,6 +24,11 @@ class ForumResource extends Resource
     /** @phpstan-ignore-next-line */
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
+    public static function getBreadcrumb(): string
+    {
+        return config('filament-forum.frontend.forum.breadcrumb');
+    }
+
     public static function table(Table $table): Table
     {
         return $table
