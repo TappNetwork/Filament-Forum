@@ -13,7 +13,7 @@ use Tapp\FilamentForum\Models\ForumPost;
 class EditForumPost extends EditRecord
 {
     use HasCustomForumPostBreadcrumb;
-    
+
     protected static string $resource = ForumPostResource::class;
 
     protected function getHeaderActions(): array
