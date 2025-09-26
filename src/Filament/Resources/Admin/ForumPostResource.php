@@ -43,6 +43,8 @@ class ForumPostResource extends Resource
 
     public static function infolist(Schema $schema): Schema
     {
+        $titleAttribute = config('filament-forum.user.title-attribute');
+
         return $schema
             ->components([
                 Grid::make([
@@ -60,7 +62,7 @@ class ForumPostResource extends Resource
 
                         Section::make()
                             ->schema([
-                                TextEntry::make('user.name')
+                                TextEntry::make("user.{$titleAttribute}")
                                     ->label('Poster'),
                                 TextEntry::make('created_at')
                                     ->hiddenLabel()
@@ -79,16 +81,48 @@ class ForumPostResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
+        $titleAttribute = config('filament-forum.user.title-attribute');
+        $searchResultsUsing = config('filament-forum.user.search-results-using');
+        $optionLabelUsing = config('filament-forum.user.option-label-using');
+
+        $userSelect = Select::make('user_id')
+            ->label('User')
+            ->native(false)
+            ->required()
+            ->relationship(
+                name: 'user',
+                titleAttribute: $titleAttribute
+            )
+            ->getOptionLabelFromRecordUsing(function (Model $record) use ($titleAttribute) {
+                return $record->{$titleAttribute};
+            })
+            ->searchable();
+
+        // Add custom search functionality if provided
+        if ($searchResultsUsing && is_callable($searchResultsUsing)) {
+            $userSelect = $userSelect->getSearchResultsUsing($searchResultsUsing);
+
+            // Add custom option label if provided
+            if ($optionLabelUsing && is_callable($optionLabelUsing)) {
+                $userSelect = $userSelect->getOptionLabelUsing($optionLabelUsing);
+            }
+        }
+
         return $schema
             ->components([
                 TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
-                Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->searchable()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+                Select::make('forum_id')
+                    ->label('Forum')
                     ->native(false)
-                    ->required(),
+                    ->required()
+                    ->relationship(
+                        name: 'forum',
+                        titleAttribute: 'name'
+                    ),
+                $userSelect,
                 Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
@@ -97,9 +131,11 @@ class ForumPostResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $titleAttribute = config('filament-forum.user.title-attribute');
+
         return $table
             ->columns([
-                TextColumn::make('user.name')
+                TextColumn::make("user.{$titleAttribute}")
                     ->sortable(),
                 TextColumn::make('name')
                     ->label('Question')

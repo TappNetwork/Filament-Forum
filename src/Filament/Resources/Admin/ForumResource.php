@@ -16,6 +16,7 @@ use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\CreateForum;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\EditForum;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\ListForums;
@@ -34,13 +35,37 @@ class ForumResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
+        $titleAttribute = config('filament-forum.user.title-attribute');
+        $searchResultsUsing = config('filament-forum.user.search-results-using');
+        $optionLabelUsing = config('filament-forum.user.option-label-using');
+
+        $ownerSelect = Select::make('owner_id')
+            ->relationship(
+                name: 'owner',
+                titleAttribute: $titleAttribute
+            )
+            ->getOptionLabelFromRecordUsing(function (Model $record) use ($titleAttribute) {
+                return $record->{$titleAttribute};
+            });
+
+        // Add custom search functionality if provided
+        if ($searchResultsUsing && is_callable($searchResultsUsing)) {
+            $ownerSelect = $ownerSelect
+                ->searchable()
+                ->getSearchResultsUsing($searchResultsUsing);
+
+            // Add custom option label if provided
+            if ($optionLabelUsing && is_callable($optionLabelUsing)) {
+                $ownerSelect = $ownerSelect->getOptionLabelUsing($optionLabelUsing);
+            }
+        }
+
         return $schema
             ->components([
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Select::make('owner_id')
-                    ->relationship('owner', 'name'),
+                $ownerSelect,
                 Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
@@ -52,6 +77,31 @@ class ForumResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $titleAttribute = config('filament-forum.user.title-attribute');
+        $searchResultsUsing = config('filament-forum.user.search-results-using');
+        $optionLabelUsing = config('filament-forum.user.option-label-using');
+
+        $ownerFilter = SelectFilter::make('owner_id')
+            ->label('Owner')
+            ->relationship(
+                name: 'owner',
+                titleAttribute: $titleAttribute
+            )
+            ->getOptionLabelFromRecordUsing(function (Model $record) use ($titleAttribute) {
+                return $record->{$titleAttribute};
+            })
+            ->searchable();
+
+        // Add custom search functionality if provided
+        if ($searchResultsUsing && is_callable($searchResultsUsing)) {
+            $ownerFilter = $ownerFilter->getSearchResultsUsing($searchResultsUsing);
+
+            // Add custom option label if provided
+            if ($optionLabelUsing && is_callable($optionLabelUsing)) {
+                $ownerFilter = $ownerFilter->getOptionLabelUsing($optionLabelUsing);
+            }
+        }
+
         return $table
             ->columns([
                 SpatieMediaLibraryImageColumn::make('image')
@@ -59,7 +109,7 @@ class ForumResource extends Resource
                 TextColumn::make('name')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('owner.name')
+                TextColumn::make("owner.{$titleAttribute}")
                     ->sortable(),
                 TextColumn::make('description')
                     ->sortable()
@@ -84,10 +134,7 @@ class ForumResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('owner_id')
-                    ->label('Owner')
-                    ->relationship('owner', 'name')
-                    ->searchable(),
+                $ownerFilter,
             ])
             ->recordActions([
                 EditAction::make(),
