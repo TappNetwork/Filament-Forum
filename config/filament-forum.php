@@ -19,4 +19,12 @@ return [
         // The User model class (used for custom search functionality)
         'model' => 'App\\Models\\User',
     ],
+
+    'frontend' => [
+        'forum-posts' => [
+            'title' => 'Forum Posts',
+            'breadcrumb' => 'Forum Posts',
+        ],
+    ],
+
 ];

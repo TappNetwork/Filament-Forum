@@ -32,4 +32,16 @@ class ViewForumPost extends ViewRecord
         /** @phpstan-ignore-next-line */
         return $this->record->name;
     }
+
+    public function getBreadcrumbs(): array
+    {
+        $forumResource = config('filament-forum.resources.forumResource');
+        $forumRecord = $this->getRecord()->forum;
+
+        return [
+            $forumResource::getUrl('index') => 'Forums',
+            $forumResource::getUrl('forum-posts', ['record' => $forumRecord]) => config('filament-forum.frontend.forum-posts.breadcrumb'),
+            '' => 'View',
+        ];
+    }
 }
