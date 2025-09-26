@@ -16,18 +16,7 @@ return [
         // The title attribute of user relationship. Can be an accessor in your User model
         'title-attribute' => 'name',
 
-        // Custom search results closure for searchable selects
-        // Example: fn (string $search): array => User::query()
-        //     ->where('name', 'like', "%{$search}%")
-        //     ->orWhere('email', 'like', "%{$search}%")
-        //     ->limit(50)
-        //     ->pluck('name', 'id')
-        //     ->all()
-        'search-results-using' => null,
-
-        // Custom option label closure for searchable selects
-        // Example: fn ($value): ?string => User::find($value)?->name
-        'option-label-using' => null,
-
+        // The User model class (used for custom search functionality)
+        'model' => 'App\\Models\\User',
     ],
 ];

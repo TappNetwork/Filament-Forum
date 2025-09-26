@@ -36,8 +36,7 @@ class ForumResource extends Resource
     public static function form(Schema $schema): Schema
     {
         $titleAttribute = config('filament-forum.user.title-attribute');
-        $searchResultsUsing = config('filament-forum.user.search-results-using');
-        $optionLabelUsing = config('filament-forum.user.option-label-using');
+        $userModel = config('filament-forum.user.model', 'App\\Models\\User');
 
         $ownerSelect = Select::make('owner_id')
             ->relationship(
@@ -46,18 +45,14 @@ class ForumResource extends Resource
             )
             ->getOptionLabelFromRecordUsing(function (Model $record) use ($titleAttribute) {
                 return $record->{$titleAttribute};
-            });
+            })
+            ->searchable();
 
-        // Add custom search functionality if provided
-        if ($searchResultsUsing && is_callable($searchResultsUsing)) {
+        // Add custom search functionality if User model has the trait and implements custom methods
+        if (class_exists($userModel) && method_exists($userModel, 'hasCustomForumSearch') && $userModel::hasCustomForumSearch()) {
             $ownerSelect = $ownerSelect
-                ->searchable()
-                ->getSearchResultsUsing($searchResultsUsing);
-
-            // Add custom option label if provided
-            if ($optionLabelUsing && is_callable($optionLabelUsing)) {
-                $ownerSelect = $ownerSelect->getOptionLabelUsing($optionLabelUsing);
-            }
+                ->getSearchResultsUsing(fn (string $search): array => $userModel::getForumSearchResults($search) ?? [])
+                ->getOptionLabelUsing(fn ($value): ?string => $userModel::getForumOptionLabel($value));
         }
 
         return $schema
@@ -78,8 +73,7 @@ class ForumResource extends Resource
     public static function table(Table $table): Table
     {
         $titleAttribute = config('filament-forum.user.title-attribute');
-        $searchResultsUsing = config('filament-forum.user.search-results-using');
-        $optionLabelUsing = config('filament-forum.user.option-label-using');
+        $userModel = config('filament-forum.user.model', 'App\\Models\\User');
 
         $ownerFilter = SelectFilter::make('owner_id')
             ->label('Owner')
@@ -92,14 +86,11 @@ class ForumResource extends Resource
             })
             ->searchable();
 
-        // Add custom search functionality if provided
-        if ($searchResultsUsing && is_callable($searchResultsUsing)) {
-            $ownerFilter = $ownerFilter->getSearchResultsUsing($searchResultsUsing);
-
-            // Add custom option label if provided
-            if ($optionLabelUsing && is_callable($optionLabelUsing)) {
-                $ownerFilter = $ownerFilter->getOptionLabelUsing($optionLabelUsing);
-            }
+        // Add custom search functionality if User model has the trait and implements custom methods
+        if (class_exists($userModel) && method_exists($userModel, 'hasCustomForumSearch') && $userModel::hasCustomForumSearch()) {
+            $ownerFilter = $ownerFilter
+                ->getSearchResultsUsing(fn (string $search): array => $userModel::getForumSearchResults($search) ?? [])
+                ->getOptionLabelUsing(fn ($value): ?string => $userModel::getForumOptionLabel($value));
         }
 
         return $table
