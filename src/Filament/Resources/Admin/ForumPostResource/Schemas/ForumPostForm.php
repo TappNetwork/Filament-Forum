@@ -18,7 +18,7 @@ class ForumPostForm
 
         $userSelect = Select::make('user_id')
             ->relationship(
-                name: 'user', 
+                name: 'user',
                 titleAttribute: $titleAttribute
             )
             ->getOptionLabelFromRecordUsing(function (Model $record) use ($titleAttribute) {
