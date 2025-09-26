@@ -6,11 +6,14 @@ use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Auth;
 use Kirschbaum\Commentions\Filament\Actions\CommentsAction;
+use Tapp\FilamentForum\Concerns\HasCustomForumPostBreadcrumb;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
 use Tapp\FilamentForum\Models\ForumPost;
 
 class EditForumPost extends EditRecord
 {
+    use HasCustomForumPostBreadcrumb;
+    
     protected static string $resource = ForumPostResource::class;
 
     protected function getHeaderActions(): array
@@ -26,17 +29,5 @@ class EditForumPost extends EditRecord
     {
         /** @var ForumPost */
         return $this->record;
-    }
-
-    public function getBreadcrumbs(): array
-    {
-        $forumResource = config('filament-forum.resources.forumResource');
-        $forumRecord = $this->getParentRecord();
-
-        return [
-            $forumResource::getUrl('index') => config('filament-forum.frontend.forum.breadcrumb'),
-            $forumResource::getUrl('forum-posts', ['record' => $forumRecord]) => config('filament-forum.frontend.forum-posts.breadcrumb'),
-            '' => 'View',
-        ];
     }
 }
