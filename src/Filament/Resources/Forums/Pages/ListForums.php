@@ -10,7 +10,6 @@ class ListForums extends ListRecords
 {
     protected static string $resource = ForumResource::class;
 
-
     public function getTitle(): string|Htmlable
     {
         return config('filament-forum.frontend.forum.title');
