@@ -32,4 +32,8 @@ return [
         ],
     ],
 
+    'admin' => [
+        'navigation-group' => 'Forums',
+    ],
+
 ];

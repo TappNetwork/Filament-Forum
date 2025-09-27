@@ -35,11 +35,14 @@ class ForumPostResource extends Resource
 {
     protected static ?string $model = ForumPost::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Forums';
-
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
     protected static ?string $slug = 'forum-posts';
+
+    public static function getNavigationGroup(): ?string
+    {
+        return config('filament-forum.admin.navigation-group');
+    }
 
     public static function infolist(Schema $schema): Schema
     {

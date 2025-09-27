@@ -27,11 +27,14 @@ class ForumResource extends Resource
 {
     protected static ?string $model = Forum::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Forums';
-
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $slug = 'forums';
+
+    public static function getNavigationGroup(): ?string
+    {
+        return config('filament-forum.admin.navigation-group');
+    }
 
     public static function form(Schema $schema): Schema
     {
