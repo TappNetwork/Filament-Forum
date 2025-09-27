@@ -85,6 +85,14 @@ class User extends Authenticatable
 }
 ```
 
+6. Add to your custom theme (usually`theme.css`) file:
+
+To include the TailwindCSS styles used on frontend pages, add to your theme file:
+
+```css
+@source '../../../../vendor/tapp/filament-forum';
+```
+
 That's it! The plugins will auto-register with Filament and be ready to use.
 
 ## Custom User Model, Attribute, and Search Functionality
