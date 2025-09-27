@@ -12,7 +12,7 @@ trait HasCustomForumPostBreadcrumb
         return [
             $forumResource::getUrl('index') => config('filament-forum.frontend.forum.breadcrumb'),
             $forumResource::getUrl('forum-posts', ['record' => $forumRecord]) => config('filament-forum.frontend.forum-posts.breadcrumb'),
-            '' => 'View',
+            '' => str($this->form->getOperation())->ucfirst(),
         ];
     }
 }
