@@ -29,7 +29,11 @@ return [
         'forum-posts' => [
             'title' => 'Forum Posts',
             'breadcrumb' => 'Forum Posts',
+            'label' => 'Forum Post',
+            'plural-label' => 'Forum Posts',
         ],
+
+        'navigation-label' => 'Forums',
     ],
 
     'admin' => [

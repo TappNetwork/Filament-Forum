@@ -29,6 +29,11 @@ class ForumResource extends Resource
         return config('filament-forum.frontend.forum.breadcrumb');
     }
 
+    public static function getNavigationLabel(): string
+    {
+        return config('filament-forum.frontend.navigation-label', 'Forums');
+    }
+
     public static function table(Table $table): Table
     {
         return $table
