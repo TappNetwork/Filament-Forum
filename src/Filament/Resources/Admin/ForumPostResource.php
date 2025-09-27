@@ -29,7 +29,6 @@ use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\EditForu
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\ListForumPosts;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\ViewForumPost;
 use Tapp\FilamentForum\Models\ForumPost;
-use UnitEnum;
 
 class ForumPostResource extends Resource
 {

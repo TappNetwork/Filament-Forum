@@ -21,7 +21,6 @@ use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\CreateForum;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\EditForum;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\ListForums;
 use Tapp\FilamentForum\Models\Forum;
-use UnitEnum;
 
 class ForumResource extends Resource
 {
