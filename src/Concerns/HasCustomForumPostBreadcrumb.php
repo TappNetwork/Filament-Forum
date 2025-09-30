@@ -8,11 +8,12 @@ trait HasCustomForumPostBreadcrumb
     {
         $forumResource = config('filament-forum.resources.forumResource');
         $forumRecord = $this->getParentRecord();
+        $operation = (string) str($this->form->getOperation());
 
         return [
-            $forumResource::getUrl('index') => config('filament-forum.frontend.forum.breadcrumb'),
-            $forumResource::getUrl('forum-posts', ['record' => $forumRecord]) => config('filament-forum.frontend.forum-posts.breadcrumb'),
-            '' => str($this->form->getOperation())->ucfirst(),
+            $forumResource::getUrl('index') => __('filament-forum::filament-forum.forum.breadcrumb'),
+            $forumResource::getUrl('forum-posts', ['record' => $forumRecord]) => __('filament-forum::filament-forum.forum-post.breadcrumb'),
+            '' => __('filament-forum::filament-forum.forum-post.'.$operation),
         ];
     }
 }

@@ -95,6 +95,12 @@ To include the TailwindCSS styles used on frontend pages, add to your theme file
 
 That's it! The plugins will auto-register with Filament and be ready to use.
 
+Optionally, you can publish the translation files with:
+
+```bash
+php artisan vendor:publish --tag="filament-forum-translations"
+```
+
 ## Custom User Model, Attribute, and Search Functionality
 
 By default, the `name` column of `User` model is used for the `user` relationship. You can customize it using the  `title-attribute` on `filament-form.php` config file.

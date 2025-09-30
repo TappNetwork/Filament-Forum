@@ -32,7 +32,7 @@ class ForumResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return config('filament-forum.admin.navigation-group');
+        return __('filament-forum::filament-forum.admin.navigation-group');
     }
 
     public static function form(Schema $schema): Schema

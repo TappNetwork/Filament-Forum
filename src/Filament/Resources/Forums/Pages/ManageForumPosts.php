@@ -25,12 +25,17 @@ class ManageForumPosts extends ManageRelatedRecords
 
     public function getTitle(): string|Htmlable
     {
-        return config('filament-forum.frontend.forum-posts.title');
+        return __('filament-forum::filament-forum.forum-post.title');
     }
 
     public function getBreadcrumb(): string
     {
-        return config('filament-forum.frontend.forum-posts.breadcrumb');
+        return __('filament-forum::filament-forum.forum-post.breadcrumb');
+    }
+
+    public static function getSlug(?\Filament\Panel $panel = null): string
+    {
+        return config('filament-forum.forum-post.slug');
     }
 
     public function table(Table $table): Table

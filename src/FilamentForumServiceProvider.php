@@ -26,7 +26,8 @@ class FilamentForumServiceProvider extends PackageServiceProvider
                 'create_forum_posts_table',
                 'create_favorite_forum_post_table',
                 'create_forum_post_views_table',
-            ]);
+            ])
+            ->hasTranslations();
     }
 
     public function packageBooted()

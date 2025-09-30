@@ -12,6 +12,6 @@ class ListForums extends ListRecords
 
     public function getTitle(): string|Htmlable
     {
-        return config('filament-forum.frontend.forum.title');
+        return __('filament-forum::filament-forum.forum.title');
     }
 }

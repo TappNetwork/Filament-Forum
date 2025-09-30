@@ -25,12 +25,12 @@ class ForumPostResource extends Resource
 
     public static function getPluralLabel(): ?string
     {
-        return config('filament-forum.frontend.forum-posts.plural-label', 'Forums');
+        return __('filament-forum::filament-forum.forum-post.plural-label');
     }
 
     public static function getLabel(): ?string
     {
-        return config('filament-forum.frontend.forum-posts.label', 'Forum');
+        return __('filament-forum::filament-forum.forum-post.label');
     }
 
     public static function form(Schema $schema): Schema
@@ -57,7 +57,7 @@ class ForumPostResource extends Resource
 
     public static function getSlug(?\Filament\Panel $panel = null): string
     {
-        return 'forum-posts';
+        return config('filament-forum.forum-post.slug');
     }
 
     public static function getPages(): array

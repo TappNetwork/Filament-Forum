@@ -20,24 +20,12 @@ return [
         'model' => 'App\\Models\\User',
     ],
 
-    'frontend' => [
-        'forum' => [
-            'title' => 'Forums',
-            'breadcrumb' => 'Forums',
-        ],
-
-        'forum-posts' => [
-            'title' => 'Forum Posts',
-            'breadcrumb' => 'Forum Posts',
-            'label' => 'Forum Post',
-            'plural-label' => 'Forum Posts',
-        ],
-
-        'navigation-label' => 'Forums',
+    'forum' => [
+        'slug' => 'forums',
     ],
 
-    'admin' => [
-        'navigation-group' => 'Forums',
+    'forum-post' => [
+        'slug' => 'forum-posts',
     ],
 
 ];
