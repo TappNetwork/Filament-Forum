@@ -15,6 +15,8 @@ class ForumPostInfolist
 {
     public static function configure(Schema $schema): Schema
     {
+        $titleAttribute = config('filament-forum.user.title-attribute');
+
         return $schema
             ->components([
                 Grid::make([
@@ -32,13 +34,13 @@ class ForumPostInfolist
 
                         Section::make()
                             ->schema([
-                                TextEntry::make('user.name')
-                                    ->label('Poster'),
+                                TextEntry::make("user.{$titleAttribute}")
+                                    ->label(__('filament-forum::filament-forum.forum-post.infolist.label.poster')),
                                 TextEntry::make('created_at')
                                     ->hiddenLabel()
                                     ->since(),
                                 TextEntry::make('updated_at')
-                                    ->label('Last edited')
+                                    ->label(__('filament-forum::filament-forum.forum-post.infolist.label.last-edited'))
                                     ->since()
                                     ->visible(fn (ForumPost $record) => $record->hasBeenEdited()),
                             ])
@@ -48,6 +50,7 @@ class ForumPostInfolist
                 Section::make('Comments')
                     ->schema([
                         CommentsEntry::make('comments')
+                            ->hiddenLabel()
                             ->mentionables(fn (Model $record) => User::all()),
                     ]),
             ]);

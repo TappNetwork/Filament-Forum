@@ -17,9 +17,11 @@ class ForumPostForm
                     ->id('forumPostForm')
                     ->schema([
                         TextInput::make('name')
+                            ->label(__('filament-forum::filament-forum.forum-post.form.label.name'))
                             ->required()
                             ->maxLength(255),
                         Textarea::make('description')
+                            ->label(__('filament-forum::filament-forum.forum-post.form.label.description'))
                             ->required(),
                     ]),
             ]);

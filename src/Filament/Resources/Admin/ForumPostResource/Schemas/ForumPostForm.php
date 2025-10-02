@@ -25,6 +25,7 @@ class ForumPostForm
                 return $record->{$titleAttribute};
             })
             ->searchable()
+            ->label(__('filament-forum::filament-forum.forum-post.form.label.user'))
             ->native(false)
             ->required();
 
@@ -39,13 +40,26 @@ class ForumPostForm
             ->components([
                 Section::make()
                     ->id('forumPostForm')
+                    ->columns(2)
                     ->schema([
                         TextInput::make('name')
+                            ->label(__('filament-forum::filament-forum.forum-post.form.label.name'))
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->columnSpanFull(),
+                        Select::make('forum_id')
+                            ->label(__('filament-forum::filament-forum.forum-post.form.label.forum'))
+                            ->native(false)
+                            ->required()
+                            ->relationship(
+                                name: 'forum',
+                                titleAttribute: 'name'
+                            ),
                         $userSelect,
                         Textarea::make('description')
-                            ->required(),
+                            ->label(__('filament-forum::filament-forum.forum-post.form.label.description'))
+                            ->required()
+                            ->columnSpanFull(),
                     ]),
             ]);
     }

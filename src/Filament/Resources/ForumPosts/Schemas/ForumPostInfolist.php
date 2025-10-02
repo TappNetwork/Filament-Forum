@@ -18,10 +18,11 @@ class ForumPostInfolist
     {
         return $schema
             ->components([
-                Section::make(fn (ForumPost $record) => $record->user->name.' - '.$record->created_at->diffForHumans().($record->hasBeenEdited() ? ' (edited)' : ''))
+                Section::make(fn (ForumPost $record) => $record->user->name.' - '.$record->created_at->diffForHumans().($record->hasBeenEdited() ? ' ('.__('filament-forum::filament-forum.forum-post.edited').')' : ''))
                     ->headerActions([
                         Action::make('favorite')
                             ->iconButton()
+                            ->tooltip(__('filament-forum::filament-forum.forum-post.toggle-favorite'))
                             ->icon(fn (ForumPost $record) => $record->isFavorite() ? 'heroicon-s-star' : 'heroicon-o-star')
                             ->action(fn (ForumPost $record) => $record->toggleFavorite()),
                         Action::make('share')
@@ -57,6 +58,7 @@ class ForumPostInfolist
                         ])
                             ->schema([
                                 TextEntry::make('description')
+                                    ->label(__('filament-forum::filament-forum.forum-post.infolist.label.name'))
                                     ->hiddenLabel()
                                     ->columnSpanFull(),
                             ]),
@@ -64,6 +66,7 @@ class ForumPostInfolist
                         Section::make('Comments')
                             ->schema([
                                 CommentsEntry::make('comments')
+                                    ->hiddenLabel()
                                     ->mentionables(fn (Model $record) => User::all()),
                             ]),
                     ]),

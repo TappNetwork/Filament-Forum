@@ -43,7 +43,7 @@
                         'transition-colors': true
                     }"
                 >
-                    <div x-tooltip.raw="Toggle Favorite">
+                    <div x-tooltip.raw="{{ __('filament-forum::filament-forum.forum-post.toggle-favorite') }}">
                         <x-filament::loading-indicator
                             wire:loading
                             wire:target="toggleFavorite({{ $record->getKey() }})"
