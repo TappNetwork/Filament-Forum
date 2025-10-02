@@ -11,22 +11,22 @@
             <a href="{{ ForumPostResource::getUrl('view', ['forum' => $record->forum->id, 'record' => $record->id]) }}">
                 <div class="flex items-start space-x-4">
                     <img
-                        src="{{ $record->user->profile_photo ?? 'https://ui-avatars.com/api/?name=' . urlencode($record->user->name ?? 'Unknown') }}"
-                        alt="{{ $record->user->name ?? 'Unknown' }}"
+                        src="{{ $record->user->profile_photo ?? 'https://ui-avatars.com/api/?name=' . urlencode($record->user->name ?? __('filament-forum::filament-forum.forum-post.unknown')) }}"
+                        alt="{{ $record->user->name ?? __('filament-forum::filament-forum.forum-post.unknown') }}"
                         class="w-10 h-10 rounded-full"
                     >
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900">
                             {{ $record->name }}
                             @if($record->hasBeenEdited())
-                                <span class="text-sm text-gray-500 font-normal pl-2">edited</span>
+                                <span class="text-sm text-gray-500 font-normal pl-2">{{ __('filament-forum::filament-forum.forum-post.edited') }}</span>
                             @endif
                         </h3>
                         <p class="text-sm text-gray-500">
                             @if($record->getLastCommentTime())
-                                Last reply {{ $record->getLastCommentTime() }}
+                            {{ __('filament-forum::filament-forum.forum-post.last-reply') }} {{ $record->getLastCommentTime() }}
                             @else
-                                No replies yet
+                            {{ __('filament-forum::filament-forum.forum-post.no-replies') }}
                             @endif
                         </p>
                     </div>
@@ -43,7 +43,7 @@
                         'transition-colors': true
                     }"
                 >
-                    <div x-tooltip.raw="Toggle Favorite">
+                    <div x-tooltip.raw="{{ __('filament-forum::filament-forum.forum-post.toggle-favorite') }}">
                         <x-filament::loading-indicator
                             wire:loading
                             wire:target="toggleFavorite({{ $record->getKey() }})"
@@ -71,7 +71,12 @@
         {{-- Footer with stats and comment authors --}}
         <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
             <div class="text-sm text-gray-500">
-                {{ $record->views_count ?? 0 }} views &bull; {{ $record->comments()->count() }} replies
+                @php
+                    $viewsCount = $record->views_count ?? 0;
+                    $replies = $record->comments()->count();
+                @endphp
+ 
+                {{ trans_choice('filament-forum::filament-forum.forum-post.views', $viewsCount, ['value' => $viewsCount]) }} &bull; {{ trans_choice('filament-forum::filament-forum.forum-post.replies', $replies, ['value' => $replies]) }}
             </div>
 
             {{-- Comment Authors --}}

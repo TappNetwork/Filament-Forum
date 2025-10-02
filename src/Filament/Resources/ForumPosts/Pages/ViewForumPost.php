@@ -6,11 +6,14 @@ use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
+use Tapp\FilamentForum\Concerns\HasCustomForumPostBreadcrumb;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
 use Tapp\FilamentForum\Models\ForumPost;
 
 class ViewForumPost extends ViewRecord
 {
+    use HasCustomForumPostBreadcrumb;
+
     protected static string $resource = ForumPostResource::class;
 
     protected function getHeaderActions(): array

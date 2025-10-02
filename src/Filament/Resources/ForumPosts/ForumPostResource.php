@@ -23,6 +23,16 @@ class ForumPostResource extends Resource
 
     protected static ?string $parentResource = ForumResource::class;
 
+    public static function getPluralLabel(): ?string
+    {
+        return __('filament-forum::filament-forum.forum-post.plural-label');
+    }
+
+    public static function getLabel(): ?string
+    {
+        return __('filament-forum::filament-forum.forum-post.label');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ForumPostForm::configure($schema);
@@ -47,7 +57,7 @@ class ForumPostResource extends Resource
 
     public static function getSlug(?\Filament\Panel $panel = null): string
     {
-        return 'forum-posts';
+        return config('filament-forum.forum-post.slug');
     }
 
     public static function getPages(): array

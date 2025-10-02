@@ -12,4 +12,20 @@ return [
         'adminForumPostResource' => \Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource::class,
     ],
 
+    'user' => [
+        // The title attribute of user relationship. Can be an accessor in your User model
+        'title-attribute' => 'name',
+
+        // The User model class (used for custom search functionality)
+        'model' => 'App\\Models\\User',
+    ],
+
+    'forum' => [
+        'slug' => 'forums',
+    ],
+
+    'forum-post' => [
+        'slug' => 'forum-posts',
+    ],
+
 ];

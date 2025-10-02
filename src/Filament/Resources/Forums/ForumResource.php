@@ -24,6 +24,16 @@ class ForumResource extends Resource
     /** @phpstan-ignore-next-line */
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
+    public static function getBreadcrumb(): string
+    {
+        return __('filament-forum::filament-forum.forum.breadcrumb');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament-forum::filament-forum.forum.navigation-label');
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -68,11 +78,18 @@ class ForumResource extends Resource
 
     public static function getPages(): array
     {
+        $forumPostSlug = config('filament-forum.forum-post.slug');
+
         return [
             'index' => ListForums::route('/'),
             // 'view' => ViewForum::route('/{record}'),
-            'forum-posts' => ManageForumPosts::route('/{record}/forum-posts'),
+            'forum-posts' => ManageForumPosts::route("/{record}/{$forumPostSlug}"),
         ];
+    }
+
+    public static function getSlug(?\Filament\Panel $panel = null): string
+    {
+        return config('filament-forum.forum.slug');
     }
 
     public static function canCreate(): bool
