@@ -7,6 +7,7 @@ use Filament\Actions\Action;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
 use Tapp\FilamentForum\Filament\Infolists\Components\ForumCommentsEntry;
@@ -63,8 +64,7 @@ class ForumPostInfolist
                                     ->columnSpanFull(),
                             ]),
 
-                        Section::make()
-                            ->compact()
+                        Group::make()
                             ->schema([
                                 ForumCommentsEntry::make('comments')
                                     ->hiddenLabel()

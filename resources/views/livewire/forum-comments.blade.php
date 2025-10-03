@@ -33,26 +33,71 @@
                         class="w-8 h-8 rounded-full flex-shrink-0"
                     >
                     <div class="flex-1 min-w-0">
-                        <div class="flex items-center space-x-2">
-                            <span class="font-medium text-gray-900 dark:text-gray-100">
-                                {{ $comment->getAuthorName() }}
-                            </span>
-                            <span class="text-sm text-gray-500 dark:text-gray-400">
-                                {{ $comment->created_at->diffForHumans() }}
-                            </span>
-                            @if($comment->hasBeenEdited())
-                                <span class="text-xs text-gray-400 dark:text-gray-500">
-                                    ({{ __('filament-forum::filament-forum.comments.edited') }})
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="font-medium text-gray-900 dark:text-gray-100">
+                                    {{ $comment->getAuthorName() }}
                                 </span>
-                            @endif
+                                <span class="text-sm text-gray-500 dark:text-gray-400">
+                                    {{ $comment->created_at->diffForHumans() }}
+                                </span>
+                                @if($comment->hasBeenEdited())
+                                    <span class="text-xs text-gray-400 dark:text-gray-500">
+                                        ({{ __('filament-forum::filament-forum.comments.edited') }})
+                                    </span>
+                                @endif
+                            </div>
+                            
+                            {{-- Edit/Delete Actions --}}
+                            @auth
+                                @if($comment->isAuthor(Auth::user()))
+                                    <div class="flex items-center space-x-1">
+                                        @if($editingCommentId !== $comment->id)
+                                            <button
+                                                wire:click="editComment({{ $comment->id }})"
+                                                class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                                                title="{{ __('filament-forum::filament-forum.comments.edit') }}"
+                                            >
+                                                <x-heroicon-o-pencil class="w-4 h-4" />
+                                            </button>
+                                            
+                                            {{ ($this->deleteCommentAction)(['commentId' => $comment->id]) }}
+                                        @endif
+                                    </div>
+                                @endif
+                            @endauth
                         </div>
                     </div>
                 </div>
 
                 {{-- Comment Content --}}
-                <div class="prose dark:prose-invert max-w-none mb-3">
-                    {!! $this->renderRichContent($comment->content) !!}
-                </div>
+                @if($editingCommentId === $comment->id)
+                    {{-- Edit Form --}}
+                    <div class="mb-3">
+                        <form wire:submit="updateComment" class="space-y-3">
+                            {{ $this->editCommentForm }}
+                            
+                            <div class="flex justify-end space-x-2">
+                                <x-filament::button 
+                                    type="button" 
+                                    color="gray" 
+                                    wire:click="cancelEdit"
+                                >
+                                    {{ __('filament-forum::filament-forum.comments.cancel') }}
+                                </x-filament::button>
+                                <x-filament::button type="submit" wire:loading.attr="disabled">
+                                    <x-filament::loading-indicator wire:loading wire:target="updateComment" class="h-4 w-4 mr-2" />
+                                    {{ __('filament-forum::filament-forum.comments.save') }}
+                                </x-filament::button>
+                            </div>
+                        </form>
+                    </div>
+                @else
+                    {{-- Display Content --}}
+                    <div class="prose dark:prose-invert max-w-none mb-3">
+                        {!! $this->renderRichContent($comment->content) !!}
+                    </div>
+                @endif
 
                 {{-- Comment Attachments --}}
                 @if($comment->hasMedia('attachments'))
