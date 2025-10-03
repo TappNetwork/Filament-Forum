@@ -9,15 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Kirschbaum\Commentions\Contracts\Commentable;
-use Kirschbaum\Commentions\HasComments;
 use Tapp\FilamentForum\Events\ForumPostCreated;
 use Tapp\FilamentForum\Models\Traits\CanFavoriteForumPost;
 
-class ForumPost extends Model implements Commentable
+class ForumPost extends Model
 {
     use CanFavoriteForumPost;
-    use HasComments;
 
     /** @use HasFactory<ForumPostFactory> */
     use HasFactory;
@@ -46,6 +43,11 @@ class ForumPost extends Model implements Commentable
     public function views(): HasMany
     {
         return $this->hasMany(ForumPostView::class);
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(ForumComment::class);
     }
 
     public function recordView(): void
@@ -77,7 +79,29 @@ class ForumPost extends Model implements Commentable
             ->exists();
     }
 
-    public function getCountDistinctUsersWhoCommented()
+    public function commentsQuery(): HasMany
+    {
+        return $this->comments()
+            ->latest()
+            ->with(['author', 'reactions.reactor']);
+    }
+
+    public function getComments(): Collection
+    {
+        return $this->commentsQuery()->get();
+    }
+
+    public function addComment(string $content, $author): ForumComment
+    {
+        /** @var ForumComment */
+        return $this->comments()->create([
+            'content' => $content,
+            'author_id' => $author->getKey(),
+            'author_type' => get_class($author),
+        ]);
+    }
+
+    public function getCountDistinctUsersWhoCommented(): int
     {
         return $this->comments()->distinct('author_id')->count();
     }
@@ -88,7 +112,6 @@ class ForumPost extends Model implements Commentable
             ->latest()
             ->first();
 
-        /** @phpstan-ignore-next-line */
         return $lastComment?->created_at?->diffForHumans();
     }
 
@@ -102,7 +125,6 @@ class ForumPost extends Model implements Commentable
             ->orderByRaw('MAX(created_at) DESC')
             ->take(3)
             ->get()
-            /** @phpstan-ignore-next-line */
             ->map(fn ($comment) => $comment->author);
     }
 

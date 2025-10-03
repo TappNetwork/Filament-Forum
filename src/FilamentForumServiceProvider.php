@@ -26,14 +26,18 @@ class FilamentForumServiceProvider extends PackageServiceProvider
                 'create_forum_posts_table',
                 'create_favorite_forum_post_table',
                 'create_forum_post_views_table',
+                'create_forum_comments_table',
+                'create_forum_comment_reactions_table',
             ])
             ->hasTranslations();
     }
 
     public function packageBooted()
     {
-        // Register Livewire components/resources here, e.g.:
-        // Livewire::component('forum-post', \Tapp\FilamentForum\Components\ForumPost::class);
+        // Register Livewire components
+        Livewire::component('tapp.filament-forum.forum-comments', \Tapp\FilamentForum\Livewire\ForumComments::class);
+        Livewire::component('tapp.filament-forum.forum-comment-reactions', \Tapp\FilamentForum\Livewire\ForumCommentReactions::class);
+
         // Register ForumResource in your panel provider to add it to navigation:
         // In your PanelProvider:
         // public function resources(): array {
