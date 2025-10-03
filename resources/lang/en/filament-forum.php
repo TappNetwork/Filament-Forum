@@ -103,6 +103,7 @@ return [
     'comments.load-more' => 'Load more comments',
     'comments.add-reaction' => 'Add Reaction',
     'comments.reactions-count' => '{0} No reactions|{1} :count reaction|[2,*] :count reactions',
+    'comments.count' => '{0} No comments|{1} :count comment|[2,*] :count comments',
 
     /*
     |--------------------------------------------------------------------------

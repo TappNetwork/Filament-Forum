@@ -23,6 +23,15 @@
 
     {{-- Comments List --}}
     <div class="space-y-4" wire:key="comments-list">
+        {{-- Comments Count --}}
+        @if($comments->count() > 0)
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-base font-medium text-gray-900 dark:text-gray-100">
+                    {{ trans_choice('filament-forum::filament-forum.comments.count', $comments->count(), ['count' => $comments->count()]) }}
+                </h3>
+            </div>
+        @endif
+
         @forelse($comments as $comment)
             <div class="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4" wire:key="comment-{{ $comment->id }}">
                 {{-- Comment Header --}}
