@@ -77,11 +77,11 @@ class ForumComment extends Model implements HasMedia
         );
 
         if (empty($matches[1])) {
-            return new \Illuminate\Database\Eloquent\Collection(); // Return empty collection
+            return new \Illuminate\Database\Eloquent\Collection; // Return empty collection
         }
-        
+
         $userIds = $matches[1];
-        
+
         return $userModel::whereIn('id', $userIds)->get();
     }
 

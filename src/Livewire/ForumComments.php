@@ -2,27 +2,24 @@
 
 namespace Tapp\FilamentForum\Livewire;
 
+use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
-use Filament\Actions\Action;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\EditAction;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
-use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Tapp\FilamentForum\Events\ForumCommentCreated;
 use Tapp\FilamentForum\Models\ForumComment;
 use Tapp\FilamentForum\Models\ForumPost;
 
-class ForumComments extends Component implements HasSchemas, HasActions
+class ForumComments extends Component implements HasActions, HasSchemas
 {
     use InteractsWithActions;
     use InteractsWithSchemas;
@@ -180,13 +177,14 @@ class ForumComments extends Component implements HasSchemas, HasActions
     public function editComment(int $commentId): void
     {
         $comment = ForumComment::findOrFail($commentId);
-        
+
         // Check if user can edit this comment
-        if (!$this->canEditComment($comment)) {
+        if (! $this->canEditComment($comment)) {
             Notification::make()
                 ->title(__('filament-forum::filament-forum.comments.unauthorized'))
                 ->danger()
                 ->send();
+
             return;
         }
 
@@ -197,23 +195,24 @@ class ForumComments extends Component implements HasSchemas, HasActions
 
     public function updateComment(): void
     {
-        if (!$this->editingCommentId) {
+        if (! $this->editingCommentId) {
             return;
         }
 
         $comment = ForumComment::findOrFail($this->editingCommentId);
-        
+
         // Check if user can edit this comment
-        if (!$this->canEditComment($comment)) {
+        if (! $this->canEditComment($comment)) {
             Notification::make()
                 ->title(__('filament-forum::filament-forum.comments.unauthorized'))
                 ->danger()
                 ->send();
+
             return;
         }
 
         $data = $this->editCommentForm->getState();
-        
+
         $comment->update([
             'content' => $data['content'],
         ]);
@@ -230,13 +229,14 @@ class ForumComments extends Component implements HasSchemas, HasActions
     public function deleteComment(int $commentId): void
     {
         $comment = ForumComment::findOrFail($commentId);
-        
+
         // Check if user can delete this comment
-        if (!$this->canDeleteComment($comment)) {
+        if (! $this->canDeleteComment($comment)) {
             Notification::make()
                 ->title(__('filament-forum::filament-forum.comments.unauthorized'))
                 ->danger()
                 ->send();
+
             return;
         }
 
@@ -268,13 +268,14 @@ class ForumComments extends Component implements HasSchemas, HasActions
             ->action(function (array $arguments) {
                 $commentId = $arguments['commentId'];
                 $comment = ForumComment::findOrFail($commentId);
-                
+
                 // Check if user can delete this comment
-                if (!$this->canDeleteComment($comment)) {
+                if (! $this->canDeleteComment($comment)) {
                     Notification::make()
                         ->title(__('filament-forum::filament-forum.comments.unauthorized'))
                         ->danger()
                         ->send();
+
                     return;
                 }
 
@@ -296,7 +297,7 @@ class ForumComments extends Component implements HasSchemas, HasActions
 
     protected function canEditComment(ForumComment $comment): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -306,7 +307,7 @@ class ForumComments extends Component implements HasSchemas, HasActions
 
     protected function canDeleteComment(ForumComment $comment): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -348,11 +349,11 @@ class ForumComments extends Component implements HasSchemas, HasActions
         );
 
         if (empty($matches[1])) {
-            return new \Illuminate\Database\Eloquent\Collection(); // Return empty collection
+            return new \Illuminate\Database\Eloquent\Collection; // Return empty collection
         }
-        
+
         $userIds = $matches[1];
-        
+
         return $userModel::whereIn('id', $userIds)->get();
     }
 

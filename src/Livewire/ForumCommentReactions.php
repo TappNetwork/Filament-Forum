@@ -18,7 +18,7 @@ class ForumCommentReactions extends Component
 
     public array $availableReactions = [
         '👍' => 'Like',
-        '❤️' => 'Love', 
+        '❤️' => 'Love',
         '😂' => 'Laugh',
         '😮' => 'Wow',
         '😢' => 'Sad',
@@ -57,7 +57,7 @@ class ForumCommentReactions extends Component
         if (! Auth::check()) {
             return;
         }
-        
+
         $this->showReactionPicker = ! $this->showReactionPicker;
     }
 
