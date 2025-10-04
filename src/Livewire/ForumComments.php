@@ -383,23 +383,23 @@ class ForumComments extends Component implements HasActions, HasSchemas
         // Find @username patterns in the content and replace with proper mention HTML
         // Simple approach: try to match each available username directly
         $processed = $content;
-        
+
         // Sort usernames by length (longest first) to avoid partial matches
         $sortedUsernames = $userLookup->keys()->sortByDesc(function ($username) {
             return strlen($username);
         });
-        
+
         foreach ($sortedUsernames as $username) {
-            $pattern = '/@' . preg_quote($username, '/') . '(?=\s|<|$)/u';
+            $pattern = '/@'.preg_quote($username, '/').'(?=\s|<|$)/u';
             $user = $userLookup->get($username);
-            
+
             $replacement = sprintf(
                 '<span class="mention" data-type="mention" data-id="%s" data-label="%s">@%s</span>',
                 $user['id'],
                 htmlspecialchars($username, ENT_QUOTES, 'UTF-8'),
                 htmlspecialchars($username, ENT_QUOTES, 'UTF-8')
             );
-            
+
             $newContent = preg_replace($pattern, $replacement, $processed);
             if ($newContent !== $processed) {
                 $processed = $newContent;
@@ -458,7 +458,7 @@ class ForumComments extends Component implements HasActions, HasSchemas
                     'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'select', 'small', 'span',
                     'strike', 'strong', 'sub', 'summary', 'sup', 'table', 'tbody', 'td',
                     'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'tt', 'u', 'ul', 'var',
-                    'video', 'wbr'
+                    'video', 'wbr',
                 ])
                 ->allowedAttributes([
                     'a' => ['href', 'title', 'target', 'rel'],
