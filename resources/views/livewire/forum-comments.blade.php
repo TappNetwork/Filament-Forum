@@ -1,7 +1,12 @@
 <div class="space-y-6" @if($pollingInterval) wire:poll.{{ $pollingInterval }}="refreshComments" @endif>
     {{-- Comment Form --}}
     @auth
-        <div class="bg-white dark:bg-gray-900 rounded-lg dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-900 rounded-lg dark:border-gray-700"
+             x-load
+             x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('forum-mentions', 'tapp/filament-forum') }}"
+             x-data="forumMentions({
+                 mentionables: @js($this->getMentionablesData())
+             })">
             <form wire:submit="create" class="space-y-4">
                 {{ $this->commentForm }}
                 
@@ -82,7 +87,12 @@
                 {{-- Comment Content --}}
                 @if($editingCommentId === $comment->id)
                     {{-- Edit Form --}}
-                    <div class="mb-3">
+                    <div class="mb-3"
+                         x-load
+                         x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('forum-mentions', 'tapp/filament-forum') }}"
+                         x-data="forumMentions({
+                             mentionables: @js($this->getMentionablesData())
+                         })">
                         <form wire:submit="updateComment" class="space-y-3">
                             {{ $this->editCommentForm }}
                             

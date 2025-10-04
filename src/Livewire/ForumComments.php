@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Tapp\FilamentForum\Events\ForumCommentCreated;
+use Tapp\FilamentForum\Filament\RichEditor\Plugins\MentionPlugin;
 use Tapp\FilamentForum\Models\ForumComment;
 use Tapp\FilamentForum\Models\ForumPost;
 
@@ -72,6 +73,9 @@ class ForumComments extends Component implements HasActions, HasSchemas
                     ->fileAttachmentsDisk('public')
                     ->fileAttachmentsDirectory('forum-comments')
                     ->fileAttachmentsVisibility('public')
+                    ->plugins([
+                        new MentionPlugin,
+                    ])
                     ->toolbarButtons([
                         'attachFiles',
                         'blockquote',
@@ -104,6 +108,9 @@ class ForumComments extends Component implements HasActions, HasSchemas
                     ->fileAttachmentsDisk('public')
                     ->fileAttachmentsDirectory('forum-comments')
                     ->fileAttachmentsVisibility('public')
+                    ->plugins([
+                        new MentionPlugin,
+                    ])
                     ->toolbarButtons([
                         'attachFiles',
                         'blockquote',
@@ -139,13 +146,16 @@ class ForumComments extends Component implements HasActions, HasSchemas
         // Use Filament's built-in schema validation
         $data = $this->commentForm->getState();
 
+        // Process mentions in the content
+        $processedContent = $this->processMentions($data['content']);
+
         $comment = $this->record->addComment(
-            content: $data['content'],
+            content: $processedContent,
             author: Auth::user()
         );
 
         // Handle mentions
-        $mentioned = $this->extractMentions(is_string($data['content']) ? $data['content'] : '');
+        $mentioned = $this->extractMentions($processedContent);
         if ($mentioned->isNotEmpty()) {
             foreach ($mentioned as $user) {
                 // Dispatch mention event if needed
@@ -213,8 +223,11 @@ class ForumComments extends Component implements HasActions, HasSchemas
 
         $data = $this->editCommentForm->getState();
 
+        // Process mentions in the content
+        $processedContent = $this->processMentions($data['content']);
+
         $comment->update([
-            'content' => $data['content'],
+            'content' => $processedContent,
         ]);
 
         $this->cancelEdit();
@@ -357,6 +370,73 @@ class ForumComments extends Component implements HasActions, HasSchemas
         return $userModel::whereIn('id', $userIds)->get();
     }
 
+    protected function processMentions(string $content): string
+    {
+        if (empty($content)) {
+            return $content;
+        }
+
+        // Get all available users for mention lookup
+        $mentionables = $this->getMentionablesData();
+        $userLookup = collect($mentionables)->keyBy('name');
+
+        // Find @username patterns in the content and replace with proper mention HTML
+        // Simple approach: try to match each available username directly
+        $processed = $content;
+        
+        // Sort usernames by length (longest first) to avoid partial matches
+        $sortedUsernames = $userLookup->keys()->sortByDesc(function ($username) {
+            return strlen($username);
+        });
+        
+        foreach ($sortedUsernames as $username) {
+            $pattern = '/@' . preg_quote($username, '/') . '(?=\s|<|$)/u';
+            $user = $userLookup->get($username);
+            
+            $replacement = sprintf(
+                '<span class="mention" data-type="mention" data-id="%s" data-label="%s">@%s</span>',
+                $user['id'],
+                htmlspecialchars($username, ENT_QUOTES, 'UTF-8'),
+                htmlspecialchars($username, ENT_QUOTES, 'UTF-8')
+            );
+            
+            $newContent = preg_replace($pattern, $replacement, $processed);
+            if ($newContent !== $processed) {
+                $processed = $newContent;
+            }
+        }
+
+        return $processed;
+    }
+
+    protected function getMentionablesData(): array
+    {
+        if ($this->mentionables) {
+            return $this->mentionables->map(function ($user) {
+                return [
+                    'id' => $user->getKey(),
+                    'name' => $user->name ?? 'Unknown User',
+                    'avatar' => method_exists($user, 'getFilamentAvatarUrl')
+                        ? $user->getFilamentAvatarUrl()
+                        : null,
+                ];
+            })->toArray();
+        }
+
+        // Fallback to all users if no mentionables provided
+        $userModel = config('auth.providers.users.model');
+
+        return $userModel::limit(50)->get()->map(function ($user) {
+            return [
+                'id' => $user->getKey(),
+                'name' => $user->name ?? 'Unknown User',
+                'avatar' => method_exists($user, 'getFilamentAvatarUrl')
+                    ? $user->getFilamentAvatarUrl()
+                    : null,
+            ];
+        })->toArray();
+    }
+
     public function renderRichContent(?string $content): string
     {
         if (empty($content)) {
@@ -366,6 +446,41 @@ class ForumComments extends Component implements HasActions, HasSchemas
         try {
             return RichContentRenderer::make($content)
                 ->fileAttachmentsDisk('public')
+                ->allowedElements([
+                    'a', 'abbr', 'acronym', 'address', 'area', 'article', 'aside', 'audio', 'b',
+                    'bdi', 'bdo', 'big', 'blockquote', 'br', 'button', 'canvas', 'caption',
+                    'center', 'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del',
+                    'details', 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'em', 'fieldset',
+                    'figcaption', 'figure', 'font', 'footer', 'form', 'h1', 'h2', 'h3', 'h4',
+                    'h5', 'h6', 'header', 'hgroup', 'hr', 'i', 'img', 'input', 'ins', 'kbd',
+                    'label', 'legend', 'li', 'main', 'map', 'mark', 'menu', 'menuitem', 'meter',
+                    'nav', 'nobr', 'ol', 'optgroup', 'option', 'output', 'p', 'pre', 'progress',
+                    'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'select', 'small', 'span',
+                    'strike', 'strong', 'sub', 'summary', 'sup', 'table', 'tbody', 'td',
+                    'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'tt', 'u', 'ul', 'var',
+                    'video', 'wbr'
+                ])
+                ->allowedAttributes([
+                    'a' => ['href', 'title', 'target', 'rel'],
+                    'img' => ['src', 'alt', 'title', 'width', 'height'],
+                    'span' => ['class', 'data-type', 'data-id', 'data-label'], // Allow mention attributes
+                    'div' => ['class'],
+                    'p' => ['class'],
+                    'h1' => ['class'],
+                    'h2' => ['class'],
+                    'h3' => ['class'],
+                    'h4' => ['class'],
+                    'h5' => ['class'],
+                    'h6' => ['class'],
+                    'blockquote' => ['class'],
+                    'ul' => ['class'],
+                    'ol' => ['class'],
+                    'li' => ['class'],
+                    'strong' => ['class'],
+                    'em' => ['class'],
+                    'code' => ['class'],
+                    'pre' => ['class'],
+                ])
                 ->toHtml();
         } catch (\Exception $e) {
             // Fallback to raw HTML if RichContentRenderer fails
