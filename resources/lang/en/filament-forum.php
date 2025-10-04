@@ -73,4 +73,48 @@ return [
     'forum-post.table.label.description' => 'Description',
     'forum-post.table.label.created-at' => 'Created At',
     'forum-post.table.label.updated-at' => 'Updated At',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Comments
+    |--------------------------------------------------------------------------
+    */
+
+    'comments.add-comment' => 'Add a comment',
+    'comments.edit-comment' => 'Edit comment',
+    'comments.placeholder' => 'Write your comment here...',
+    'comments.post-comment' => 'Post Comment',
+    'comments.login-required' => 'You must be logged in to comment',
+    'comments.login-to-comment' => 'Please log in to add a comment',
+    'comments.login-to-react' => 'Please log in to react to comments',
+    'comments.created' => 'Comment posted successfully',
+    'comments.updated' => 'Comment updated successfully',
+    'comments.deleted' => 'Comment deleted successfully',
+    'comments.unauthorized' => 'You are not authorized to perform this action',
+    'comments.edited' => 'edited',
+    'comments.edit' => 'Edit',
+    'comments.delete' => 'Delete',
+    'comments.delete-confirm' => 'Are you sure you want to delete this comment? This action cannot be undone.',
+    'comments.delete-modal-heading' => 'Delete Comment',
+    'comments.delete-modal-description' => 'Are you sure you want to delete this comment? This action cannot be undone.',
+    'comments.save' => 'Save',
+    'comments.cancel' => 'Cancel',
+    'comments.no-comments' => 'No comments yet. Be the first to comment!',
+    'comments.load-more' => 'Load more comments',
+    'comments.add-reaction' => 'Add Reaction',
+    'comments.reactions-count' => '{0} No reactions|{1} :count reaction|[2,*] :count reactions',
+    'comments.count' => '{0} No comments|{1} :count comment|[2,*] :count comments',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reactions
+    |--------------------------------------------------------------------------
+    */
+
+    'reactions.👍' => 'Like',
+    'reactions.❤️' => 'Love',
+    'reactions.😂' => 'Laugh',
+    'reactions.😮' => 'Wow',
+    'reactions.😢' => 'Sad',
+    'reactions.😡' => 'Angry',
 ];

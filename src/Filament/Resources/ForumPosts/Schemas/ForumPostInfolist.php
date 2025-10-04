@@ -6,10 +6,11 @@ use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
-use Kirschbaum\Commentions\Filament\Infolists\Components\CommentsEntry;
+use Tapp\FilamentForum\Filament\Infolists\Components\ForumCommentsEntry;
 use Tapp\FilamentForum\Models\ForumPost;
 
 class ForumPostInfolist
@@ -63,11 +64,14 @@ class ForumPostInfolist
                                     ->columnSpanFull(),
                             ]),
 
-                        Section::make('Comments')
+                        Group::make()
                             ->schema([
-                                CommentsEntry::make('comments')
+                                ForumCommentsEntry::make('comments')
                                     ->hiddenLabel()
-                                    ->mentionables(fn (Model $record) => User::all()),
+                                    ->mentionables(fn (Model $record) => User::all())
+                                    ->paginated(true)
+                                    ->perPage(10)
+                                    ->polling('30s'),
                             ]),
                     ]),
             ]);
