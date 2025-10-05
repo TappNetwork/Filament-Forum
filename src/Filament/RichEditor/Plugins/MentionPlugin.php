@@ -17,7 +17,7 @@ class MentionPlugin implements RichContentPlugin
     public function getTipTapPhpExtensions(): array
     {
         return [
-            new \Tapp\FilamentForum\TipTap\Extensions\Mention(),
+            new \Tapp\FilamentForum\TipTap\Extensions\Mention,
         ];
     }
 
