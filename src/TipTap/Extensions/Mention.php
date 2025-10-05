@@ -52,7 +52,7 @@ class Mention extends Node
                 'class' => 'mention',
                 'data-type' => 'mention',
             ], $HTMLAttributes),
-            '@' . ($HTMLAttributes['data-label'] ?? ''),
+            '@'.($HTMLAttributes['data-label'] ?? ''),
         ];
     }
 }

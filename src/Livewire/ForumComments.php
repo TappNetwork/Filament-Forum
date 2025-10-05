@@ -247,7 +247,7 @@ class ForumComments extends Component implements HasActions, HasSchemas
         }
 
         $comment->delete();
-        
+
         // Use a more conservative approach - just remove from collection
         $this->comments = $this->comments->reject(function ($c) use ($commentId) {
             return $c->id === $commentId;
@@ -329,7 +329,7 @@ class ForumComments extends Component implements HasActions, HasSchemas
     {
         if ($this->paginated) {
             $this->currentPage++;
-            
+
             // Load only the new comments for this page
             $newComments = $this->record->comments()
                 ->with(['author', 'reactions.reactor', 'media'])
@@ -337,7 +337,7 @@ class ForumComments extends Component implements HasActions, HasSchemas
                 ->skip(($this->currentPage - 1) * $this->perPage)
                 ->take($this->perPage)
                 ->get();
-            
+
             // Append new comments to existing collection
             $this->comments = $this->comments->merge($newComments);
         }
