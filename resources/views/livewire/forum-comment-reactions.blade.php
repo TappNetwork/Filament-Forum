@@ -25,7 +25,7 @@
     </div>
 
     {{-- Add Reaction Button --}}
-    <div class="relative">
+    <div class="relative" x-data="{ open: @entangle('showReactionPicker') }" x-on:click.outside="open = false">
         @auth
             <button
                 wire:click="toggleReactionPicker"
@@ -37,21 +37,26 @@
             </button>
 
             {{-- Reaction Picker --}}
-            @if($showReactionPicker)
-                <div class="absolute bottom-full left-0 mb-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg p-2 z-10">
-                    <div class="flex space-x-1">
-                        @foreach($availableReactions as $emoji => $label)
-                            <button
-                                wire:click="toggleReaction('{{ $emoji }}')"
-                                class="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                                title="{{ $label }}"
-                            >
-                                <span class="text-lg">{{ $emoji }}</span>
-                            </button>
-                        @endforeach
-                    </div>
+            <div x-show="open" 
+                 x-transition:enter="transition ease-out duration-100"
+                 x-transition:enter-start="transform opacity-0 scale-95"
+                 x-transition:enter-end="transform opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-75"
+                 x-transition:leave-start="transform opacity-100 scale-100"
+                 x-transition:leave-end="transform opacity-0 scale-95"
+                 class="absolute bottom-full left-0 mb-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg p-2 z-10">
+                <div class="flex space-x-1">
+                    @foreach($availableReactions as $emoji => $label)
+                        <button
+                            wire:click="toggleReaction('{{ $emoji }}')"
+                            class="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                            title="{{ $label }}"
+                        >
+                            <span class="text-lg">{{ $emoji }}</span>
+                        </button>
+                    @endforeach
                 </div>
-            @endif
+            </div>
         @else
             <button
                 disabled
