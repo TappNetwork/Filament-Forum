@@ -1,6 +1,3 @@
-/* Filament Forum Styles */
-
-/* Mention styling to match commentions - more specific selectors to override Filament styles */
 .fi-in-entry-content .mention[data-type="mention"],
 .fi-fo-rich-editor .mention[data-type="mention"],
 .mention[data-type="mention"] {
@@ -21,17 +18,22 @@
     color: #93c5fd !important;
 }
 
-/* Mention dropdown styles */
+/* Mention dropdown styles - flexible positioning */
 .mention-dropdown {
-    position: absolute;
+    position: absolute !important;
     background: white;
     border: 1px solid #e5e7eb;
     border-radius: 0.5rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     max-height: 12rem;
     overflow-y: auto;
-    z-index: 50;
+    z-index: 9999 !important;
     min-width: 200px;
+}
+
+/* Fallback for cases where absolute positioning doesn't work */
+.mention-dropdown.fixed-position {
+    position: fixed !important;
 }
 
 .dark .mention-dropdown {

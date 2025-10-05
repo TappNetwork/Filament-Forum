@@ -16,13 +16,15 @@ class MentionPlugin implements RichContentPlugin
      */
     public function getTipTapPhpExtensions(): array
     {
-        return [];
+        return [
+            new \Tapp\FilamentForum\TipTap\Extensions\Mention(),
+        ];
     }
 
     public function getTipTapJsExtensions(): array
     {
-        // Return empty array - we'll handle mentions through our custom JavaScript
-        // without requiring external TipTap extensions
+        // Return empty - we handle mentions with server-side processing
+        // The PHP extension is sufficient for parsing existing content
         return [];
     }
 

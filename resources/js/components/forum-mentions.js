@@ -1,442 +1,402 @@
-// Forum Mentions Alpine Component
+// Alpine.js component for mention dropdown UI
+// Uses DOM manipulation to insert mentions, server processes them into proper HTML
+
 export default function forumMentions({
     mentionables = [],
 }) {
     return {
-        mentionables,
+        mentionables: mentionables,
+        showDropdown: false,
+        dropdownPosition: { top: 0, left: 0 },
+        filteredMentionables: [],
+        selectedIndex: 0,
+        currentQuery: '',
+
+    init() {
+        this.observeForTipTapEditor();
         
-        init() {
-            console.log('Forum mentions Alpine component initialized');
-            this.initializeMentions();
-        },
+        // Add cleanup when Alpine component is destroyed
+        this.$el._x_cleanups = this.$el._x_cleanups || [];
+        this.$el._x_cleanups.push(() => {
+            this.cleanup();
+        });
+    },
         
-        initializeMentions() {
-            // Use the mentionables data passed to the component
-            console.log('Initializing mentions with data:', this.mentionables);
-            
-            // Find RichEditor elements in the current Alpine component scope
-            const richEditors = this.$el.querySelectorAll('.fi-fo-rich-editor, [data-field-wrapper-for*="content"]');
-            console.log('Found rich editors:', richEditors.length);
-            
-            if (richEditors.length === 0) {
-                // Fallback: look for any rich editor in the component
-                const fallbackEditor = this.$el.querySelector('[x-data*="richEditorFormComponent"]');
-                if (fallbackEditor) {
-                    console.log('Found fallback rich editor');
-                    this.setupFilamentMentions(fallbackEditor, this.mentionables);
-                } else {
-                    console.log('No rich editor found, trying direct setup');
-                    this.setupFilamentMentions(this.$el, this.mentionables);
-                }
-                return;
+    cleanup() {
+        // Clean up any mention contexts and event listeners
+        const editors = this.$el.querySelectorAll('.tiptap.ProseMirror');
+        editors.forEach(editor => {
+            if (editor._mentionContext) {
+                delete editor._mentionContext;
             }
-            
-            richEditors.forEach((element) => {
-                // Store mentionables on the element for later use
-                element._mentionables = this.mentionables;
-                
-                // Find the Filament RichEditor Alpine component
-                this.setupFilamentMentions(element, this.mentionables);
-            });
-        },
-        
-        setupFilamentMentions(element, mentionables) {
-            // Find the Filament RichEditor container
-            const richEditorContainer = element.closest('[x-data*="richEditorFormComponent"]');
-            if (!richEditorContainer) {
-                console.log('Could not find Filament RichEditor container, falling back to basic setup');
-                this.observeForTipTapEditor(element);
-                return;
-            }
-            
-            console.log('Found Filament RichEditor container');
-            
-            // Wait for Alpine to initialize
-            const checkAlpine = () => {
-                if (richEditorContainer._x_dataStack && richEditorContainer._x_dataStack.length > 0) {
-                    const alpineData = richEditorContainer._x_dataStack[0];
-                    if (alpineData.$getEditor) {
-                        console.log('Alpine RichEditor component found');
-                        this.setupMentionsWithFilament(element, mentionables, alpineData);
-                    } else {
-                        setTimeout(checkAlpine, 100);
-                    }
-                } else {
-                    setTimeout(checkAlpine, 100);
-                }
-            };
-            
-            checkAlpine();
-        },
-        
-        setupMentionsWithFilament(element, mentionables, alpineData) {
-            // Find the actual editor element (.ProseMirror)
-            const editorElement = element.querySelector('.ProseMirror') || 
-                                 element.closest('[x-data*="richEditorFormComponent"]').querySelector('.ProseMirror');
-            
-            if (!editorElement) {
-                console.log('Could not find ProseMirror editor element');
-                return;
-            }
-            
-            console.log('Setting up mentions with Filament integration');
-            
-            // Store references for later use
-            editorElement._mentionables = mentionables;
-            editorElement._alpineData = alpineData;
-            
-            // Add input event listener
-            editorElement.addEventListener('input', (e) => {
-                this.handleMentionInputFilament(editorElement, mentionables, alpineData);
-            });
-            
-            // Add keyup event listener for @ detection
-            editorElement.addEventListener('keyup', (e) => {
-                if (e.key === '@') {
-                    console.log('@ typed in Filament editor');
-                    this.handleMentionInputFilament(editorElement, mentionables, alpineData);
-                }
-            });
-        },
-        
-        handleMentionInputFilament(editorElement, mentionables, alpineData) {
-            const selection = window.getSelection();
-            if (!selection.rangeCount) return;
-            
-            const range = selection.getRangeAt(0);
-            if (!editorElement.contains(range.commonAncestorContainer)) return;
-            
-            // Get the text content before the cursor
-            const textNode = range.startContainer;
-            if (textNode.nodeType !== Node.TEXT_NODE) return;
-            
-            const textContent = textNode.textContent;
-            const cursorPosition = range.startOffset;
-            const textBeforeCursor = textContent.substring(0, cursorPosition);
-            
-            // Look for @ followed by text (mention pattern)
-            const mentionMatch = textBeforeCursor.match(/@([a-zA-Z0-9_\s]*)$/);
-            
-            if (mentionMatch) {
-                const query = mentionMatch[1].toLowerCase().trim();
-                console.log('Mention query:', query);
-                
-                // Store the mention context for later insertion
-                const atPosition = textBeforeCursor.lastIndexOf('@');
-                editorElement._mentionContext = {
-                    textNode: textNode,
-                    atPosition: atPosition,
-                    cursorPosition: cursorPosition,
-                    query: query,
-                    fullMatch: mentionMatch[0],
-                    alpineData: alpineData
-                };
-                
-                // Filter mentionables based on query
-                const filteredMentionables = mentionables.filter(user => {
-                    const userName = (user.name || '').toLowerCase();
-                    return query === '' || userName.includes(query);
-                });
-                
-                console.log('Filtered mentionables:', filteredMentionables);
-                
-                this.showMentionDropdown(editorElement, filteredMentionables, query);
-            } else {
-                // Clear stored context and hide dropdown if no mention pattern
-                delete editorElement._mentionContext;
-                this.hideMentionDropdown();
-            }
-        },
-        
-        observeForTipTapEditor(element) {
-            // Fallback for non-Filament setup
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.type === 'childList') {
-                        const editorElement = element.querySelector('.ProseMirror');
-                        if (editorElement && !editorElement._mentionsInitialized) {
-                            editorElement._mentionsInitialized = true;
-                            console.log('TipTap editor found (fallback), mentionables available:', element._mentionables);
-                            
-                            editorElement.addEventListener('input', (e) => {
-                                this.handleMentionInput(editorElement, element._mentionables || []);
-                            });
-                            
-                            editorElement.addEventListener('keyup', (e) => {
-                                if (e.key === '@') {
-                                    console.log('@ typed, mentionables:', element._mentionables);
-                                    this.handleMentionInput(editorElement, element._mentionables || []);
-                                }
-                            });
-                            
-                            observer.disconnect();
-                        }
-                    }
-                });
-            });
-            
-            observer.observe(element, {
-                childList: true,
-                subtree: true
-            });
-            
-            // Also check immediately
-            const editorElement = element.querySelector('.ProseMirror');
-            if (editorElement && !editorElement._mentionsInitialized) {
-                editorElement._mentionsInitialized = true;
-                console.log('TipTap editor found immediately (fallback)');
-                
-                editorElement.addEventListener('input', (e) => {
-                    this.handleMentionInput(editorElement, element._mentionables || []);
-                });
-                
-                editorElement.addEventListener('keyup', (e) => {
-                    if (e.key === '@') {
-                        this.handleMentionInput(editorElement, element._mentionables || []);
-                    }
-                });
-            }
-        },
-        
-        handleMentionInput(editorElement, mentionables) {
-            // Fallback mention handling for non-Filament setup
-            const selection = window.getSelection();
-            if (!selection.rangeCount) return;
-            
-            const range = selection.getRangeAt(0);
-            if (!editorElement.contains(range.commonAncestorContainer)) return;
-            
-            const textNode = range.startContainer;
-            if (textNode.nodeType !== Node.TEXT_NODE) return;
-            
-            const textContent = textNode.textContent;
-            const cursorPosition = range.startOffset;
-            const textBeforeCursor = textContent.substring(0, cursorPosition);
-            
-            const mentionMatch = textBeforeCursor.match(/@([a-zA-Z0-9_\s]*)$/);
-            
-            if (mentionMatch) {
-                const query = mentionMatch[1].toLowerCase().trim();
-                
-                const atPosition = textBeforeCursor.lastIndexOf('@');
-                editorElement._mentionContext = {
-                    textNode: textNode,
-                    atPosition: atPosition,
-                    cursorPosition: cursorPosition,
-                    query: query,
-                    fullMatch: mentionMatch[0]
-                };
-                
-                const filteredMentionables = mentionables.filter(user => {
-                    const userName = (user.name || '').toLowerCase();
-                    return query === '' || userName.includes(query);
-                });
-                
-                this.showMentionDropdown(editorElement, filteredMentionables, query);
-            } else {
-                delete editorElement._mentionContext;
-                this.hideMentionDropdown();
-            }
-        },
-        
-        hideMentionDropdown() {
-            const existingDropdown = document.querySelector('.mention-dropdown');
-            if (existingDropdown) {
-                existingDropdown.remove();
-            }
-        },
-        
-        showMentionDropdown(editorElement, mentionables, query) {
-            console.log('Showing mention dropdown with:', mentionables);
-            
-            // Remove any existing dropdown
-            this.hideMentionDropdown();
-            
-            // Don't show dropdown if no matches
-            if (!mentionables || mentionables.length === 0) {
-                return;
-            }
-            
-            // Create dropdown
-            const dropdown = document.createElement('div');
-            dropdown.className = 'mention-dropdown';
-            
-            dropdown.innerHTML = mentionables
-                .slice(0, 5) // Limit to 5 users
-                .map((user, index) => {
-                    const userName = user.name || 'Unknown User';
-                    const userId = user.id || 0;
-                    
-                    // Highlight matching text
-                    const highlightedName = query ? 
-                        userName.replace(new RegExp(`(${query})`, 'gi'), '<strong>$1</strong>') : 
-                        userName;
-                    
-                    return `
-                        <div class="mention-item" data-user-id="${userId}" data-user-name="${userName}">
-                            <div class="avatar">
-                                ${userName.charAt(0).toUpperCase()}
-                            </div>
-                            <span class="name">${highlightedName}</span>
-                        </div>
-                    `;
-                })
-                .join('');
-            
-            // Position dropdown near the cursor
-            const rect = editorElement.getBoundingClientRect();
-            dropdown.style.position = 'fixed';
-            dropdown.style.top = (rect.bottom + 5) + 'px';
-            dropdown.style.left = rect.left + 'px';
-            
-            // Add to document
-            document.body.appendChild(dropdown);
-            
-            // Add click handlers
-            dropdown.querySelectorAll('.mention-item').forEach((item) => {
-                item.addEventListener('click', () => {
-                    const userId = item.getAttribute('data-user-id');
-                    const userName = item.getAttribute('data-user-name');
-                    
-                    console.log('User selected:', userId, userName);
-                    
-                    this.insertMentionFilament(editorElement, userId, userName);
-                    this.hideMentionDropdown();
-                });
-            });
-            
-            // Close dropdown when clicking outside
+        });
+        this.hideDropdown();
+    },
+
+        observeForTipTapEditor() {
+            // Wait for TipTap editor to be ready
             setTimeout(() => {
-                document.addEventListener('click', function closeDropdown(e) {
-                    if (!dropdown.contains(e.target)) {
-                        this.hideMentionDropdown();
-                        document.removeEventListener('click', closeDropdown);
-                    }
-                }.bind(this));
+                this.findAndObserveTipTapEditors();
             }, 100);
         },
-        
-        insertMentionFilament(editorElement, userId, userName) {
-            console.log('Attempting to insert mention with Filament:', userId, userName);
+
+        findAndObserveTipTapEditors() {
+            // Look for Filament RichEditor containers within our scope
+            const richEditorContainers = this.$el.querySelectorAll('.fi-fo-rich-editor');
             
+            richEditorContainers.forEach((container, index) => {
+                // Look for the actual TipTap editor element
+                const editorElement = container.querySelector('.tiptap.ProseMirror');
+                
+                if (editorElement) {
+                    this.setupMentionHandling(editorElement, container);
+                } else {
+                    // Retry after a short delay
+                    setTimeout(() => {
+                        const retryEditorElement = container.querySelector('.tiptap.ProseMirror');
+                        if (retryEditorElement) {
+                            this.setupMentionHandling(retryEditorElement, container);
+                        }
+                    }, 500);
+                }
+            });
+        },
+
+        setupMentionHandling(editorElement, container) {
+            // Get the Alpine component that manages this editor
+            const alpineComponent = container.closest('[x-data]');
+            let alpineData = null;
+            
+            if (alpineComponent && alpineComponent._x_dataStack) {
+                alpineData = alpineComponent._x_dataStack[0];
+            }
+            
+            // Add event listeners
+            editorElement.addEventListener('input', (event) => {
+                this.handleMentionInput(event, editorElement, alpineData);
+            });
+            
+            editorElement.addEventListener('keyup', (event) => {
+                this.handleMentionInput(event, editorElement, alpineData);
+            });
+            
+            editorElement.addEventListener('keydown', (event) => {
+                if (this.showDropdown) {
+                    this.handleDropdownKeydown(event, editorElement);
+                }
+            });
+            
+            // Handle clicks outside to close dropdown
+            document.addEventListener('click', (event) => {
+                if (this.showDropdown && !event.target.closest('.mention-dropdown') && !event.target.closest('.tiptap')) {
+                    this.hideDropdown();
+                }
+            });
+            
+            // Prevent dropdown from closing when clicking inside it
+            document.addEventListener('click', (event) => {
+                if (event.target.closest('.mention-dropdown')) {
+                    event.stopPropagation();
+                }
+            });
+        },
+
+        handleMentionInput(event, editorElement, alpineData) {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            
+            const range = selection.getRangeAt(0);
+            const textNode = range.startContainer;
+            
+            if (textNode.nodeType !== Node.TEXT_NODE) return;
+            
+            const textContent = textNode.textContent;
+            const cursorPosition = range.startOffset;
+            
+            // Look for @ symbol followed by characters
+            const textBeforeCursor = textContent.substring(0, cursorPosition);
+            const mentionMatch = textBeforeCursor.match(/@([a-zA-Z0-9_\s]*)$/);
+            
+            if (mentionMatch) {
+                const query = mentionMatch[1];
+                const fullMatch = mentionMatch[0];
+                const atPosition = textBeforeCursor.lastIndexOf('@');
+                
+                // Store the current query
+                this.currentQuery = query;
+                
+                // Store context for insertion
+                editorElement._mentionContext = {
+                    textNode,
+                    atPosition,
+                    cursorPosition,
+                    fullMatch,
+                    alpineData
+                };
+                
+                this.filterMentionables(query);
+                this.showMentionDropdown(editorElement, range);
+            } else {
+                this.hideDropdown();
+                delete editorElement._mentionContext;
+            }
+        },
+
+        filterMentionables(query) {
+            if (!query) {
+                this.filteredMentionables = this.mentionables.slice(0, 10);
+            } else {
+                this.filteredMentionables = this.mentionables.filter(user => 
+                    user.name.toLowerCase().includes(query.toLowerCase())
+                ).slice(0, 10);
+            }
+
+            this.selectedIndex = 0;
+        },
+
+        showMentionDropdown(editorElement, range) {
+            // Get cursor position relative to the viewport
+            const rect = range.getBoundingClientRect();
+            
+            // Check if this is an edit form by looking for specific container classes
+            const isEditForm = editorElement.closest('[wire\\:submit="updateComment"]') !== null;
+            
+            if (isEditForm) {
+                // For edit forms, use fixed positioning relative to viewport
+                this.dropdownPosition = {
+                    top: rect.bottom + 5,
+                    left: rect.left
+                };
+            } else {
+                // For main comment form, try to position relative to Alpine container
+                const alpineContainer = editorElement.closest('[x-data*="forumMentions"]');
+                
+                if (alpineContainer) {
+                    const containerRect = alpineContainer.getBoundingClientRect();
+                    this.dropdownPosition = {
+                        top: rect.bottom - containerRect.top + 5,
+                        left: rect.left - containerRect.left
+                    };
+                } else {
+                    // Fallback to fixed positioning
+                    this.dropdownPosition = {
+                        top: rect.bottom + 5,
+                        left: rect.left
+                    };
+                }
+            }
+            
+            this.showDropdown = true;
+        },
+
+        hideDropdown() {
+            this.showDropdown = false;
+            this.filteredMentionables = [];
+            this.selectedIndex = 0;
+            this.currentQuery = '';
+            
+            // Clean up mention context from editors in current scope
+            const editorInScope = this.$el.querySelector('.tiptap.ProseMirror');
+            if (editorInScope && editorInScope._mentionContext) {
+                delete editorInScope._mentionContext;
+            }
+        },
+
+        handleDropdownKeydown(event, editorElement) {
+            switch (event.key) {
+                case 'ArrowDown':
+                    event.preventDefault();
+                    this.selectedIndex = Math.min(this.selectedIndex + 1, this.filteredMentionables.length - 1);
+                    break;
+                case 'ArrowUp':
+                    event.preventDefault();
+                    this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
+                    break;
+                case 'Enter':
+                case 'Tab':
+                    event.preventDefault();
+                    if (this.filteredMentionables[this.selectedIndex]) {
+                        this.insertMention(editorElement, this.filteredMentionables[this.selectedIndex].id, this.filteredMentionables[this.selectedIndex].name);
+                    }
+                    break;
+                case 'Escape':
+                    event.preventDefault();
+                    this.hideDropdown();
+                    break;
+            }
+        },
+
+        clickMention(userId, userName, editorElement) {
+            // Find the editor element if not provided
+            if (!editorElement) {
+                editorElement = this.$el.querySelector('.tiptap.ProseMirror');
+            }
+            
+            if (editorElement) {
+                this.insertMention(editorElement, userId, userName);
+            } else {
+                console.error('Could not find editor element for mention insertion');
+            }
+        },
+
+        // Method called from the template
+        selectMention(user) {
+            // First try to find editor within this Alpine component scope
+            const editorElement = this.$el.querySelector('.tiptap.ProseMirror');
+            if (editorElement && editorElement._mentionContext) {
+                console.log('Found editor with context in current scope');
+                this.insertMention(editorElement, user.id, user.name);
+                return;
+            }
+            
+            // Find the editor that has mention context AND is within an Alpine scope that has showDropdown = true
+            const allEditors = document.querySelectorAll('.tiptap.ProseMirror');
+            
+            // Prioritize editor within current Alpine scope even if it doesn't have context
+            if (editorElement) {
+                // Check if current Alpine scope has dropdown showing
+                if (this.showDropdown) {
+                    this.insertMentionFallback(user.name);
+                    return;
+                }
+            }
+            
+            // Fallback: find any editor with context
+            for (let editor of allEditors) {
+                if (editor._mentionContext) {
+                    this.insertMention(editor, user.id, user.name);
+                    return;
+                }
+            }
+
+            // Last resort: use current scope editor
+            if (editorElement) {
+                this.insertMentionFallback(user.name);
+            } else {
+                console.error('No editor found at all');
+            }
+        },
+
+        insertMention(editorElement, userId, userName) {
             const context = editorElement._mentionContext;
             if (!context) {
                 console.error('No mention context available');
+                this.insertMentionFallback(userName);
                 return;
             }
             
-            // Try using Filament's $getEditor() function first
-            if (context.alpineData && context.alpineData.$getEditor) {
-                const editor = context.alpineData.$getEditor();
-                if (editor) {
-                    console.log('Using Filament editor to insert mention');
-                    
-                    try {
-                        // Delete the @query text first
-                        editor.chain()
-                            .focus()
-                            .deleteRange({ 
-                                from: editor.state.selection.from - context.fullMatch.length, 
-                                to: editor.state.selection.from 
-                            })
-                            .run();
-                        
-                        // Insert the mention text as plain text (server will process it)
-                        editor.chain()
-                            .focus()
-                            .insertContent(`@${userName} `)
-                            .run();
-                        
-                        console.log('Mention inserted as plain text');
-                        delete editorElement._mentionContext;
-                        return;
-                        
-                    } catch (error) {
-                        console.error('TipTap insertion failed:', error);
-                    }
-                }
-            }
-            
-            // Fallback to DOM manipulation (this was working before)
-            console.log('Falling back to DOM manipulation');
-            this.insertMentionDOM(editorElement, userId, userName, context);
-        },
-        
-        insertMentionDOM(editorElement, userId, userName, context) {
             try {
-                const selection = window.getSelection();
-                const range = selection.getRangeAt(0);
+                // Focus the editor first
+                editorElement.focus();
                 
-                // Find the text node containing the @ symbol
+                // Use the stored context to replace text directly
                 let textNode = context.textNode;
                 let startOffset = context.atPosition;
-                let endOffset = context.cursorPosition;
                 
-                // Ensure we have a valid text node
-                if (!textNode || textNode.nodeType !== Node.TEXT_NODE) {
-                    console.log('Invalid text node, trying to find current text node');
-                    textNode = range.startContainer;
-                    if (textNode.nodeType !== Node.TEXT_NODE) {
-                        textNode = textNode.childNodes[0];
-                    }
-                    
-                    if (!textNode || textNode.nodeType !== Node.TEXT_NODE) {
-                        console.error('Could not find valid text node');
-                        return;
-                    }
-                    
-                    // Recalculate positions
-                    const textContent = textNode.textContent;
-                    const atIndex = textContent.lastIndexOf('@');
-                    if (atIndex === -1) {
-                        console.error('Could not find @ symbol in text node');
-                        return;
-                    }
-                    startOffset = atIndex;
-                    endOffset = range.startOffset;
+                // Validate text node is still valid
+                if (!textNode || !textNode.parentNode || textNode.nodeType !== Node.TEXT_NODE) {
+                    console.log('Text node is no longer valid, using fallback');
+                    this.insertMentionFallback(userName);
+                    return;
                 }
                 
-                // Create a new range for replacement
-                const replaceRange = document.createRange();
-                replaceRange.setStart(textNode, startOffset);
-                replaceRange.setEnd(textNode, endOffset);
+                // find the @ symbol and replace everything from @ to the end of the match
+                const originalText = textNode.textContent;
+                const beforeAtSymbol = originalText.substring(0, startOffset);
+                const afterMatch = originalText.substring(startOffset + context.fullMatch.length);
+                const newText = beforeAtSymbol + `@${userName} ` + afterMatch;
                 
-                // Delete the @query text
-                replaceRange.deleteContents();
+                // Update the text content
+                textNode.textContent = newText;
                 
-                // Insert the plain text mention (server will process it)
-                const mentionText = document.createTextNode(`@${userName} `);
-                replaceRange.insertNode(mentionText);
+                // Create a new selection at the end of the inserted mention
+                const newCursorPosition = startOffset + `@${userName} `.length;
                 
-                // Position cursor after the mention
-                replaceRange.setStartAfter(mentionText);
-                replaceRange.collapse(true);
-                
-                // Update selection
+                // Create a new range and selection
+                const selection = window.getSelection();
                 selection.removeAllRanges();
-                selection.addRange(replaceRange);
                 
-                console.log('Mention inserted via DOM manipulation');
+                try {
+                    const range = document.createRange();
+                    range.setStart(textNode, newCursorPosition);
+                    range.setEnd(textNode, newCursorPosition);
+                    selection.addRange(range);
+                } catch (rangeError) {
+                    console.log('Range creation failed, but text was inserted:', rangeError.message);
+                }
                 
-                // Trigger input event to notify the editor
+                // Trigger input event
                 setTimeout(() => {
                     const inputEvent = new Event('input', { bubbles: true });
                     editorElement.dispatchEvent(inputEvent);
                 }, 10);
                 
             } catch (error) {
-                console.error('DOM manipulation insertion failed:', error);
-                // If all else fails, just insert at current cursor position
-                try {
-                    document.execCommand('insertText', false, `@${userName} `);
-                    console.log('Used execCommand fallback');
-                } catch (execError) {
-                    console.error('execCommand fallback also failed:', execError);
-                }
+                console.error('Mention insertion failed:', error);
+                this.insertMentionFallback(userName);
             }
             
             // Clean up
             delete editorElement._mentionContext;
+            this.hideDropdown();
         },
+        
+        insertMentionFallback(userName) {
+            try {
+                // Try to find the current selection and replace @query with @username
+                const selection = window.getSelection();
+                if (selection.rangeCount > 0) {
+                    const range = selection.getRangeAt(0);
+                    const textNode = range.startContainer;
+                    
+                    if (textNode.nodeType === Node.TEXT_NODE) {
+                        const textContent = textNode.textContent;
+                        const cursorPosition = range.startOffset;
+                        
+                        // Look for @ symbol in the entire text content (not just before cursor)
+                        const atIndex = textContent.indexOf('@');
+                        
+                        if (atIndex !== -1) {
+                            // Replace the @ and any text after it with @username
+                            const beforeAt = textContent.substring(0, atIndex);
+                            const newText = beforeAt + `@${userName} `;
+                            
+                            textNode.textContent = newText;
+                            
+                            // Position cursor after the mention
+                            const newCursorPosition = atIndex + `@${userName} `.length;
+                            const newRange = document.createRange();
+                            newRange.setStart(textNode, newCursorPosition);
+                            newRange.setEnd(textNode, newCursorPosition);
+                            selection.removeAllRanges();
+                            selection.addRange(newRange);
+
+                            this.hideDropdown();
+                            return;
+                        } else {
+                            console.log('No @ symbol found in text content');
+                        }
+                    }
+                }
+
+                // Last resort: just insert the username (this will add to current position)
+                document.execCommand('insertText', false, `${userName} `);
+                
+            } catch (error) {
+                console.error('All fallback methods failed:', error);
+            }
+            
+            // Clean up and hide dropdown
+            const editorElements = document.querySelectorAll('.tiptap.ProseMirror');
+            editorElements.forEach(el => delete el._mentionContext);
+            this.hideDropdown();
+        },
+
+        highlightQuery(name, query) {
+            if (!query) return name;
+            
+            const regex = new RegExp(`(${query})`, 'gi');
+            return name.replace(regex, '<mark>$1</mark>');
+        }
     }
 }

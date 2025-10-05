@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Tapp\FilamentForum\Events\ForumCommentCreated;
-use Tapp\FilamentForum\Filament\RichEditor\Plugins\MentionPlugin;
 use Tapp\FilamentForum\Models\ForumComment;
 use Tapp\FilamentForum\Models\ForumPost;
 
@@ -73,9 +72,6 @@ class ForumComments extends Component implements HasActions, HasSchemas
                     ->fileAttachmentsDisk('public')
                     ->fileAttachmentsDirectory('forum-comments')
                     ->fileAttachmentsVisibility('public')
-                    ->plugins([
-                        new MentionPlugin,
-                    ])
                     ->toolbarButtons([
                         'attachFiles',
                         'blockquote',
@@ -108,9 +104,6 @@ class ForumComments extends Component implements HasActions, HasSchemas
                     ->fileAttachmentsDisk('public')
                     ->fileAttachmentsDirectory('forum-comments')
                     ->fileAttachmentsVisibility('public')
-                    ->plugins([
-                        new MentionPlugin,
-                    ])
                     ->toolbarButtons([
                         'attachFiles',
                         'blockquote',
@@ -254,7 +247,11 @@ class ForumComments extends Component implements HasActions, HasSchemas
         }
 
         $comment->delete();
-        $this->loadComments();
+        
+        // Use a more conservative approach - just remove from collection
+        $this->comments = $this->comments->reject(function ($c) use ($commentId) {
+            return $c->id === $commentId;
+        });
 
         Notification::make()
             ->title(__('filament-forum::filament-forum.comments.deleted'))
@@ -332,7 +329,17 @@ class ForumComments extends Component implements HasActions, HasSchemas
     {
         if ($this->paginated) {
             $this->currentPage++;
-            $this->loadComments();
+            
+            // Load only the new comments for this page
+            $newComments = $this->record->comments()
+                ->with(['author', 'reactions.reactor', 'media'])
+                ->latest()
+                ->skip(($this->currentPage - 1) * $this->perPage)
+                ->take($this->perPage)
+                ->get();
+            
+            // Append new comments to existing collection
+            $this->comments = $this->comments->merge($newComments);
         }
     }
 

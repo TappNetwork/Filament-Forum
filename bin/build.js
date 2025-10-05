@@ -71,4 +71,11 @@ compile({
     outfile: './resources/dist/forum-mentions.js',
 })
 
+compile({
+    ...defaultOptions,
+    entryPoints: ['./resources/js/tiptap/mention.js'],
+    outfile: './resources/dist/tiptap-mention.js',
+    format: 'esm', // Output as ES module for Filament to import
+})
+
 console.log('Build complete!')

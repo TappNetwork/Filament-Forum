@@ -1,22 +1,52 @@
 <div class="space-y-6" @if($pollingInterval) wire:poll.{{ $pollingInterval }}="refreshComments" @endif>
     {{-- Comment Form --}}
     @auth
-        <div class="bg-white dark:bg-gray-900 rounded-lg dark:border-gray-700"
-             x-load
-             x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('forum-mentions', 'tapp/filament-forum') }}"
-             x-data="forumMentions({
-                 mentionables: @js($this->getMentionablesData())
-             })">
-            <form wire:submit="create" class="space-y-4">
-                {{ $this->commentForm }}
-                
-                <div class="flex justify-end">
-                    <x-filament::button type="submit" wire:loading.attr="disabled">
-                        <x-filament::loading-indicator wire:loading wire:target="create" class="h-4 w-4 mr-2" />
-                        {{ __('filament-forum::filament-forum.comments.post-comment') }}
-                    </x-filament::button>
+        <div class="bg-white dark:bg-gray-900 rounded-lg dark:border-gray-700 relative">
+            <div x-load
+                 x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('forum-mentions', 'tapp/filament-forum') }}"
+                 x-data="forumMentions({
+                     mentionables: @js($this->getMentionablesData())
+                 })">
+                <form wire:submit="create" class="space-y-4">
+                    {{ $this->commentForm }}
+                    
+                    <div class="flex justify-end">
+                        <x-filament::button type="submit" wire:loading.attr="disabled">
+                            <x-filament::loading-indicator wire:loading wire:target="create" class="h-4 w-4 mr-2" />
+                            {{ __('filament-forum::filament-forum.comments.post-comment') }}
+                        </x-filament::button>
+                    </div>
+                </form>
+
+                {{-- Mentions Dropdown --}}
+                <div x-show="showDropdown" 
+                     x-cloak
+                     class="mention-dropdown"
+                     style="position: absolute; z-index: 9999;"
+                     :style="`top: ${dropdownPosition.top}px; left: ${dropdownPosition.left}px;`">
+                    <template x-for="(user, index) in filteredMentionables" :key="user.id">
+                        <div class="mention-item"
+                             :class="{ 'bg-gray-100 dark:bg-gray-600': index === selectedIndex }"
+                             @click.stop="selectMention(user)">
+                            <div class="avatar">
+                                <template x-if="user.avatar">
+                                    <img :src="user.avatar" :alt="user.name" class="w-full h-full rounded-full">
+                                </template>
+                                <template x-if="!user.avatar">
+                                    <span x-text="user.name.charAt(0).toUpperCase()" class="text-gray-600 dark:text-gray-300"></span>
+                                </template>
+                            </div>
+                            <span class="name" x-html="highlightQuery(user.name, currentQuery || '')"></span>
+                        </div>
+                    </template>
+                    
+                    <template x-if="filteredMentionables.length === 0">
+                        <div class="mention-item text-gray-500 dark:text-gray-400">
+                            No users found
+                        </div>
+                    </template>
                 </div>
-            </form>
+            </div>
         </div>
     @else
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-center">
@@ -27,7 +57,7 @@
     @endauth
 
     {{-- Comments List --}}
-    <div class="space-y-4" wire:key="comments-list">
+    <div class="space-y-4">
         {{-- Comments Count --}}
         @if($comments->count() > 0)
             <div class="flex items-center justify-between mb-4">
@@ -85,14 +115,15 @@
                 </div>
 
                 {{-- Comment Content --}}
-                @if($editingCommentId === $comment->id)
-                    {{-- Edit Form --}}
-                    <div class="mb-3"
-                         x-load
-                         x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('forum-mentions', 'tapp/filament-forum') }}"
-                         x-data="forumMentions({
-                             mentionables: @js($this->getMentionablesData())
-                         })">
+                <div wire:key="content-{{ $comment->id }}">
+                    @if($editingCommentId === $comment->id)
+                        {{-- Edit Form --}}
+                        <div class="mb-3" wire:key="edit-form-{{ $comment->id }}"
+                             x-load
+                             x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('forum-mentions', 'tapp/filament-forum') }}"
+                             x-data="forumMentions({
+                                 mentionables: @js($this->getMentionablesData())
+                             })">
                         <form wire:submit="updateComment" class="space-y-3">
                             {{ $this->editCommentForm }}
                             
@@ -110,13 +141,43 @@
                                 </x-filament::button>
                             </div>
                         </form>
+
+                        {{-- Mentions Dropdown for Edit Form --}}
+                        <div x-show="showDropdown" 
+                             x-cloak
+                             class="mention-dropdown fixed-position"
+                             style="position: fixed; z-index: 9999;"
+                             :style="`top: ${dropdownPosition.top}px; left: ${dropdownPosition.left}px;`">
+                            <template x-for="(user, index) in filteredMentionables" :key="user.id">
+                                <div class="mention-item"
+                                     :class="{ 'bg-gray-100 dark:bg-gray-600': index === selectedIndex }"
+                                     @click.stop="selectMention(user)">
+                                    <div class="avatar">
+                                        <template x-if="user.avatar">
+                                            <img :src="user.avatar" :alt="user.name" class="w-full h-full rounded-full">
+                                        </template>
+                                        <template x-if="!user.avatar">
+                                            <span x-text="user.name.charAt(0).toUpperCase()" class="text-gray-600 dark:text-gray-300"></span>
+                                        </template>
+                                    </div>
+                                    <span class="name" x-html="highlightQuery(user.name, currentQuery || '')"></span>
+                                </div>
+                            </template>
+                            
+                            <template x-if="filteredMentionables.length === 0">
+                                <div class="mention-item text-gray-500 dark:text-gray-400">
+                                    No users found
+                                </div>
+                            </template>
+                        </div>
                     </div>
-                @else
-                    {{-- Display Content --}}
-                    <div class="prose dark:prose-invert max-w-none mb-3">
-                        {!! $this->renderRichContent($comment->content) !!}
-                    </div>
-                @endif
+                    @else
+                        {{-- Display Content --}}
+                        <div class="prose dark:prose-invert max-w-none mb-3">
+                            {!! $this->renderRichContent($comment->content) !!}
+                        </div>
+                    @endif
+                </div>
 
                 {{-- Comment Attachments --}}
                 @if($comment->hasMedia('attachments'))
@@ -179,3 +240,19 @@
     {{-- Action Modals --}}
     <x-filament-actions::modals />
 </div>
+
+{{-- Simplified cleanup for wire:replace --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Minimal cleanup since wire:replace handles DOM replacement
+    document.addEventListener('livewire:morphed', function(event) {
+        // Clean up any stale Alpine contexts after DOM replacement
+        const staleEditors = document.querySelectorAll('.tiptap.ProseMirror');
+        staleEditors.forEach(editor => {
+            if (editor._mentionContext && !editor.isConnected) {
+                delete editor._mentionContext;
+            }
+        });
+    });
+});
+</script>
