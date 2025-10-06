@@ -2,7 +2,6 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Tables;
 
-use App\Models\User;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -19,6 +18,7 @@ class ForumPostsTable
     public static function configure(Table $table): Table
     {
         $titleAttribute = config('filament-forum.user.title-attribute');
+        $userModelClass = config('filament-forum.user.model', 'App\\Models\\User');
 
         return $table
             ->columns([
@@ -61,7 +61,7 @@ class ForumPostsTable
                     ViewAction::make(),
                     EditAction::make(),
                     CommentsAction::make()
-                        ->mentionables(User::all()),
+                        ->mentionables($userModelClass::getMentionableUsers()),
                     DeleteAction::make(),
                 ])
                     ->tooltip('Actions'),

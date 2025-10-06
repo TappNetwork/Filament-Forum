@@ -112,3 +112,4 @@ export const Mention = Node.create({
 })
 
 export default Mention
+

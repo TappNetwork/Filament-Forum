@@ -10,7 +10,7 @@ class ForumCommentsEntry extends Entry
 {
     protected string $view = 'filament-forum::filament.infolists.components.forum-comments-entry';
 
-    protected array|Closure|null $mentionables = null;
+    protected array|Collection|Closure|null $mentionables = null;
 
     protected bool|Closure $paginated = false;
 

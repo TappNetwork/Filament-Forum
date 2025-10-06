@@ -72,7 +72,11 @@ A forum package for Filament apps that provides both admin and frontend resource
    }
    ```
 
-5. Add `HasFavoriteForumPost` trait to your User model:
+5. User model requirements
+
+- Ensure your User model has a `name` attribute
+
+- Add `HasFavoriteForumPost` trait to your `User` model:
 
 ```php
 use Tapp\FilamentForum\Models\Traits\HasFavoriteForumPost;
@@ -82,6 +86,17 @@ class User extends Authenticatable
     // ...
     use HasFavoriteForumPost;
     // ...
+}
+```
+
+- Add `HasMentionables` trait (you can use it to customize which users are mentionable, see below in "Custom Mentionables") to your `User` model
+
+```php
+use Tapp\FilamentForum\Models\Traits\HasMentionables;
+
+class User extends Authenticatable
+{
+    use HasMentionables;
 }
 ```
 
@@ -177,6 +192,35 @@ class User extends Authenticatable
         $user = static::find($value);
         
         return $user ? "{$user->name} ({$user->email})" : null;
+    }
+}
+```
+
+## Custom Mentionables
+
+You can customize which users are mentionable by overriding the `getMentionableUsers()` method in your `User` model:
+
+```php
+// In your User model
+public static function getMentionableUsers()
+{
+    // Only active users
+    return static::where('is_active', true)->get();
+}
+```
+
+## User Avatar
+
+Optionally, implements Filament's `HasAvatar` interface:
+
+```php
+use Filament\Models\Contracts\HasAvatar;
+
+class User extends Authenticatable implements HasAvatar
+{   
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar_url;
     }
 }
 ```
