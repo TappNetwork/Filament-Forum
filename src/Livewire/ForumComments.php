@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Tapp\FilamentForum\Events\ForumCommentCreated;
+use Tapp\FilamentForum\Events\UserWasMentioned;
 use Tapp\FilamentForum\Models\ForumComment;
 use Tapp\FilamentForum\Models\ForumPost;
 
@@ -151,8 +152,8 @@ class ForumComments extends Component implements HasActions, HasSchemas
         $mentioned = $this->extractMentions($processedContent);
         if ($mentioned->isNotEmpty()) {
             foreach ($mentioned as $user) {
-                // Dispatch mention event if needed
-                // UserWasMentionedEvent::dispatch($user, $comment);
+                // Dispatch mention event
+                UserWasMentioned::dispatch($user, $comment);
             }
         }
 

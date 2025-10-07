@@ -48,8 +48,6 @@ class ForumCommentReactions extends Component
         $this->comment->toggleReaction($type, Auth::user());
         $this->loadReactions();
         $this->showReactionPicker = false;
-
-        // No need to dispatch events - each component manages its own state
     }
 
     public function toggleReactionPicker(): void

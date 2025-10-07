@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Tapp\FilamentForum\Events\CommentWasReacted;
 
 /**
  * @property int $id
@@ -141,11 +142,29 @@ class ForumComment extends Model implements HasMedia
         if ($existingReaction) {
             $existingReaction->delete();
         } else {
-            $this->reactions()->create([
+            $reaction = $this->reactions()->create([
                 'reactor_id' => $user->getKey(),
                 'reactor_type' => get_class($user),
                 'type' => $reaction,
             ]);
+
+            CommentWasReacted::dispatch(
+                $user, 
+                $this,
+                $reaction
+            );
+
+            // Dispatch CommentWasReacted event for users mentioned in this comment
+            // $mentioned = $this->getMentioned();
+            // if ($mentioned->isNotEmpty()) {
+            //     foreach ($mentioned as $user) {
+            //         CommentWasReacted::dispatch(
+            //             $user, 
+            //             $this,
+            //             $reaction
+            //         );
+            //     }
+            // }
         }
     }
 
