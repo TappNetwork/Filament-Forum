@@ -149,7 +149,7 @@ class ForumComment extends Model implements HasMedia
             ]);
 
             CommentWasReacted::dispatch(
-                $user, 
+                $user,
                 $this,
                 $reaction
             );
@@ -159,7 +159,7 @@ class ForumComment extends Model implements HasMedia
             // if ($mentioned->isNotEmpty()) {
             //     foreach ($mentioned as $user) {
             //         CommentWasReacted::dispatch(
-            //             $user, 
+            //             $user,
             //             $this,
             //             $reaction
             //         );
