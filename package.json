@@ -1,0 +1,17 @@
+{
+    "name": "filament-forum",
+    "version": "1.0.0",
+    "description": "Filament Forum Plugin Assets",
+    "main": "resources/js/filament-forum.js",
+    "type": "module",
+    "scripts": {
+        "build": "node bin/build.js",
+        "dev": "node bin/build.js --dev"
+    },
+    "keywords": ["filament", "forum", "mentions", "laravel"],
+    "author": "Tapp Network",
+    "license": "MIT",
+    "devDependencies": {
+        "esbuild": "^0.19.0"
+    }
+}

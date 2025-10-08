@@ -72,7 +72,11 @@ A forum package for Filament apps that provides both admin and frontend resource
    }
    ```
 
-5. Add `HasFavoriteForumPost` trait to your User model:
+5. User model requirements
+
+- Ensure your User model has a `name` attribute
+
+- Add `HasFavoriteForumPost` trait to your `User` model:
 
 ```php
 use Tapp\FilamentForum\Models\Traits\HasFavoriteForumPost;
@@ -82,6 +86,17 @@ class User extends Authenticatable
     // ...
     use HasFavoriteForumPost;
     // ...
+}
+```
+
+- Add `HasMentionables` trait (you can use it to customize which users are mentionable, see below in "Custom Mentionables") to your `User` model
+
+```php
+use Tapp\FilamentForum\Models\Traits\HasMentionables;
+
+class User extends Authenticatable
+{
+    use HasMentionables;
 }
 ```
 
@@ -181,6 +196,141 @@ class User extends Authenticatable
 }
 ```
 
+## Custom Mentionables
+
+You can customize which users are mentionable by overriding the `getMentionableUsers()` method in your `User` model:
+
+```php
+// In your User model
+public static function getMentionableUsers()
+{
+    // Only active users
+    return static::where('is_active', true)->get();
+}
+```
+
+## User Avatar
+
+Optionally, implements Filament's `HasAvatar` interface:
+
+```php
+use Filament\Models\Contracts\HasAvatar;
+
+class User extends Authenticatable implements HasAvatar
+{   
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar_url;
+    }
+}
+```
+
+## Events Dispatched
+
+The plugin automatically dispatches events when a forum is created, a comment is created, reacted to, or when users are mentioned in a comment:
+
+- `Tapp\FilamentForum\Events\ForumCommentCreated`
+- `Tapp\FilamentForum\Events\ForumPostCreated`
+- `Tapp\FilamentForum\Events\CommentWasReacted`
+- `Tapp\FilamentForum\Events\UserWasMentioned`
+
+### UserWasMentioned Event
+
+You can send a notification by listening to the `UserWasMentioned` event. The event structure is:
+
+```php
+use Tapp\FilamentForum\Events\UserWasMentioned;
+
+// The event contains:
+// - $mentionedUser: The user who was mentioned
+// - $comment: The ForumComment instance
+```
+
+Example usage:
+
+```php
+namespace App\Listeners;
+
+use App\Notifications\UserMentionedNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
+use Illuminate\Queue\InteractsWithQueue;
+use Tapp\FilamentForum\Events\UserWasMentioned;
+
+class SendUserMentionedNotification implements ShouldQueue
+{
+    use InteractsWithQueue;
+
+    public function handle(UserWasMentioned $event): void
+    {
+        $mentionedUser = $event->mentionedUser;
+        $comment = $event->comment;
+        
+        // Send notification to the mentioned user
+        $mentionedUser->notify(new UserMentionedNotification($comment));
+        
+        // Or dispatch a custom notification
+        Notification::make()
+            ->title('You were mentioned in a comment')
+            ->body("You were mentioned by {$comment->author->name}")
+            ->sendToDatabase($mentionedUser);
+    }
+}
+```
+
+This should work with [Laravel's event auto-discovery](https://laravel.com/docs/11.x/events#registering-events-and-listeners). If not, you can register your listener on `EventServiceProvider`:
+
+```php
+use Tapp\FilamentForum\Events\UserWasMentioned;
+use App\Listeners\SendUserMentionedNotification;
+
+protected $listen = [
+    UserWasMentioned::class => [
+        SendUserMentionedNotification::class,
+    ],
+];
+```
+
+Custom notification example:
+
+```php
+namespace App\Notifications;
+
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Tapp\FilamentForum\Models\ForumComment;
+
+class UserMentionedNotification extends Notification
+{
+    public function __construct(
+        public ForumComment $comment
+    ) {}
+
+    public function via($notifiable)
+    {
+        return ['database', 'mail'];
+    }
+
+    public function toDatabase($notifiable)
+    {
+        return [
+            'title' => 'You were mentioned',
+            'body' => "You were mentioned in a comment by {$this->comment->author->name}",
+            'comment_id' => $this->comment->id,
+            'forum_post_id' => $this->comment->forumPost->id,
+        ];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+            ->subject('You were mentioned in a forum comment')
+            ->line("You were mentioned in a comment by {$this->comment->author->name}")
+            ->action('View Comment', route('forum.posts.show', $this->comment->forumPost));
+    }
+}
+```
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
@@ -196,6 +346,7 @@ If you discover any security-related issues, please email security@tappnetwork.c
 ## Credits
 
 -  [Tapp Network](https://github.com/TappNetwork)
+-  Comments inspired by [Commentions](https://github.com/kirschbaum-development/commentions)
 -  [All Contributors](../../contributors)
 
 ## License
