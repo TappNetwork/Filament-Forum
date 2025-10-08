@@ -454,41 +454,6 @@ class ForumComments extends Component implements HasActions, HasSchemas
         try {
             return RichContentRenderer::make($content)
                 ->fileAttachmentsDisk('public')
-                ->allowedElements([
-                    'a', 'abbr', 'acronym', 'address', 'area', 'article', 'aside', 'audio', 'b',
-                    'bdi', 'bdo', 'big', 'blockquote', 'br', 'button', 'canvas', 'caption',
-                    'center', 'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del',
-                    'details', 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'em', 'fieldset',
-                    'figcaption', 'figure', 'font', 'footer', 'form', 'h1', 'h2', 'h3', 'h4',
-                    'h5', 'h6', 'header', 'hgroup', 'hr', 'i', 'img', 'input', 'ins', 'kbd',
-                    'label', 'legend', 'li', 'main', 'map', 'mark', 'menu', 'menuitem', 'meter',
-                    'nav', 'nobr', 'ol', 'optgroup', 'option', 'output', 'p', 'pre', 'progress',
-                    'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'select', 'small', 'span',
-                    'strike', 'strong', 'sub', 'summary', 'sup', 'table', 'tbody', 'td',
-                    'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'tt', 'u', 'ul', 'var',
-                    'video', 'wbr',
-                ])
-                ->allowedAttributes([
-                    'a' => ['href', 'title', 'target', 'rel'],
-                    'img' => ['src', 'alt', 'title', 'width', 'height'],
-                    'span' => ['class', 'data-type', 'data-id', 'data-label'], // Allow mention attributes
-                    'div' => ['class'],
-                    'p' => ['class'],
-                    'h1' => ['class'],
-                    'h2' => ['class'],
-                    'h3' => ['class'],
-                    'h4' => ['class'],
-                    'h5' => ['class'],
-                    'h6' => ['class'],
-                    'blockquote' => ['class'],
-                    'ul' => ['class'],
-                    'ol' => ['class'],
-                    'li' => ['class'],
-                    'strong' => ['class'],
-                    'em' => ['class'],
-                    'code' => ['class'],
-                    'pre' => ['class'],
-                ])
                 ->toHtml();
         } catch (\Exception $e) {
             // Fallback to raw HTML if RichContentRenderer fails
