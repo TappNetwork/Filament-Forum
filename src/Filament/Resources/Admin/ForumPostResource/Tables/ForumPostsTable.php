@@ -11,7 +11,6 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
-use Kirschbaum\Commentions\Filament\Actions\CommentsAction;
 
 class ForumPostsTable
 {
@@ -60,8 +59,6 @@ class ForumPostsTable
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),
-                    CommentsAction::make()
-                        ->mentionables($userModelClass::getMentionableUsers()),
                     DeleteAction::make(),
                 ])
                     ->tooltip('Actions'),

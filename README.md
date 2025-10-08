@@ -331,8 +331,6 @@ class UserMentionedNotification extends Notification
 }
 ```
 
-
-
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
@@ -348,6 +346,7 @@ If you discover any security-related issues, please email security@tappnetwork.c
 ## Credits
 
 -  [Tapp Network](https://github.com/TappNetwork)
+-  Comments inspired by [Commentions](https://github.com/kirschbaum-development/commentions)
 -  [All Contributors](../../contributors)
 
 ## License
