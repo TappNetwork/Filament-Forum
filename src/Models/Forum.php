@@ -20,6 +20,7 @@ class Forum extends Model implements HasMedia
 
     /** @use HasFactory<ForumFactory> */
     use HasFactory;
+
     use InteractsWithMedia;
 
     protected $guarded = [];

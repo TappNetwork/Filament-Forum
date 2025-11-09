@@ -16,7 +16,6 @@ use Tapp\FilamentForum\Models\Traits\CanFavoriteForumPost;
 class ForumPost extends Model
 {
     use BelongsToTenant;
-
     use CanFavoriteForumPost;
 
     /** @use HasFactory<ForumPostFactory> */
