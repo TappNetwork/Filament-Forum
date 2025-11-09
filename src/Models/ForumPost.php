@@ -10,10 +10,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Tapp\FilamentForum\Events\ForumPostCreated;
+use Tapp\FilamentForum\Models\Traits\BelongsToTenant;
 use Tapp\FilamentForum\Models\Traits\CanFavoriteForumPost;
 
 class ForumPost extends Model
 {
+    use BelongsToTenant;
+
     use CanFavoriteForumPost;
 
     /** @use HasFactory<ForumPostFactory> */

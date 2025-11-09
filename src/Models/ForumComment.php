@@ -15,6 +15,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Tapp\FilamentForum\Events\CommentWasReacted;
+use Tapp\FilamentForum\Models\Traits\BelongsToTenant;
 
 /**
  * @property int $id
@@ -29,6 +30,7 @@ use Tapp\FilamentForum\Events\CommentWasReacted;
  */
 class ForumComment extends Model implements HasMedia
 {
+    use BelongsToTenant;
     use HasFactory;
     use InteractsWithMedia;
 
