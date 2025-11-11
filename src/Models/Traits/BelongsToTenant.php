@@ -45,7 +45,7 @@ trait BelongsToTenant
                     return;
                 }
             }
-            
+
             // For ForumPost, get tenant from its Forum
             if (method_exists($model, 'forum') && isset($model->forum_id)) {
                 $parentForumId = $model->forum_id;
