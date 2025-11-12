@@ -8,6 +8,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
@@ -66,6 +67,14 @@ class ForumsTable
                         // Only render the tooltip if the column content exceeds the length limit.
                         return $state;
                     }),
+                IconColumn::make('is_hidden')
+                    ->label('Access')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-lock-closed')
+                    ->falseIcon('heroicon-o-globe-alt')
+                    ->trueColor('warning')
+                    ->falseColor('success')
+                    ->formatStateUsing(fn (bool $state): string => $state ? 'Hidden' : 'Public'),
                 TextColumn::make('created_at')
                     ->label(__('filament-forum::filament-forum.forum.table.label.created-at'))
                     ->dateTime()
