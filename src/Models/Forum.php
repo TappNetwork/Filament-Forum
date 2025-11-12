@@ -50,7 +50,7 @@ class Forum extends Model implements HasMedia
     public function users(): BelongsToMany
     {
         $userModel = config('auth.providers.users.model', Authenticatable::class);
-        
+
         return $this->belongsToMany($userModel, 'forum_user', 'forum_id', 'user_id')->withTimestamps();
     }
 
@@ -60,11 +60,11 @@ class Forum extends Model implements HasMedia
     public function scopeAccessibleTo(Builder $query, $user): void
     {
         $isForumAdmin = method_exists($user, 'isForumAdmin') && $user->isForumAdmin();
-        
+
         $query->where(function ($q) use ($user, $isForumAdmin) {
             // Public forums (is_hidden = false) - accessible to everyone
             $q->where('is_hidden', false);
-            
+
             // Hidden forums (is_hidden = true) - accessible to assigned users or forum admins
             if ($isForumAdmin) {
                 // Forum admins can see all hidden forums
@@ -73,9 +73,9 @@ class Forum extends Model implements HasMedia
                 // Regular users can only see hidden forums they're assigned to
                 $q->orWhere(function ($subQ) use ($user) {
                     $subQ->where('is_hidden', true)
-                         ->whereHas('users', function ($userQuery) use ($user) {
-                             $userQuery->where('user_id', $user->id);
-                         });
+                        ->whereHas('users', function ($userQuery) use ($user) {
+                            $userQuery->where('user_id', $user->id);
+                        });
                 });
             }
         });
@@ -86,12 +86,12 @@ class Forum extends Model implements HasMedia
      */
     public function canBeAccessedBy($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
         // Public forums (is_hidden = false) are accessible to everyone
-        if (!$this->is_hidden) {
+        if (! $this->is_hidden) {
             return true;
         }
 

@@ -84,8 +84,6 @@ trait ForumUser
      * Determine if the user is a forum admin.
      * Forum admins can see hidden forums even if they are not assigned to them.
      * Override this method in your User model to customize admin logic.
-     *
-     * @return bool
      */
     public function isForumAdmin(): bool
     {
@@ -94,4 +92,3 @@ trait ForumUser
         return false;
     }
 }
-

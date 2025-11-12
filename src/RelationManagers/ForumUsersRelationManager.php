@@ -11,8 +11,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ForumUsersRelationManager extends RelationManager
 {
@@ -75,4 +73,3 @@ class ForumUsersRelationManager extends RelationManager
             ]);
     }
 }
-
