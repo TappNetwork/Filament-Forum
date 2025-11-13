@@ -2,6 +2,10 @@
 
 All notable changes to `Filament Forum` will be documented in this file.
 
+## v2.0.3 - 2025-11-13
+
+**Full Changelog**: https://github.com/TappNetwork/Filament-Forum/compare/v2.0.2...v2.0.3
+
 ## v2.0.1 - 2025-11-13
 
 **Full Changelog**: https://github.com/TappNetwork/Filament-Forum/compare/v2.0.0...v2.0.1
