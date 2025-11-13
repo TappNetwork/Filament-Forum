@@ -2,6 +2,7 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Schemas;
 
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
@@ -50,6 +51,10 @@ class ForumForm
                             ->label(__('filament-forum::filament-forum.forum.form.label.description'))
                             ->required()
                             ->columnSpanFull(),
+                        Checkbox::make('is_hidden')
+                            ->label('Hidden Forum')
+                            ->helperText('If checked, only assigned users can view this forum. If unchecked, all logged in users can view it.')
+                            ->live(),
                         SpatieMediaLibraryFileUpload::make('image')
                             ->label(__('filament-forum::filament-forum.forum.form.label.image'))
                             ->collection('images')
