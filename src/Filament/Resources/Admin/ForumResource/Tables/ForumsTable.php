@@ -67,14 +67,12 @@ class ForumsTable
                         // Only render the tooltip if the column content exceeds the length limit.
                         return $state;
                     }),
-                IconColumn::make('is_hidden')
+                TextColumn::make('is_hidden')
                     ->label('Access')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-lock-closed')
-                    ->falseIcon('heroicon-o-globe-alt')
-                    ->trueColor('warning')
-                    ->falseColor('success')
-                    ->formatStateUsing(fn (bool $state): string => $state ? 'Hidden' : 'Public'),
+                    ->badge()
+                    ->formatStateUsing(fn (bool $state): string => $state ? 'Hidden' : 'Public')
+                    ->color(fn (bool $state): string => $state ? 'warning' : 'success')
+                    ->icon(fn (bool $state): string => $state ? 'heroicon-o-lock-closed' : 'heroicon-o-globe-alt'),
                 TextColumn::make('created_at')
                     ->label(__('filament-forum::filament-forum.forum.table.label.created-at'))
                     ->dateTime()
