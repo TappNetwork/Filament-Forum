@@ -5,13 +5,9 @@ use Tapp\FilamentForum\Models\Forum;
 use Tapp\FilamentForum\Models\ForumPost;
 
 beforeEach(function () {
-    // Get models from config
-    $this->userModel = config('filament-forum.user.model', 'App\\Models\\User');
-    $this->tenantModel = config('filament-forum.tenancy.model', 'App\\Models\\Team');
-
-    // Enable tenancy for tests
-    config(['filament-forum.tenancy.enabled' => true]);
-    config(['filament-forum.tenancy.model' => $this->tenantModel]);
+    // Get models from config (already set in TestCase.php to use Tests\Models\User and Tests\Models\Team)
+    $this->userModel = config('filament-forum.user.model');
+    $this->tenantModel = config('filament-forum.tenancy.model');
 });
 
 it('can toggle favorite with tenancy enabled', function () {
