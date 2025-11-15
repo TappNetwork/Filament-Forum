@@ -3,43 +3,51 @@
 use Filament\Facades\Filament;
 use Tapp\FilamentForum\Models\Forum;
 use Tapp\FilamentForum\Models\ForumPost;
-use Workbench\App\Models\Team;
-use Workbench\App\Models\User;
 
 beforeEach(function () {
+    // Get models from config
+    $this->userModel = config('filament-forum.user.model', 'App\\Models\\User');
+    $this->tenantModel = config('filament-forum.tenancy.model', 'App\\Models\\Team');
+
     // Enable tenancy for tests
     config(['filament-forum.tenancy.enabled' => true]);
-    config(['filament-forum.tenancy.model' => Team::class]);
+    config(['filament-forum.tenancy.model' => $this->tenantModel]);
 });
 
 it('can toggle favorite with tenancy enabled', function () {
-    $team = Team::factory()->create();
-    $user = User::factory()->create();
+    $tenantModel = $this->tenantModel;
+    $userModel = $this->userModel;
+
+    $team = $tenantModel::factory()->create();
+    $user = $userModel::factory()->create();
 
     // Set current tenant
     Filament::setTenant($team);
     actingAs($user);
 
+    // Get the tenant column name dynamically
+    $tenantColumn = Forum::getTenantColumnName();
+
     $forum = Forum::factory()->create([
-        'team_id' => $team->id,
+        $tenantColumn => $team->id,
     ]);
 
     $post = ForumPost::factory()->create([
         'forum_id' => $forum->id,
         'user_id' => $user->id,
-        'team_id' => $team->id,
+        $tenantColumn => $team->id,
     ]);
 
     // Toggle favorite
     $post->toggleFavorite();
 
-    // Check that the favorite was created with team_id
+    // Check that the favorite was created with tenant_id
     expect($user->favoriteForumPosts()->count())->toBe(1);
     expect($user->favoriteForumPosts->first()->id)->toBe($post->id);
 
-    // Verify pivot data includes team_id
+    // Verify pivot data includes tenant_id
     $pivot = $user->favoriteForumPosts()->first()->pivot;
-    expect($pivot->team_id)->toBe($team->id);
+    expect($pivot->{$tenantColumn})->toBe($team->id);
 
     // Check isFavorite returns true
     expect($post->isFavorite())->toBeTrue();
@@ -51,25 +59,31 @@ it('can toggle favorite with tenancy enabled', function () {
 });
 
 it('scopes favorites to current tenant', function () {
-    $team1 = Team::factory()->create();
-    $team2 = Team::factory()->create();
-    $user = User::factory()->create();
+    $tenantModel = $this->tenantModel;
+    $userModel = $this->userModel;
+
+    $team1 = $tenantModel::factory()->create();
+    $team2 = $tenantModel::factory()->create();
+    $user = $userModel::factory()->create();
 
     actingAs($user);
 
-    $forum1 = Forum::factory()->create(['team_id' => $team1->id]);
-    $forum2 = Forum::factory()->create(['team_id' => $team2->id]);
+    // Get the tenant column name dynamically
+    $tenantColumn = Forum::getTenantColumnName();
+
+    $forum1 = Forum::factory()->create([$tenantColumn => $team1->id]);
+    $forum2 = Forum::factory()->create([$tenantColumn => $team2->id]);
 
     $post1 = ForumPost::factory()->create([
         'forum_id' => $forum1->id,
         'user_id' => $user->id,
-        'team_id' => $team1->id,
+        $tenantColumn => $team1->id,
     ]);
 
     $post2 = ForumPost::factory()->create([
         'forum_id' => $forum2->id,
         'user_id' => $user->id,
-        'team_id' => $team2->id,
+        $tenantColumn => $team2->id,
     ]);
 
     // Favorite post1 in team1 context
@@ -97,10 +111,12 @@ it('scopes favorites to current tenant', function () {
 });
 
 it('works without tenancy when disabled', function () {
+    $userModel = $this->userModel;
+
     // Disable tenancy
     config(['filament-forum.tenancy.enabled' => false]);
 
-    $user = User::factory()->create();
+    $user = $userModel::factory()->create();
     actingAs($user);
 
     $forum = Forum::factory()->create();
