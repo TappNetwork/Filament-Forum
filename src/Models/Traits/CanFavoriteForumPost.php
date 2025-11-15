@@ -52,7 +52,7 @@ trait CanFavoriteForumPost
             // Add tenant scoping if tenancy is enabled
             if (config('filament-forum.tenancy.enabled') && Filament::hasTenancy()) {
                 $tenantColumn = config('filament-forum.tenancy.column') ?: 'team_id';
-                $query->where('favorite_forum_post.' . $tenantColumn, Filament::getTenant()->id);
+                $query->where('favorite_forum_post.'.$tenantColumn, Filament::getTenant()->id);
             }
         });
     }
@@ -65,7 +65,7 @@ trait CanFavoriteForumPost
             // Add tenant scoping if tenancy is enabled
             if (config('filament-forum.tenancy.enabled') && Filament::hasTenancy()) {
                 $tenantColumn = config('filament-forum.tenancy.column') ?: 'team_id';
-                $query->where('favorite_forum_post.' . $tenantColumn, Filament::getTenant()->id);
+                $query->where('favorite_forum_post.'.$tenantColumn, Filament::getTenant()->id);
             }
         });
     }
