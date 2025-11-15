@@ -48,9 +48,7 @@ trait BelongsToTenant
 
             // For ForumPost, get tenant from its Forum
             if (method_exists($model, 'forum') && isset($model->forum_id)) {
-                $parentForumId = $model->forum_id;
-                $parentForumClass = get_class($model->forum()->getRelated());
-                $parentForum = $parentForumClass::find($parentForumId);
+                $parentForum = $model->forum()->getRelated()->find($model->forum_id);
 
                 if ($parentForum) {
                     $parentTenant = $parentForum->{$tenantRelationshipName};
@@ -64,9 +62,7 @@ trait BelongsToTenant
 
             // For ForumComment, get tenant from its ForumPost
             if (method_exists($model, 'forumPost') && isset($model->forum_post_id)) {
-                $parentPostId = $model->forum_post_id;
-                $parentPostClass = get_class($model->forumPost()->getRelated());
-                $parentPost = $parentPostClass::find($parentPostId);
+                $parentPost = $model->forumPost()->getRelated()->find($model->forum_post_id);
 
                 if ($parentPost) {
                     $parentTenant = $parentPost->{$tenantRelationshipName};
