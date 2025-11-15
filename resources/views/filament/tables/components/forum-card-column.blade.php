@@ -46,7 +46,6 @@
             </div>
 
             <x-filament::button
-                class="bg-primary-600 hover:bg-primary-700 text-white"
                 href="{{ ForumResource::getUrl('forum-posts', ['record' => $record->id]) }}"
                 tag="a"
             >
