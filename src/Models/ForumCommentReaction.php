@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Tapp\FilamentForum\Models\Traits\BelongsToTenant;
 
 /**
  * @property int $id
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class ForumCommentReaction extends Model
 {
+    use BelongsToTenant;
     use HasFactory;
 
     protected $fillable = [

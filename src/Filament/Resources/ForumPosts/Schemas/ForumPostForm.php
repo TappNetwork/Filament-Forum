@@ -15,6 +15,7 @@ class ForumPostForm
             ->components([
                 Section::make()
                     ->id('forumPostForm')
+                    ->columnSpanFull()
                     ->schema([
                         TextInput::make('name')
                             ->label(__('filament-forum::filament-forum.forum-post.form.label.name'))

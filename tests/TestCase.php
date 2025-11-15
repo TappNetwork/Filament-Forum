@@ -20,7 +20,10 @@ abstract class TestCase extends Orchestra
             $this->setUpTheTestEnvironment();
         }
 
-        // Load migrations after setup
+        // Load test migrations first (users, teams)
+        $this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
+
+        // Load plugin migrations after test migrations
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
@@ -44,7 +47,12 @@ abstract class TestCase extends Orchestra
             'prefix' => '',
         ]);
 
-        // Set up auth configuration
-        $app['config']->set('auth.providers.users.model', \Illuminate\Foundation\Auth\User::class);
+        // Set up auth configuration with test User model
+        $app['config']->set('auth.providers.users.model', \Tapp\FilamentForum\Tests\Models\User::class);
+
+        // Configure plugin to use test models
+        $app['config']->set('filament-forum.user.model', \Tapp\FilamentForum\Tests\Models\User::class);
+        $app['config']->set('filament-forum.tenancy.model', \Tapp\FilamentForum\Tests\Models\Team::class);
+        $app['config']->set('filament-forum.tenancy.enabled', true);
     }
 }

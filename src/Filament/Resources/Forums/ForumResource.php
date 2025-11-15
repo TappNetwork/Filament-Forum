@@ -24,6 +24,28 @@ class ForumResource extends Resource
     /** @phpstan-ignore-next-line */
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
+    /**
+     * Check if this resource should be scoped to a tenant.
+     * This is called by Filament to determine if tenant scoping should be applied.
+     */
+    public static function isScopedToTenant(): bool
+    {
+        return config('filament-forum.tenancy.enabled', false);
+    }
+
+    /**
+     * Get the tenant ownership relationship name.
+     * This tells Filament which relationship to use for tenant scoping.
+     */
+    public static function getTenantOwnershipRelationshipName(): string
+    {
+        if (! config('filament-forum.tenancy.enabled')) {
+            return 'tenant';
+        }
+
+        return Forum::getTenantRelationshipName();
+    }
+
     public static function getBreadcrumb(): string
     {
         return __('filament-forum::filament-forum.forum.breadcrumb');

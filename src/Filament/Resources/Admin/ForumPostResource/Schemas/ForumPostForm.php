@@ -40,6 +40,7 @@ class ForumPostForm
             ->components([
                 Section::make()
                     ->id('forumPostForm')
+                    ->columnSpanFull()
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')

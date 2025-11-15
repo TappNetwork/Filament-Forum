@@ -23,6 +23,28 @@ class ForumPostResource extends Resource
 
     protected static ?string $slug = 'forum-posts';
 
+    /**
+     * Check if this resource should be scoped to a tenant.
+     * This is called by Filament to determine if tenant scoping should be applied.
+     */
+    public static function isScopedToTenant(): bool
+    {
+        return config('filament-forum.tenancy.enabled', false);
+    }
+
+    /**
+     * Get the tenant ownership relationship name.
+     * This tells Filament which relationship to use for tenant scoping.
+     */
+    public static function getTenantOwnershipRelationshipName(): string
+    {
+        if (! config('filament-forum.tenancy.enabled')) {
+            return 'tenant';
+        }
+
+        return ForumPost::getTenantRelationshipName();
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return __('filament-forum::filament-forum.admin.navigation-group');

@@ -20,6 +20,7 @@ class ForumPostInfolist
         return $schema
             ->components([
                 Section::make(fn (ForumPost $record) => $record->user->name.' - '.$record->created_at->diffForHumans().($record->hasBeenEdited() ? ' ('.__('filament-forum::filament-forum.forum-post.edited').')' : ''))
+                    ->columnSpanFull()
                     ->headerActions([
                         Action::make('favorite')
                             ->iconButton()

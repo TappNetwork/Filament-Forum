@@ -42,6 +42,7 @@ class ForumForm
             ->components([
                 Section::make()
                     ->id('forumForm')
+                    ->columnSpanFull()
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')

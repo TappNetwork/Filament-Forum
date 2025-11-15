@@ -15,9 +15,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Tapp\FilamentForum\Models\Traits\BelongsToTenant;
 
 class Forum extends Model implements HasMedia
 {
+    use BelongsToTenant;
+
     /** @use HasFactory<ForumFactory> */
     use HasFactory;
 
