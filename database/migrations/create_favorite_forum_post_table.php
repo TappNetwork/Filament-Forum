@@ -6,9 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('forum_comment_reactions', function (Blueprint $table) {
+        Schema::create('favorite_forum_post', function (Blueprint $table) {
             $table->id();
 
             // Add tenant relationship if tenancy is enabled
@@ -19,24 +22,17 @@ return new class extends Migration
                     ->cascadeOnDelete();
             }
 
-            $table->foreignId('forum_comment_id')->constrained()->cascadeOnDelete();
-            $table->morphs('reactor');
-            
-            if (config('database.default') === 'mysql') {
-                $table->string('type', 50)->collation('utf8mb4_bin');
-            } else {
-                $table->string('type', 50);
-            }
-            
+            $table->foreignId('forum_post_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
-
-            $table->unique(['forum_comment_id', 'reactor_type', 'reactor_id', 'type'], 'unique_comment_reaction');
-            $table->index(['forum_comment_id', 'type']);
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('forum_comment_reactions');
+        Schema::dropIfExists('favorite_forum_post');
     }
 };

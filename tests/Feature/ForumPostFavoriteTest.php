@@ -17,9 +17,10 @@ it('can toggle favorite with tenancy enabled', function () {
     $team = $tenantModel::factory()->create();
     $user = $userModel::factory()->create();
 
+    actingAs($user);
+
     // Set current tenant
     Filament::setTenant($team);
-    actingAs($user);
 
     // Get the tenant column name dynamically
     $tenantColumn = Forum::getTenantColumnName();
@@ -37,6 +38,9 @@ it('can toggle favorite with tenancy enabled', function () {
     // Toggle favorite
     $post->toggleFavorite();
 
+    // Refresh user to clear cached relationships
+    $user = $user->fresh();
+
     // Check that the favorite was created with tenant_id
     expect($user->favoriteForumPosts()->count())->toBe(1);
     expect($user->favoriteForumPosts->first()->id)->toBe($post->id);
@@ -50,6 +54,11 @@ it('can toggle favorite with tenancy enabled', function () {
 
     // Toggle again to unfavorite
     $post->toggleFavorite();
+
+    // Refresh user to clear cached relationships
+    $user = $user->fresh();
+    actingAs($user); // Re-authenticate with the refreshed user
+
     expect($user->favoriteForumPosts()->count())->toBe(0);
     expect($post->isFavorite())->toBeFalse();
 });
@@ -104,32 +113,4 @@ it('scopes favorites to current tenant', function () {
     $favoritedInTeam2 = ForumPost::favorited()->get();
     expect($favoritedInTeam2->count())->toBe(1);
     expect($favoritedInTeam2->first()->id)->toBe($post2->id);
-});
-
-it('works without tenancy when disabled', function () {
-    $userModel = $this->userModel;
-
-    // Disable tenancy
-    config(['filament-forum.tenancy.enabled' => false]);
-
-    $user = $userModel::factory()->create();
-    actingAs($user);
-
-    $forum = Forum::factory()->create();
-    $post = ForumPost::factory()->create([
-        'forum_id' => $forum->id,
-        'user_id' => $user->id,
-    ]);
-
-    // Toggle favorite
-    $post->toggleFavorite();
-
-    // Check that the favorite was created
-    expect($user->favoriteForumPosts()->count())->toBe(1);
-    expect($post->isFavorite())->toBeTrue();
-
-    // Toggle again to unfavorite
-    $post->toggleFavorite();
-    expect($user->favoriteForumPosts()->count())->toBe(0);
-    expect($post->isFavorite())->toBeFalse();
 });

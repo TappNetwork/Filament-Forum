@@ -4,12 +4,12 @@ namespace Tapp\FilamentForum\Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tapp\FilamentForum\Models\Traits\CanFavoriteForumPost;
+use Tapp\FilamentForum\Models\Traits\HasFavoriteForumPost;
 
 class User extends Authenticatable
 {
-    use CanFavoriteForumPost;
     use HasFactory;
+    use HasFavoriteForumPost;
 
     protected $guarded = [];
 
