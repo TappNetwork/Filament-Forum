@@ -13,6 +13,13 @@ abstract class TestCase extends Orchestra
 {
     use WithWorkbench;
 
+    /**
+     * The Illuminate\Testing\TestResponse instance for the last request.
+     *
+     * @var \Illuminate\Testing\TestResponse|null
+     */
+    protected static $latestResponse;
+
     protected function getPackageProviders($app)
     {
         return [
