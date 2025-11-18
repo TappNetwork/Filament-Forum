@@ -2,12 +2,27 @@
 
 namespace Tapp\FilamentForum\Tests;
 
+use Filament\FilamentServiceProvider;
+use Filament\Support\SupportServiceProvider;
+use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Tapp\FilamentForum\FilamentForumServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
     use WithWorkbench;
+
+    protected function getPackageProviders($app)
+    {
+        return [
+            LivewireServiceProvider::class,
+            FilamentServiceProvider::class,
+            SupportServiceProvider::class,
+            FilamentForumServiceProvider::class,
+            TestPanelProvider::class,
+        ];
+    }
 
     protected function defineEnvironment($app)
     {
