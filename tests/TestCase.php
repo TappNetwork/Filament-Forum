@@ -41,4 +41,10 @@ abstract class TestCase extends Orchestra
         $app['config']->set('filament-forum.tenancy.model', \Tapp\FilamentForum\Tests\Models\Team::class);
         $app['config']->set('filament-forum.tenancy.enabled', true);
     }
+
+    protected function defineDatabaseMigrations()
+    {
+        // Load test-specific migrations (users, teams)
+        $this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
+    }
 }
