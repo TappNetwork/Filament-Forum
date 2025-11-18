@@ -4,7 +4,7 @@ use Tapp\FilamentForum\Tests\TestCase;
 
 uses(
     TestCase::class,
-    Illuminate\Foundation\Testing\RefreshDatabase::class,
+    Illuminate\Foundation\Testing\LazilyRefreshDatabase::class,
 )->in(__DIR__);
 
 // Pest helper functions

@@ -26,8 +26,9 @@ abstract class TestCase extends Orchestra
 
     protected function defineEnvironment($app)
     {
-        // Configure SQLite database
-        $app['config']->set('database.connections.testbench', [
+        // Configure SQLite database (testing connection)
+        $app['config']->set('database.default', 'testing');
+        $app['config']->set('database.connections.testing', [
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
@@ -46,5 +47,8 @@ abstract class TestCase extends Orchestra
     {
         // Load test-specific migrations (users, teams)
         $this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
+
+        // Load plugin migrations (forums, posts, etc.)
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 }
