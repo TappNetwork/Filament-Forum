@@ -32,7 +32,8 @@ class FilamentForumServiceProvider extends PackageServiceProvider
                 'create_forum_comments_table',
                 'create_forum_comment_reactions_table',
             ])
-            ->hasTranslations();
+            ->hasTranslations()
+            ->hasCommand(\Tapp\FilamentForum\Console\InstallTestsCommand::class);
     }
 
     public function packageBooted()

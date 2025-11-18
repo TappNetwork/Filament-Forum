@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tapp\FilamentForum\Models;
 
-use Database\Factories\ForumFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Tapp\FilamentForum\Database\Factories\ForumFactory;
 use Tapp\FilamentForum\Models\Traits\BelongsToTenant;
 
 class Forum extends Model implements HasMedia
@@ -24,6 +24,11 @@ class Forum extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $guarded = [];
+
+    protected static function newFactory()
+    {
+        return ForumFactory::new();
+    }
 
     public function owner(): BelongsTo
     {

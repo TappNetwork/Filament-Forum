@@ -514,6 +514,35 @@ class UserMentionedNotification extends Notification
 }
 ```
 
+## Testing
+
+### Publishing Tests to Your Application
+
+You can publish ready-to-use test files to your application to test the Filament Forum functionality:
+
+```bash
+php artisan filament-forum:install-tests
+```
+
+This will copy test files to your `tests/Feature` directory:
+- `FilamentForumTest.php` - Basic forum and post functionality tests
+- `FilamentForumTenancyTest.php` - Multi-tenancy specific tests (automatically skipped if tenancy is disabled)
+
+The tests are written using [Pest](https://pestphp.com/) and automatically use your configured User and Tenant models from `config/filament-forum.php`.
+
+**Requirements:**
+- Pest testing framework: `composer require pestphp/pest --dev`
+- Model factories for your User model and Tenant model (if using tenancy)
+
+**Run the tests:**
+```bash
+php artisan test --filter=FilamentForum
+```
+
+See the published tests for more examples of how to test the plugin in your application.
+
+Read more about publishing tests [here](PUBLISH_TESTS.md).
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
