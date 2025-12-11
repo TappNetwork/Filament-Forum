@@ -22,6 +22,7 @@ class ForumPostInfolist
                     'default' => 1,
                     'sm' => 3,
                 ])
+                    ->columnSpanFull()
                     ->schema([
                         Section::make()
                             ->schema([
@@ -47,6 +48,7 @@ class ForumPostInfolist
                     ]),
 
                 Section::make('Comments')
+                    ->columnSpanFull()
                     ->schema([
                         ForumCommentsEntry::make('comments')
                             ->hiddenLabel()
