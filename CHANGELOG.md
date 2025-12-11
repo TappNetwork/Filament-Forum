@@ -2,6 +2,14 @@
 
 All notable changes to `Filament Forum` will be documented in this file.
 
+## v2.0.4 - 2025-12-11
+
+### What's Changed
+
+* Add columnSpanFull() by @andreia in https://github.com/TappNetwork/Filament-Forum/pull/10
+
+**Full Changelog**: https://github.com/TappNetwork/Filament-Forum/compare/v2.0.3...v2.0.4
+
 ## v2.0.3 - 2025-11-13
 
 **Full Changelog**: https://github.com/TappNetwork/Filament-Forum/compare/v2.0.2...v2.0.3
