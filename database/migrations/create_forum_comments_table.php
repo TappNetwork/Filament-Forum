@@ -10,6 +10,15 @@ return new class extends Migration
     {
         Schema::create('forum_comments', function (Blueprint $table) {
             $table->id();
+
+            // Add tenant relationship if tenancy is enabled
+            if (config('filament-forum.tenancy.enabled')) {
+                $tenantModel = config('filament-forum.tenancy.model');
+                $table->foreignIdFor($tenantModel)
+                    ->constrained()
+                    ->cascadeOnDelete();
+            }
+
             $table->foreignId('forum_post_id')->constrained()->cascadeOnDelete();
             $table->morphs('author');
             $table->longText('content');

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tapp\FilamentForum\Models;
 
-use Database\Factories\ForumFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,9 +14,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Tapp\FilamentForum\Database\Factories\ForumFactory;
+use Tapp\FilamentForum\Models\Traits\BelongsToTenant;
 
 class Forum extends Model implements HasMedia
 {
+    use BelongsToTenant;
+
     /** @use HasFactory<ForumFactory> */
     use HasFactory;
 
@@ -28,6 +31,11 @@ class Forum extends Model implements HasMedia
     protected $casts = [
         'is_hidden' => 'boolean',
     ];
+
+    protected static function newFactory()
+    {
+        return ForumFactory::new();
+    }
 
     public function owner(): BelongsTo
     {

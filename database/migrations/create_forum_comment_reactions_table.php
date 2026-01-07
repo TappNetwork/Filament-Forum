@@ -10,15 +10,24 @@ return new class extends Migration
     {
         Schema::create('forum_comment_reactions', function (Blueprint $table) {
             $table->id();
+
+            // Add tenant relationship if tenancy is enabled
+            if (config('filament-forum.tenancy.enabled')) {
+                $tenantModel = config('filament-forum.tenancy.model');
+                $table->foreignIdFor($tenantModel)
+                    ->constrained()
+                    ->cascadeOnDelete();
+            }
+
             $table->foreignId('forum_comment_id')->constrained()->cascadeOnDelete();
             $table->morphs('reactor');
-            
+
             if (config('database.default') === 'mysql') {
                 $table->string('type', 50)->collation('utf8mb4_bin');
             } else {
                 $table->string('type', 50);
             }
-            
+
             $table->timestamps();
 
             $table->unique(['forum_comment_id', 'reactor_type', 'reactor_id', 'type'], 'unique_comment_reaction');

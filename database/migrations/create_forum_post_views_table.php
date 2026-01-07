@@ -10,6 +10,15 @@ return new class extends Migration
     {
         Schema::create('forum_post_views', function (Blueprint $table) {
             $table->id();
+
+            // Add tenant relationship if tenancy is enabled
+            if (config('filament-forum.tenancy.enabled')) {
+                $tenantModel = config('filament-forum.tenancy.model');
+                $table->foreignIdFor($tenantModel)
+                    ->constrained()
+                    ->cascadeOnDelete();
+            }
+
             $table->foreignId('forum_post_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
@@ -24,4 +33,3 @@ return new class extends Migration
         Schema::dropIfExists('forum_post_views');
     }
 };
- 

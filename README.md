@@ -7,6 +7,7 @@ A forum package for Filament apps that provides both admin and frontend resource
 - PHP 8.1+
 - Laravel 10+
 - Filament 4.0+
+- Spatie Laravel Media Library
 
 ## Features
 
@@ -22,6 +23,9 @@ A forum package for Filament apps that provides both admin and frontend resource
    ```
 
 2. **Publish and run the migrations:**
+
+> [!WARNING]  
+> If you are using multi-tenancy please see the "Multi-Tenancy Support" instructions below **before** publishing and running migrations.
 
    ```bash
    php artisan vendor:publish --tag="filament-forum-migrations"
@@ -111,6 +115,185 @@ Optionally, you can publish the translation files with:
 ```bash
 php artisan vendor:publish --tag="filament-forum-translations"
 ```
+
+## Multi-Tenancy Support
+
+Filament Forum includes built-in support for multi-tenancy, allowing you to scope forums and forum posts to specific tenants (e.g., teams, organizations, workspaces).
+
+### ⚠️ Important: Enable Tenancy Before Migrations
+
+**You MUST configure and enable tenancy in the config file BEFORE running the migrations.** The migrations check the tenancy configuration to determine whether to add tenant columns to the database tables. If you enable tenancy after running migrations, you'll need to manually add the tenant columns to your database.
+
+### Setup
+
+#### 1. Configure Tenancy (Before Migrations!)
+
+Edit your `config/filament-forum.php` file **before** running the migrations:
+
+```php
+'tenancy' => [
+    // Enable tenancy support
+    'enabled' => true,
+
+    // The Tenant model class (e.g., App\Models\Team::class, App\Models\Organization::class)
+    'model' => \App\Models\Team::class,
+
+    // The tenant relationship name (optional)
+    // Defaults to snake_case of tenant model class name
+    // For example: Team::class -> 'team', Organization::class -> 'organization'
+    'relationship_name' => 'team',
+
+    // The tenant column name (optional)
+    // Defaults to snake_case of tenant model class name + '_id'
+    // For example: Team::class -> 'team_id', Organization::class -> 'organization_id'
+    'column' => 'team_id',
+],
+```
+
+#### 2. Run Migrations
+
+Now you can safely run the migrations, which will include the tenant columns:
+
+```bash
+php artisan vendor:publish --tag="filament-forum-migrations"
+php artisan migrate
+```
+
+The following tables will include your tenant column (e.g., `team_id`):
+- `forums`
+- `forum_posts`
+- `forum_comments`
+- `forum_comment_reactions`
+- `forum_post_views`
+
+#### 3. Configure Your Filament Panel
+
+Make sure tenancy is enabled on your Filament panel (e.g., in `AdminPanelProvider.php`):
+
+```php
+use Filament\Panel;
+use App\Models\Team;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ... other configuration
+        ->tenant(Team::class)
+        ->plugins([
+            ForumAdminPlugin::make(),
+            // ... other plugins
+        ]);
+}
+```
+
+#### 4. Implement Required Contracts on Your User Model
+
+Your User model needs to implement Filament's tenancy contracts (using `teams` tenant in this example):
+
+```php
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasTenants;
+use Filament\Panel;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
+
+class User extends Authenticatable implements FilamentUser, HasTenants
+{
+    // Define the relationship to your tenant model (eg. teams)
+    public function teams(): BelongsToMany
+    {
+        return $this->belongsToMany(Team::class);
+    }
+
+    // Required by FilamentUser
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true; // Customize as needed
+    }
+
+    // Required by HasTenants
+    public function getTenants(Panel $panel): Collection
+    {
+        return $this->teams;
+    }
+
+    // Required by HasTenants
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->teams()->whereKey($tenant)->exists();
+    }
+}
+```
+
+#### 5. Implement Required Contracts on Your Tenant Model
+
+Your Tenant model (e.g., `Team`) should implement Filament's `HasName` contract:
+
+```php
+use Filament\Models\Contracts\HasName;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+class Team extends Model implements HasName
+{
+    // Define the inverse relationship
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    // Required by HasName
+    public function getFilamentName(): string
+    {
+        return $this->name;
+    }
+}
+```
+
+### How It Works
+
+Once tenancy is enabled:
+
+1. **Automatic Scoping**: All forum and forum post queries are automatically scoped to the current tenant
+2. **Automatic Association**: When creating forums or posts, they're automatically associated with the current tenant
+3. **Access Control**: Users can only access forums and posts belonging to their current tenant
+
+### URL Structure with Tenancy
+
+With tenancy enabled, your Filament panel URLs will include the tenant identifier:
+
+```
+/admin/{tenant-slug}/forums
+/admin/{tenant-slug}/forum-posts
+```
+
+For example:
+```
+/admin/acme-company/forums
+/admin/acme-company/forum-posts
+```
+
+### Disabling Tenancy
+
+To disable tenancy, simply set `'enabled' => false` in your `config/filament-forum.php`:
+
+```php
+'tenancy' => [
+    'enabled' => false,
+    'model' => null,
+],
+```
+
+**Note**: If you've already run migrations with tenancy enabled, the tenant columns will remain in your database. You'll need to handle existing tenant-scoped data appropriately or create a migration to remove the columns if needed.
+
+### Important Notes
+
+- **Migrations First**: Always configure tenancy before running migrations
+- **Data Migration**: If you enable tenancy on an existing installation, you'll need to manually add tenant columns and populate them with appropriate values
+- **Testing**: When testing with tenancy enabled, ensure your factories and seeders properly associate records with tenants
+
+For more detailed information about implementing multi-tenancy in Filament, see the [official Filament tenancy documentation](https://filamentphp.com/docs/4.x/users/tenancy).
 
 ## Custom User Model, Attribute, and Search Functionality
 
@@ -329,6 +512,35 @@ class UserMentionedNotification extends Notification
     }
 }
 ```
+
+## Testing
+
+### Publishing Tests to Your Application
+
+You can publish ready-to-use test files to your application to test the Filament Forum functionality:
+
+```bash
+php artisan filament-forum:install-tests
+```
+
+This will copy test files to your `tests/Feature` directory:
+- `FilamentForumTest.php` - Basic forum and post functionality tests
+- `FilamentForumTenancyTest.php` - Multi-tenancy specific tests (automatically skipped if tenancy is disabled)
+
+The tests are written using [Pest](https://pestphp.com/) and automatically use your configured User and Tenant models from `config/filament-forum.php`.
+
+**Requirements:**
+- Pest testing framework: `composer require pestphp/pest --dev`
+- Model factories for your User model and Tenant model (if using tenancy)
+
+**Run the tests:**
+```bash
+php artisan test --filter=FilamentForum
+```
+
+See the published tests for more examples of how to test the plugin in your application.
+
+Read more about publishing tests [here](PUBLISH_TESTS.md).
 
 ## Changelog
 

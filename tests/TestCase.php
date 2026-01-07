@@ -5,24 +5,20 @@ namespace Tapp\FilamentForum\Tests;
 use Filament\FilamentServiceProvider;
 use Filament\Support\SupportServiceProvider;
 use Livewire\LivewireServiceProvider;
+use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Tapp\FilamentForum\FilamentForumServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
-    protected function setUp(): void
-    {
-        // Check if the parent class has the $latestResponse property before calling setUp
-        if (property_exists(get_parent_class($this), 'latestResponse')) {
-            parent::setUp();
-        } else {
-            // For older versions of TestBench that don't have $latestResponse
-            $this->setUpTheTestEnvironment();
-        }
+    use WithWorkbench;
 
-        // Load migrations after setup
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-    }
+    /**
+     * The Illuminate\Testing\TestResponse instance for the last request.
+     *
+     * @var \Illuminate\Testing\TestResponse|null
+     */
+    protected static $latestResponse;
 
     protected function getPackageProviders($app)
     {
@@ -31,20 +27,35 @@ abstract class TestCase extends Orchestra
             FilamentServiceProvider::class,
             SupportServiceProvider::class,
             FilamentForumServiceProvider::class,
+            TestPanelProvider::class,
         ];
     }
 
-    protected function getEnvironmentSetUp($app)
+    protected function defineEnvironment($app)
     {
-        // Setup default database to use sqlite :memory:
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
+        // Configure SQLite database (testing connection)
+        $app['config']->set('database.default', 'testing');
+        $app['config']->set('database.connections.testing', [
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
         ]);
 
-        // Set up auth configuration
-        $app['config']->set('auth.providers.users.model', \Illuminate\Foundation\Auth\User::class);
+        // Configure auth to use test User model
+        $app['config']->set('auth.providers.users.model', \Tapp\FilamentForum\Tests\Models\User::class);
+
+        // Configure plugin to use test models
+        $app['config']->set('filament-forum.user.model', \Tapp\FilamentForum\Tests\Models\User::class);
+        $app['config']->set('filament-forum.tenancy.model', \Tapp\FilamentForum\Tests\Models\Team::class);
+        $app['config']->set('filament-forum.tenancy.enabled', true);
+    }
+
+    protected function defineDatabaseMigrations()
+    {
+        // Load test-specific migrations (users, teams)
+        $this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
+
+        // Load plugin migrations (forums, posts, etc.)
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 }
