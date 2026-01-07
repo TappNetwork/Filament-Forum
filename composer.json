@@ -2,6 +2,7 @@
     "name": "tapp/filament-forum",
     "description": "Forum and comments package for Filament apps.",
     "type": "library",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Tapp\\FilamentForum\\": "src/",

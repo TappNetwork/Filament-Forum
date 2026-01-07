@@ -26,6 +26,8 @@ class FilamentForumServiceProvider extends PackageServiceProvider
             ->hasAssets()
             ->hasMigrations([
                 'create_forums_table',
+                'add_is_hidden_to_forums_table',
+                'create_forum_user_table',
                 'create_forum_posts_table',
                 'create_favorite_forum_post_table',
                 'create_forum_post_views_table',

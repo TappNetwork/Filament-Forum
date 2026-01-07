@@ -80,29 +80,25 @@ A forum package for Filament apps that provides both admin and frontend resource
 
 - Ensure your User model has a `name` attribute
 
-- Add `HasFavoriteForumPost` trait to your `User` model:
+- Add the `ForumUser` trait to your `User` model:
 
 ```php
-use Tapp\FilamentForum\Models\Traits\HasFavoriteForumPost;
+use Tapp\FilamentForum\Traits\ForumUser;
 
 class User extends Authenticatable
 {
     // ...
-    use HasFavoriteForumPost;
+    use ForumUser;
     // ...
 }
 ```
 
-- Add `HasMentionables` trait (you can use it to customize which users are mentionable, see below in "Custom Mentionables") to your `User` model
-
-```php
-use Tapp\FilamentForum\Models\Traits\HasMentionables;
-
-class User extends Authenticatable
-{
-    use HasMentionables;
-}
-```
+The `ForumUser` trait provides:
+- `forums()` relationship - Get all forums the user is assigned to
+- `favoriteForumPosts()` relationship - Get all favorite forum posts
+- `getMentionableUsers()` method - Customize which users are mentionable (see "Custom Mentionables" below)
+- `hasCustomForumSearch()`, `getForumSearchResults()`, `getForumOptionLabel()` methods - Custom search functionality (see "Custom User Model, Attribute, and Search Functionality" below)
+- `isForumAdmin()` method - Override to grant admin access to hidden forums (defaults to `false`)
 
 6. Add to your custom theme (usually`theme.css`) file:
 
@@ -301,33 +297,11 @@ For more detailed information about implementing multi-tenancy in Filament, see 
 
 ## Custom User Model, Attribute, and Search Functionality
 
-By default, the `name` column of `User` model is used for the `user` relationship. You can customize it using the  `title-attribute` on `filament-form.php` config file.
+By default, the `name` column of `User` model is used for the `user` relationship. You can customize it using the  `title-attribute` on `filament-forum.php` config file.
 
 The Filament Forum plugin also supports custom search functionality for user selects in forms and filters. This allows you to customize which users' columns are used to search and display in dropdowns (eg. if your `User` model doesn't have a `name` column).
 
-## Setup
-
-### 1. Add the Trait to Your User Model
-
-Add the `HasForumUserSearch` trait to your User model:
-
-```php
-<?php
-
-namespace App\Models;
-
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tapp\FilamentForum\Traits\HasForumUserSearch;
-
-class User extends Authenticatable
-{
-    use HasForumUserSearch;
-    
-    // Your existing model code...
-}
-```
-
-### 2. Configure Your User Model Class
+### Configure Your User Model Class
 
 Make sure your `config/filament-forum.php` file points to the correct `User` model:
 
@@ -338,7 +312,7 @@ Make sure your `config/filament-forum.php` file points to the correct `User` mod
 ],
 ```
 
-### 3. Customize the Search Methods
+### Customize the Search Methods
 
 Override the trait methods in your User model to customize search behavior:
 
@@ -348,11 +322,11 @@ Override the trait methods in your User model to customize search behavior:
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tapp\FilamentForum\Traits\HasForumUserSearch;
+use Tapp\FilamentForum\Traits\ForumUser;
 
 class User extends Authenticatable
 {
-    use HasForumUserSearch;
+    use ForumUser;
     
     /**
      * Custom search that searches both name and email
@@ -391,6 +365,31 @@ public static function getMentionableUsers()
     return static::where('is_active', true)->get();
 }
 ```
+
+## Forum Access Control
+
+Forums can be set as public (visible to all logged-in users) or hidden (only visible to assigned users). Forum admins can see all hidden forums regardless of assignment.
+
+### Setting Forum Access
+
+In the admin panel, you can set a forum as hidden by checking the "Hidden Forum" checkbox. Hidden forums will only be visible to:
+- Users who are explicitly assigned to the forum
+- Forum admins (users where `isForumAdmin()` returns `true`)
+
+### Forum Admin Access
+
+Override the `isForumAdmin()` method in your User model to grant admin access:
+
+```php
+// In your User model
+public function isForumAdmin(): bool
+{
+    // Example: Grant admin access based on roles
+    return $this->hasRole('Admin') || $this->hasRole('Forum Admin');
+}
+```
+
+Forum admins can see and access all hidden forums, even if they're not assigned to them.
 
 ## User Avatar
 

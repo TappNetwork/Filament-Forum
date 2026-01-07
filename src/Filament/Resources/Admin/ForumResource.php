@@ -12,6 +12,7 @@ use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\ListForums;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Schemas\ForumForm;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Tables\ForumsTable;
 use Tapp\FilamentForum\Models\Forum;
+use Tapp\FilamentForum\RelationManagers\ForumUsersRelationManager;
 
 class ForumResource extends Resource
 {
@@ -61,7 +62,7 @@ class ForumResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ForumUsersRelationManager::make(),
         ];
     }
 

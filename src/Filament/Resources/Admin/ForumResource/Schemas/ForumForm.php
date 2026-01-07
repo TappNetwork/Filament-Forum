@@ -2,6 +2,7 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Schemas;
 
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
@@ -9,6 +10,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ForumForm
 {
@@ -26,6 +28,7 @@ class ForumForm
                 return $record->{$titleAttribute};
             })
             ->searchable()
+            ->default(fn () => Auth::id())
             ->label(__('filament-forum::filament-forum.forum.form.label.owner'));
 
         // Add custom search functionality if User model has the trait and implements custom methods
@@ -55,6 +58,10 @@ class ForumForm
                             ->label(__('filament-forum::filament-forum.forum.form.label.image'))
                             ->collection('images')
                             ->columnSpanFull(),
+                        Checkbox::make('is_hidden')
+                            ->label('Hidden Forum')
+                            ->helperText('If checked, only assigned users can view this forum. If unchecked, all logged in users can view it.')
+                            ->live(),
                     ]),
             ]);
     }
