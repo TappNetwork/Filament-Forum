@@ -2,6 +2,15 @@
 
 All notable changes to `Filament Forum` will be documented in this file.
 
+## v2.0.5 - 2026-01-07
+
+### What's Changed
+
+* Add test stubs by @andreia in https://github.com/TappNetwork/Filament-Forum/pull/9
+* Multi-tenancy support by @andreia in https://github.com/TappNetwork/Filament-Forum/pull/7
+
+**Full Changelog**: https://github.com/TappNetwork/Filament-Forum/compare/v2.0.4...v2.0.5
+
 ## v2.0.4 - 2025-12-11
 
 ### What's Changed
