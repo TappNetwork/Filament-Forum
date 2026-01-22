@@ -6,7 +6,7 @@ A forum package for Filament apps that provides both admin and frontend resource
 
 - PHP 8.1+
 - Laravel 10+
-- Filament 4.0+
+- Filament 4.x/5.x
 - Spatie Laravel Media Library
 
 ## Features
