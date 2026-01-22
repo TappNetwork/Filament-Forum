@@ -2,6 +2,14 @@
 
 All notable changes to `Filament Forum` will be documented in this file.
 
+## v2.0.6 - 2026-01-22
+
+### What's Changed
+
+* Add Filament 5 support by @andreia in https://github.com/TappNetwork/Filament-Forum/pull/11
+
+**Full Changelog**: https://github.com/TappNetwork/Filament-Forum/compare/v2.0.5...v2.0.6
+
 ## v2.0.5 - 2026-01-07
 
 ### What's Changed
