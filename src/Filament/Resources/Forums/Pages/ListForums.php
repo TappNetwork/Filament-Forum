@@ -3,6 +3,7 @@
 namespace Tapp\FilamentForum\Filament\Resources\Forums\Pages;
 
 use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,26 @@ class ListForums extends ListRecords
     public function getTitle(): string|Htmlable
     {
         return __('filament-forum::filament-forum.forum.title');
+    }
+
+    public function deleteAction(): DeleteAction
+    {
+        return DeleteAction::make()
+            ->requiresConfirmation()
+            ->modalHeading(__('filament-forum::filament-forum.forum.delete.modal.heading'))
+            ->modalDescription(__('filament-forum::filament-forum.forum.delete.modal.description'))
+            ->successNotificationTitle(__('filament-forum::filament-forum.forum.delete.notification'))
+            ->iconButton()
+            ->icon('heroicon-o-trash')
+            ->color('danger')
+            ->tooltip(__('filament-forum::filament-forum.forum.delete.tooltip'))
+            ->size('sm')
+            ->extraAttributes(['class' => 'p-1'])
+            ->record(fn (array $arguments) => Forum::find($arguments['record']))
+            ->visible(fn (array $arguments) => auth()->check() &&
+                Forum::find($arguments['record'])?->owner_id === auth()->id() &&
+                Forum::find($arguments['record'])?->forumPosts()->count() === 0
+            );
     }
 
     protected function getHeaderActions(): array
