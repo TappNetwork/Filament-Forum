@@ -7,10 +7,13 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Schemas\ForumForm;
+use Tapp\FilamentForum\Filament\Resources\Forums\Pages\CreateForum;
 use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ListForums;
 use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ManageForumPosts;
 use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ViewForum;
@@ -54,6 +57,11 @@ class ForumResource extends Resource
     public static function getNavigationLabel(): string
     {
         return __('filament-forum::filament-forum.forum.navigation-label');
+    }
+
+    public static function form(Schema $schema): Schema
+    {
+        return ForumForm::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -104,6 +112,7 @@ class ForumResource extends Resource
 
         return [
             'index' => ListForums::route('/'),
+            'create' => CreateForum::route('/create'),
             // 'view' => ViewForum::route('/{record}'),
             'forum-posts' => ManageForumPosts::route("/{record}/{$forumPostSlug}"),
         ];
@@ -116,6 +125,19 @@ class ForumResource extends Resource
 
     public static function canCreate(): bool
     {
+        $user = auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        // Check if the user model has the canCreateForum method
+        if (method_exists($user, 'canCreateForum')) {
+            return $user->canCreateForum();
+        }
+
+        // Backward compatibility: return false if method doesn't exist
+        // This ensures existing installations don't suddenly allow forum creation
         return false;
     }
 

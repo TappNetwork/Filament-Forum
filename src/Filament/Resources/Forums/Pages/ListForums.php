@@ -2,6 +2,7 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Forums\Pages;
 
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,14 @@ class ListForums extends ListRecords
     public function getTitle(): string|Htmlable
     {
         return __('filament-forum::filament-forum.forum.title');
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            CreateAction::make()
+                ->visible(fn (): bool => static::getResource()::canCreate()),
+        ];
     }
 
     protected function getTableQuery(): \Illuminate\Database\Eloquent\Builder
