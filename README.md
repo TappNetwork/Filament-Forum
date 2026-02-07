@@ -80,17 +80,15 @@ A forum package for Filament apps that provides both admin and frontend resource
 
 - Ensure your User model has a `name` attribute
 
-- Add the `ForumUser` and `CanManageForums` traits to your `User` model:
+- Add the `ForumUser` trait to your `User` model:
 
 ```php
 use Tapp\FilamentForum\Traits\ForumUser;
-use Tapp\FilamentForum\Traits\CanManageForums;
 
 class User extends Authenticatable
 {
     // ...
     use ForumUser;
-    use CanManageForums;
     // ...
 }
 ```
@@ -101,8 +99,6 @@ The `ForumUser` trait provides:
 - `getMentionableUsers()` method - Customize which users are mentionable (see "Custom Mentionables" below)
 - `hasCustomForumSearch()`, `getForumSearchResults()`, `getForumOptionLabel()` methods - Custom search functionality (see "Custom User Model, Attribute, and Search Functionality" below)
 - `isForumAdmin()` method - Override to grant admin access to hidden forums (defaults to `false`)
-
-The `CanManageForums` trait provides:
 - `canCreateForum()` method - Controls forum creation permissions (see "Forum Creation Permissions" below)
 
 6. Add to your custom theme (usually`theme.css`) file:
@@ -377,15 +373,15 @@ Forums can be set as public (visible to all logged-in users) or hidden (only vis
 
 ### Forum Creation Permissions
 
-By default, forum creation is **disabled** for security. To enable forum creation, you must add the `CanManageForums` trait to your User model and override the `canCreateForum()` method:
+By default, forum creation is **disabled** for security. To enable forum creation, you must add the `ForumUser` trait to your User model and override the `canCreateForum()` method:
 
 ```php
 // In your User model
-use Tapp\FilamentForum\Traits\CanManageForums;
+use Tapp\FilamentForum\Traits\ForumUser;
 
 class User extends Authenticatable
 {
-    use CanManageForums;
+    use ForumUser;
     
     /**
      * Determine if the user can create forums.
@@ -409,7 +405,7 @@ class User extends Authenticatable
 ```
 
 **Important**: 
-- Make sure to add the `CanManageForums` trait to your User model (see step 5 in Installation)
+- Make sure to add the `ForumUser` trait to your User model (see step 5 in Installation)
 - The trait provides a default implementation that returns `false` for security
 - You must explicitly override `canCreateForum()` to enable forum creation
 
