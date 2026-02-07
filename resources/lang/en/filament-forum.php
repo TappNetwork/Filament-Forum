@@ -13,6 +13,10 @@ return [
     'forum.navigation-label' => 'Forums',
     'forum.view-posts' => 'View Posts',
     'forum.active' => 'Active',
+    'forum.delete.tooltip' => 'Delete',
+    'forum.delete.modal.heading' => 'Delete Forum',
+    'forum.delete.modal.description' => 'Are you sure you want to delete this forum? This action cannot be undone.',
+    'forum.delete.notification' => 'Forum deleted successfully',
 
     /*
     |--------------------------------------------------------------------------

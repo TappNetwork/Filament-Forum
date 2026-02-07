@@ -22,7 +22,7 @@ return new class extends Migration
                     ->cascadeOnDelete();
             }
 
-            $table->foreignId('owner_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('owner_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('name');
             $table->text('description')->nullable();
             $table->timestamps();

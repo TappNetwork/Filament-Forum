@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('forum_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('forum_id')->constrained('forums')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('forum_id')->constrained('forums')->cascadeOnDelete();
             $table->timestamps();
             $table->unique(['user_id', 'forum_id']);
         });

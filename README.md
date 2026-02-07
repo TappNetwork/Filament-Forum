@@ -99,6 +99,7 @@ The `ForumUser` trait provides:
 - `getMentionableUsers()` method - Customize which users are mentionable (see "Custom Mentionables" below)
 - `hasCustomForumSearch()`, `getForumSearchResults()`, `getForumOptionLabel()` methods - Custom search functionality (see "Custom User Model, Attribute, and Search Functionality" below)
 - `isForumAdmin()` method - Override to grant admin access to hidden forums (defaults to `false`)
+- `canCreateForum()` method - Controls forum creation permissions (see "Forum Creation Permissions" below)
 
 6. Add to your custom theme (usually`theme.css`) file:
 
@@ -369,6 +370,49 @@ public static function getMentionableUsers()
 ## Forum Access Control
 
 Forums can be set as public (visible to all logged-in users) or hidden (only visible to assigned users). Forum admins can see all hidden forums regardless of assignment.
+
+### Forum Creation Permissions
+
+By default, forum creation is **disabled** for security. To enable forum creation, you must add the `ForumUser` trait to your User model and override the `canCreateForum()` method:
+
+```php
+// In your User model
+use Tapp\FilamentForum\Traits\ForumUser;
+
+class User extends Authenticatable
+{
+    use ForumUser;
+    
+    /**
+     * Determine if the user can create forums.
+     * Override this method to enable forum creation with custom logic.
+     */
+    public function canCreateForum(): bool
+    {
+        // Example: Using Spatie Laravel Permission
+        return $this->hasPermissionTo('create forum');
+        
+        // Example: Using roles
+        // return $this->hasRole(['Admin', 'Moderator']);
+        
+        // Example: Allow all authenticated users
+        // return true;
+        
+        // Example: Custom logic
+        // return $this->is_verified && $this->reputation_points >= 100;
+    }
+}
+```
+
+**Important**: 
+- Make sure to add the `ForumUser` trait to your User model (see step 5 in Installation)
+- The trait provides a default implementation that returns `false` for security
+- You must explicitly override `canCreateForum()` to enable forum creation
+
+The `canCreateForum()` method is:
+- **Checked automatically** when displaying the "Create" button on the forums list page
+- **Enforced** when accessing the forum creation page
+- **Secure by default** - forum creation is disabled unless explicitly enabled
 
 ### Setting Forum Access
 
