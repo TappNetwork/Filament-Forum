@@ -12,11 +12,11 @@ use Filament\Support\Enums\Alignment;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
-use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Schemas\ForumForm;
 use Tapp\FilamentForum\Filament\Resources\Forums\Pages\CreateForum;
 use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ListForums;
 use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ManageForumPosts;
 use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ViewForum;
+use Tapp\FilamentForum\Filament\Resources\Forums\Schemas\ForumForm;
 use Tapp\FilamentForum\Filament\Tables\Components\ForumCardColumn;
 use Tapp\FilamentForum\Models\Forum;
 
