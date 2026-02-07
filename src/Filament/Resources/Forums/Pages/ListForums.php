@@ -33,7 +33,8 @@ class ListForums extends ListRecords
             ->size('sm')
             ->extraAttributes(['class' => 'p-1'])
             ->record(fn (array $arguments) => Forum::find($arguments['record']))
-            ->visible(fn (array $arguments) => auth()->check() &&
+            ->visible(
+                fn (array $arguments) => auth()->check() &&
                 Forum::find($arguments['record'])?->owner_id === auth()->id() &&
                 Forum::find($arguments['record'])?->forumPosts()->count() === 0
             );
