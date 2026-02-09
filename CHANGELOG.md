@@ -2,6 +2,14 @@
 
 All notable changes to `Filament Forum` will be documented in this file.
 
+## v2.0.7 - 2026-02-09
+
+### What's Changed
+
+* Ability to add forum by @andreia in https://github.com/TappNetwork/Filament-Forum/pull/12
+
+**Full Changelog**: https://github.com/TappNetwork/Filament-Forum/compare/v2.0.6...v2.0.7
+
 ## v2.0.6 - 2026-01-22
 
 ### What's Changed
