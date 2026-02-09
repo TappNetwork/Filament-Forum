@@ -1,6 +1,8 @@
 @php
     use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
     $record = $getRecord();
+    $livewire = $getLivewire();
+    $canDelete = auth()->user() && auth()->id() === $record->owner_id && $record->forumPosts()->count() === 0;
 @endphp
 
 <div class="w-full h-full flex flex-col">
@@ -12,6 +14,12 @@
                 alt="{{ $record->name }}"
                 class="w-full h-full object-cover"
             >
+        @endif
+        
+        @if($canDelete)
+            <div class="absolute top-2 right-2">
+                {{ ($livewire->deleteAction)(['record' => $record->id]) }}
+            </div>
         @endif
     </div>
 
