@@ -33,11 +33,15 @@ class ListForums extends ListRecords
             ->size('sm')
             ->extraAttributes(['class' => 'p-1'])
             ->record(fn (array $arguments) => Forum::find($arguments['record']))
-            ->visible(
-                fn (array $arguments) => auth()->check() &&
-                Forum::find($arguments['record'])?->owner_id === auth()->id() &&
-                Forum::find($arguments['record'])?->forumPosts()->count() === 0
-            );
+            ->visible(function (array $arguments) {
+                if (! auth()->check()) {
+                    return false;
+                }
+
+                $forum = Forum::find($arguments['record']);
+
+                return $forum?->owner_id === auth()->id() && $forum->forumPosts()->count() === 0;
+            });
     }
 
     protected function getHeaderActions(): array
