@@ -2,6 +2,14 @@
 
 All notable changes to `Filament Forum` will be documented in this file.
 
+## v2.0.8 - 2026-02-10
+
+### What's Changed
+
+* Update redundant queries by @andreia in https://github.com/TappNetwork/Filament-Forum/pull/13
+
+**Full Changelog**: https://github.com/TappNetwork/Filament-Forum/compare/v2.0.7...v2.0.8
+
 ## v2.0.7 - 2026-02-09
 
 ### What's Changed
