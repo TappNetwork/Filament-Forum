@@ -9,6 +9,7 @@ use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Tapp\FilamentForum\Filament\Resources\Forums\Pages\ListForums;
@@ -53,7 +54,7 @@ class ForumResource extends Resource
             ])
             ->recordActions([
                 //
-            ]);
+            ], position: RecordActionsPosition::BeforeColumns);
     }
 
     public static function getInfolistSchema(): array

@@ -2,9 +2,11 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables;
 
+use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -37,12 +39,13 @@ class ForumPostsTable
                 //
             ])
             ->recordActions([
-                // Tables\Actions\ViewAction::make(),
-                EditAction::make()
-                    ->icon('heroicon-m-pencil-square')
-                    ->iconButton()
-                    ->visible(fn (ForumPost $record): bool => Auth::check() && $record->user_id === Auth::id()),
-            ])
+                ActionGroup::make([
+                    EditAction::make()
+                        ->icon('heroicon-m-pencil-square')
+                        ->iconButton()
+                        ->visible(fn (ForumPost $record): bool => Auth::check() && $record->user_id === Auth::id()),
+                ]),
+            ], position: RecordActionsPosition::BeforeColumns)
             ->toolbarActions([
                 // Tables\Actions\BulkActionGroup::make([
                 //    Tables\Actions\DeleteBulkAction::make(),
