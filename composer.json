@@ -1,6 +1,5 @@
 {
     "name": "tapp/filament-forum",
-    "version": "2.0.0",
     "description": "Forum and comments package for Filament apps.",
     "type": "library",
     "license": "MIT",
