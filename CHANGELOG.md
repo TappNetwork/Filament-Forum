@@ -2,6 +2,14 @@
 
 All notable changes to `Filament Forum` will be documented in this file.
 
+## v2.0.9 - 2026-02-13
+
+### What's Changed
+
+* Table actions in ActionGroup at row start by @scottgrayson in https://github.com/TappNetwork/Filament-Forum/pull/14
+
+**Full Changelog**: https://github.com/TappNetwork/Filament-Forum/compare/v2.0.8...v2.0.9
+
 ## v2.0.8 - 2026-02-10
 
 ### What's Changed
