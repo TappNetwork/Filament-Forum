@@ -3,6 +3,8 @@
 namespace Tapp\FilamentForum\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Tapp\FilamentForum\Models\ForumPost;
@@ -18,7 +20,7 @@ class PostWasReacted
      * Create a new event instance.
      */
     public function __construct(
-        public $reactor,
+        public Model|Authenticatable $reactor,
         public ForumPost $post,
         public ForumPostReaction $reaction,
     ) {}

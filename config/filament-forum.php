@@ -46,4 +46,15 @@ return [
         'slug' => 'forum-posts',
     ],
 
+    'reactions' => [
+        'available' => [
+            '👍' => 'Like',
+            '❤️' => 'Love',
+            '😂' => 'Laugh',
+            '😮' => 'Wow',
+            '😢' => 'Sad',
+            '😡' => 'Angry',
+        ],
+    ],
+
 ];

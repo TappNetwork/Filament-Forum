@@ -3,6 +3,7 @@
 namespace Tapp\FilamentForum\Livewire;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Tapp\FilamentForum\Models\ForumPost;
 
@@ -16,18 +17,19 @@ class ForumPostReactions extends Component
 
     public bool $showReactionPicker = false;
 
-    public array $availableReactions = [
-        '👍' => 'Like',
-        '❤️' => 'Love',
-        '😂' => 'Laugh',
-        '😮' => 'Wow',
-        '😢' => 'Sad',
-        '😡' => 'Angry',
-    ];
+    public array $availableReactions = [];
 
     public function mount(ForumPost $post): void
     {
         $this->post = $post;
+        $this->availableReactions = config('filament-forum.reactions.available', [
+            '👍' => 'Like',
+            '❤️' => 'Love',
+            '😂' => 'Laugh',
+            '😮' => 'Wow',
+            '😢' => 'Sad',
+            '😡' => 'Angry',
+        ]);
         $this->loadReactions();
     }
 
@@ -66,6 +68,10 @@ class ForumPostReactions extends Component
                 ? $this->post->getUserReactions(Auth::user())->toArray()
                 : [];
         } catch (\Exception $e) {
+            Log::warning('Failed to load forum post reactions', [
+                'exception' => $e->getMessage(),
+                'post_id' => $this->post->id ?? null,
+            ]);
             $this->reactionCounts = [];
             $this->userReactions = [];
         }

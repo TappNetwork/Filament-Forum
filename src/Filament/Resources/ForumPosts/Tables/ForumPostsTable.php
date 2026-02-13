@@ -33,9 +33,6 @@ class ForumPostsTable
                 'default' => 1,
                 'sm' => 1,
             ])
-            ->filters([
-                //
-            ])
             ->recordActions([
                 // Tables\Actions\ViewAction::make(),
                 EditAction::make()

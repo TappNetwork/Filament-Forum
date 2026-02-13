@@ -135,6 +135,11 @@ class ForumComment extends Model implements HasMedia
 
     public function toggleReaction(string $reaction, $user): void
     {
+        $allowedTypes = array_keys(config('filament-forum.reactions.available', []));
+        if (! in_array($reaction, $allowedTypes, true)) {
+            return;
+        }
+
         $existingReaction = $this->reactions()
             ->where('reactor_id', $user->getKey())
             ->where('reactor_type', get_class($user))
