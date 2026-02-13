@@ -68,33 +68,40 @@
             </div>
         </a>
 
-        {{-- Footer with stats and comment authors --}}
+        {{-- Footer with stats, reactions and comment authors --}}
         <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
             <div class="text-sm text-gray-500">
                 @php
                     $viewsCount = $record->views_count ?? 0;
                     $replies = $record->comments()->count();
                 @endphp
- 
+
                 {{ trans_choice('filament-forum::filament-forum.forum-post.views', $viewsCount, ['value' => $viewsCount]) }} &bull; {{ trans_choice('filament-forum::filament-forum.forum-post.replies', $replies, ['value' => $replies]) }}
             </div>
 
-            {{-- Comment Authors --}}
-            <div class="flex items-center -space-x-2">
-                @foreach($record->getCommentAuthors() as $author)
-                    <img
-                        src="{{ $author->profile_photo ?? 'https://ui-avatars.com/api/?name=' . urlencode($author->name) }}"
-                        alt="{{ $author->name }}"
-                        class="w-8 h-8 rounded-full border-2 border-white"
-                    >
-                @endforeach
-                @if($record->getCountDistinctUsersWhoCommented() > 3)
-                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 border-2 border-white">
-                        <span class="text-xs text-gray-500 font-medium">
-                            +{{ $record->getCountDistinctUsersWhoCommented() - 3 }}
-                        </span>
-                    </div>
-                @endif
+            <div class="flex items-center gap-3">
+                {{-- Post Reactions --}}
+                <div>
+                    @livewire('tapp.filament-forum.forum-post-reactions', ['post' => $record], key('post-reactions-' . $record->id))
+                </div>
+
+                {{-- Comment Authors --}}
+                <div class="flex items-center -space-x-2">
+                    @foreach($record->getCommentAuthors() as $author)
+                        <img
+                            src="{{ $author->profile_photo ?? 'https://ui-avatars.com/api/?name=' . urlencode($author->name) }}"
+                            alt="{{ $author->name }}"
+                            class="w-8 h-8 rounded-full border-2 border-white"
+                        >
+                    @endforeach
+                    @if($record->getCountDistinctUsersWhoCommented() > 3)
+                        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 border-2 border-white">
+                            <span class="text-xs text-gray-500 font-medium">
+                                +{{ $record->getCountDistinctUsersWhoCommented() - 3 }}
+                            </span>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>

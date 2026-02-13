@@ -33,6 +33,7 @@ class FilamentForumServiceProvider extends PackageServiceProvider
                 'create_forum_post_views_table',
                 'create_forum_comments_table',
                 'create_forum_comment_reactions_table',
+                'create_forum_post_reactions_table',
             ])
             ->hasTranslations()
             ->hasCommand(\Tapp\FilamentForum\Console\InstallTestsCommand::class);
@@ -43,6 +44,7 @@ class FilamentForumServiceProvider extends PackageServiceProvider
         // Register Livewire components
         Livewire::component('tapp.filament-forum.forum-comments', \Tapp\FilamentForum\Livewire\ForumComments::class);
         Livewire::component('tapp.filament-forum.forum-comment-reactions', \Tapp\FilamentForum\Livewire\ForumCommentReactions::class);
+        Livewire::component('tapp.filament-forum.forum-post-reactions', \Tapp\FilamentForum\Livewire\ForumPostReactions::class);
 
         // Register assets
         FilamentAsset::register([

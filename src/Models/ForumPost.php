@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Tapp\FilamentForum\Database\Factories\ForumPostFactory;
 use Tapp\FilamentForum\Events\ForumPostCreated;
+use Tapp\FilamentForum\Events\PostWasReacted;
 use Tapp\FilamentForum\Models\Traits\BelongsToTenant;
 use Tapp\FilamentForum\Models\Traits\CanFavoriteForumPost;
 
@@ -55,6 +56,57 @@ class ForumPost extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(ForumComment::class);
+    }
+
+    public function reactions(): HasMany
+    {
+        return $this->hasMany(ForumPostReaction::class);
+    }
+
+    public function toggleReaction(string $reaction, $user): void
+    {
+        $existingReaction = $this->reactions()
+            ->where('reactor_id', $user->getKey())
+            ->where('reactor_type', get_class($user))
+            ->where('type', $reaction)
+            ->first();
+
+        if ($existingReaction) {
+            $existingReaction->delete();
+        } else {
+            $reaction = $this->reactions()->create([
+                'reactor_id' => $user->getKey(),
+                'reactor_type' => get_class($user),
+                'type' => $reaction,
+            ]);
+
+            PostWasReacted::dispatch(
+                $user,
+                $this,
+                $reaction
+            );
+        }
+    }
+
+    public function getReactionCounts(): array
+    {
+        return $this->reactions()
+            ->selectRaw('type, count(*) as count')
+            ->groupBy('type')
+            ->pluck('count', 'type')
+            ->toArray();
+    }
+
+    public function getUserReactions($user): Collection
+    {
+        if (! $user) {
+            return collect();
+        }
+
+        return $this->reactions()
+            ->where('reactor_id', $user->getKey())
+            ->where('reactor_type', get_class($user))
+            ->pluck('type');
     }
 
     public function recordView(): void

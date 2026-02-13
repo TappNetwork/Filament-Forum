@@ -18,7 +18,7 @@ class ForumPostsTable
         return $table
             ->recordUrl(null)
             ->modifyQueryUsing(function (Builder $query) {
-                return $query->with(['user', 'forum']);
+                return $query->with(['user', 'forum', 'reactions']);
             })
             ->columns([
                 Stack::make([
