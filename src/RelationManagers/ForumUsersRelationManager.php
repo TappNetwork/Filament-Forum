@@ -2,6 +2,7 @@
 
 namespace Tapp\FilamentForum\RelationManagers;
 
+use Filament\Actions\ActionGroup;
 use Filament\Actions\AttachAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DetachAction;
@@ -10,6 +11,7 @@ use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables;
+use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
 
 class ForumUsersRelationManager extends RelationManager
@@ -64,8 +66,10 @@ class ForumUsersRelationManager extends RelationManager
                     ->recordSelectSearchColumns(['name', 'email']),
             ])
             ->recordActions([
-                DetachAction::make(),
-            ])
+                ActionGroup::make([
+                    DetachAction::make(),
+                ]),
+            ], position: RecordActionsPosition::BeforeColumns)
             ->toolbarActions([
                 BulkActionGroup::make([
                     DetachBulkAction::make(),

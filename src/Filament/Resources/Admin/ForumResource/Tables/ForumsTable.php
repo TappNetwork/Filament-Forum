@@ -92,7 +92,7 @@ class ForumsTable
                     DeleteAction::make(),
                 ])
                     ->tooltip('Actions'),
-            ], position: RecordActionsPosition::AfterColumns)
+            ], position: RecordActionsPosition::BeforeColumns)
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
