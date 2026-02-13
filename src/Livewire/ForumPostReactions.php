@@ -5,11 +5,11 @@ namespace Tapp\FilamentForum\Livewire;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use Tapp\FilamentForum\Models\ForumComment;
+use Tapp\FilamentForum\Models\ForumPost;
 
-class ForumCommentReactions extends Component
+class ForumPostReactions extends Component
 {
-    public ForumComment $comment;
+    public ForumPost $post;
 
     public array $reactionCounts = [];
 
@@ -19,9 +19,9 @@ class ForumCommentReactions extends Component
 
     public array $availableReactions = [];
 
-    public function mount(ForumComment $comment): void
+    public function mount(ForumPost $post): void
     {
-        $this->comment = $comment;
+        $this->post = $post;
         $this->availableReactions = config('filament-forum.reactions.available', [
             '👍' => 'Like',
             '❤️' => 'Love',
@@ -33,9 +33,8 @@ class ForumCommentReactions extends Component
         $this->loadReactions();
     }
 
-    public function hydrate()
+    public function hydrate(): void
     {
-        // Ensure reactions are loaded after hydration
         if (empty($this->reactionCounts)) {
             $this->loadReactions();
         }
@@ -47,7 +46,7 @@ class ForumCommentReactions extends Component
             return;
         }
 
-        $this->comment->toggleReaction($type, Auth::user());
+        $this->post->toggleReaction($type, Auth::user());
         $this->loadReactions();
         $this->showReactionPicker = false;
     }
@@ -64,14 +63,14 @@ class ForumCommentReactions extends Component
     protected function loadReactions(): void
     {
         try {
-            $this->reactionCounts = $this->comment->getReactionCounts();
+            $this->reactionCounts = $this->post->getReactionCounts();
             $this->userReactions = Auth::check()
-                ? $this->comment->getUserReactions(Auth::user())->toArray()
+                ? $this->post->getUserReactions(Auth::user())->toArray()
                 : [];
         } catch (\Exception $e) {
-            Log::warning('Failed to load forum comment reactions', [
+            Log::warning('Failed to load forum post reactions', [
                 'exception' => $e->getMessage(),
-                'comment_id' => $this->comment->id ?? null,
+                'post_id' => $this->post->id ?? null,
             ]);
             $this->reactionCounts = [];
             $this->userReactions = [];
@@ -80,6 +79,6 @@ class ForumCommentReactions extends Component
 
     public function render()
     {
-        return view('filament-forum::livewire.forum-comment-reactions');
+        return view('filament-forum::livewire.forum-post-reactions');
     }
 }

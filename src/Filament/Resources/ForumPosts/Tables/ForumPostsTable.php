@@ -20,7 +20,7 @@ class ForumPostsTable
         return $table
             ->recordUrl(null)
             ->modifyQueryUsing(function (Builder $query) {
-                return $query->with(['user', 'forum']);
+                return $query->with(['user', 'forum', 'reactions']);
             })
             ->columns([
                 Stack::make([
@@ -34,9 +34,6 @@ class ForumPostsTable
             ->contentGrid([
                 'default' => 1,
                 'sm' => 1,
-            ])
-            ->filters([
-                //
             ])
             ->recordActions([
                 ActionGroup::make([
