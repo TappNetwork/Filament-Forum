@@ -13,6 +13,7 @@ use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Pages\ViewForu
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Schemas\ForumPostForm;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Schemas\ForumPostInfolist;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Tables\ForumPostsTable;
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Widgets\ForumPostStats;
 use Tapp\FilamentForum\Models\ForumPost;
 
 class ForumPostResource extends Resource
@@ -69,6 +70,13 @@ class ForumPostResource extends Resource
     {
         return [
             //
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            ForumPostStats::class,
         ];
     }
 

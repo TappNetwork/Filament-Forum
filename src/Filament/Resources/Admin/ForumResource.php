@@ -11,6 +11,7 @@ use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\EditForum;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Pages\ListForums;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Schemas\ForumForm;
 use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Tables\ForumsTable;
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumResource\Widgets\ForumStats;
 use Tapp\FilamentForum\Models\Forum;
 use Tapp\FilamentForum\RelationManagers\ForumUsersRelationManager;
 
@@ -63,6 +64,13 @@ class ForumResource extends Resource
     {
         return [
             ForumUsersRelationManager::make(),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            ForumStats::class,
         ];
     }
 
