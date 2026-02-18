@@ -2,6 +2,14 @@
 
 All notable changes to `Filament Forum` will be documented in this file.
 
+## v2.1.1 - 2026-02-18
+
+### What's Changed
+
+* Add stat widgets by @andreia in https://github.com/TappNetwork/Filament-Forum/pull/16
+
+**Full Changelog**: https://github.com/TappNetwork/Filament-Forum/compare/v2.1.0...v2.1.1
+
 ## v2.1.0 - 2026-02-13
 
 ### What's Changed
