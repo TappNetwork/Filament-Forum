@@ -2,8 +2,8 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource\Schemas;
 
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -57,9 +57,29 @@ class ForumPostForm
                                 titleAttribute: 'name'
                             ),
                         $userSelect,
-                        Textarea::make('description')
+                        RichEditor::make('description')
                             ->label(__('filament-forum::filament-forum.forum-post.form.label.description'))
                             ->required()
+                            ->toolbarButtons([
+                                'attachFiles',
+                                'blockquote',
+                                'bold',
+                                'bulletList',
+                                'codeBlock',
+                                'h2',
+                                'h3',
+                                'italic',
+                                'link',
+                                'orderedList',
+                                'redo',
+                                'strike',
+                                'underline',
+                                'undo',
+                            ])
+                            ->fileAttachmentsDisk('public')
+                            ->fileAttachmentsDirectory('forum-posts')
+                            ->fileAttachmentsVisibility('public')
+                            ->maxLength(10000)
                             ->columnSpanFull(),
                     ]),
             ]);

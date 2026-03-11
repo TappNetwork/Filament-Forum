@@ -28,6 +28,8 @@ class ForumPostInfolist
                             ->schema([
                                 TextEntry::make('description')
                                     ->hiddenLabel()
+                                    ->html()
+                                    ->prose()
                                     ->columnSpanFull(),
                             ])
                             ->columnSpan(2),
