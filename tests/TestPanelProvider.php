@@ -4,6 +4,7 @@ namespace Tapp\FilamentForum\Tests;
 
 use Filament\Panel;
 use Filament\PanelProvider;
+use Tapp\FilamentForum\Tests\Models\Team;
 
 class TestPanelProvider extends PanelProvider
 {
@@ -13,6 +14,6 @@ class TestPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->default()
-            ->tenant(\Tapp\FilamentForum\Tests\Models\Team::class);
+            ->tenant(Team::class);
     }
 }

@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Tapp\FilamentForum\Models\Forum;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Tapp\FilamentForum\Models\Forum>
+ * @extends Factory<Forum>
  */
 class ForumFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var class-string<\Tapp\FilamentForum\Models\Forum>
+     * @var class-string<Forum>
      */
     protected $model = Forum::class;
 

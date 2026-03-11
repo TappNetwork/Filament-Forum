@@ -4,6 +4,7 @@ namespace Tapp\FilamentForum\Filament\Resources\Forums\Pages;
 
 use BackedEnum;
 use Filament\Actions\CreateAction;
+use Filament\Panel;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -33,7 +34,7 @@ class ManageForumPosts extends ManageRelatedRecords
         return __('filament-forum::filament-forum.forum-post.breadcrumb');
     }
 
-    public static function getSlug(?\Filament\Panel $panel = null): string
+    public static function getSlug(?Panel $panel = null): string
     {
         return config('filament-forum.forum-post.slug');
     }

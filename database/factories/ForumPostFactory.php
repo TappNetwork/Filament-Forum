@@ -7,14 +7,14 @@ use Tapp\FilamentForum\Models\Forum;
 use Tapp\FilamentForum\Models\ForumPost;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Tapp\FilamentForum\Models\ForumPost>
+ * @extends Factory<ForumPost>
  */
 class ForumPostFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var class-string<\Tapp\FilamentForum\Models\ForumPost>
+     * @var class-string<ForumPost>
      */
     protected $model = ForumPost::class;
 

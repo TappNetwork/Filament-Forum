@@ -4,10 +4,13 @@ namespace Tapp\FilamentForum\Tests;
 
 use Filament\FilamentServiceProvider;
 use Filament\Support\SupportServiceProvider;
+use Illuminate\Testing\TestResponse;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Tapp\FilamentForum\FilamentForumServiceProvider;
+use Tapp\FilamentForum\Tests\Models\Team;
+use Tapp\FilamentForum\Tests\Models\User;
 
 abstract class TestCase extends Orchestra
 {
@@ -16,7 +19,7 @@ abstract class TestCase extends Orchestra
     /**
      * The Illuminate\Testing\TestResponse instance for the last request.
      *
-     * @var \Illuminate\Testing\TestResponse|null
+     * @var TestResponse|null
      */
     protected static $latestResponse;
 
@@ -42,11 +45,11 @@ abstract class TestCase extends Orchestra
         ]);
 
         // Configure auth to use test User model
-        $app['config']->set('auth.providers.users.model', \Tapp\FilamentForum\Tests\Models\User::class);
+        $app['config']->set('auth.providers.users.model', User::class);
 
         // Configure plugin to use test models
-        $app['config']->set('filament-forum.user.model', \Tapp\FilamentForum\Tests\Models\User::class);
-        $app['config']->set('filament-forum.tenancy.model', \Tapp\FilamentForum\Tests\Models\Team::class);
+        $app['config']->set('filament-forum.user.model', User::class);
+        $app['config']->set('filament-forum.tenancy.model', Team::class);
         $app['config']->set('filament-forum.tenancy.enabled', true);
     }
 

@@ -4,6 +4,7 @@ namespace Tapp\FilamentForum\Filament\Resources\Forums;
 
 use BackedEnum;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
@@ -119,7 +120,7 @@ class ForumResource extends Resource
         ];
     }
 
-    public static function getSlug(?\Filament\Panel $panel = null): string
+    public static function getSlug(?Panel $panel = null): string
     {
         return config('filament-forum.forum.slug');
     }

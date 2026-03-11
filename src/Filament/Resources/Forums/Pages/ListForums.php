@@ -6,6 +6,7 @@ use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
 use Tapp\FilamentForum\Models\Forum;
@@ -52,7 +53,7 @@ class ListForums extends ListRecords
         ];
     }
 
-    protected function getTableQuery(): \Illuminate\Database\Eloquent\Builder
+    protected function getTableQuery(): Builder
     {
         $user = Auth::user();
 

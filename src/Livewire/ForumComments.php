@@ -359,7 +359,7 @@ class ForumComments extends Component implements HasActions, HasSchemas
         }
     }
 
-    protected function extractMentions(string $content): \Illuminate\Database\Eloquent\Collection
+    protected function extractMentions(string $content): Collection
     {
         $userModel = config('auth.providers.users.model');
 
@@ -370,7 +370,7 @@ class ForumComments extends Component implements HasActions, HasSchemas
         );
 
         if (empty($matches[1])) {
-            return new \Illuminate\Database\Eloquent\Collection; // Return empty collection
+            return new Collection; // Return empty collection
         }
 
         $userIds = $matches[1];

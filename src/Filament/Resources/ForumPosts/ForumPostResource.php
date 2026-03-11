@@ -3,6 +3,7 @@
 namespace Tapp\FilamentForum\Filament\Resources\ForumPosts;
 
 use BackedEnum;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
@@ -77,7 +78,7 @@ class ForumPostResource extends Resource
         ];
     }
 
-    public static function getSlug(?\Filament\Panel $panel = null): string
+    public static function getSlug(?Panel $panel = null): string
     {
         return config('filament-forum.forum-post.slug');
     }

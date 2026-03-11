@@ -11,6 +11,10 @@ use Filament\Support\Facades\FilamentAsset;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Tapp\FilamentForum\Console\InstallTestsCommand;
+use Tapp\FilamentForum\Livewire\ForumCommentReactions;
+use Tapp\FilamentForum\Livewire\ForumComments;
+use Tapp\FilamentForum\Livewire\ForumPostReactions;
 
 // The following linter errors may appear if Filament is not installed in the dev environment, but are not actual code issues in a Filament app.
 // @phpstan-ignore-next-line
@@ -36,15 +40,15 @@ class FilamentForumServiceProvider extends PackageServiceProvider
                 'create_forum_post_reactions_table',
             ])
             ->hasTranslations()
-            ->hasCommand(\Tapp\FilamentForum\Console\InstallTestsCommand::class);
+            ->hasCommand(InstallTestsCommand::class);
     }
 
     public function packageBooted()
     {
         // Register Livewire components
-        Livewire::component('tapp.filament-forum.forum-comments', \Tapp\FilamentForum\Livewire\ForumComments::class);
-        Livewire::component('tapp.filament-forum.forum-comment-reactions', \Tapp\FilamentForum\Livewire\ForumCommentReactions::class);
-        Livewire::component('tapp.filament-forum.forum-post-reactions', \Tapp\FilamentForum\Livewire\ForumPostReactions::class);
+        Livewire::component('tapp.filament-forum.forum-comments', ForumComments::class);
+        Livewire::component('tapp.filament-forum.forum-comment-reactions', ForumCommentReactions::class);
+        Livewire::component('tapp.filament-forum.forum-post-reactions', ForumPostReactions::class);
 
         // Register assets
         FilamentAsset::register([
