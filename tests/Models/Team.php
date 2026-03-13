@@ -4,6 +4,7 @@ namespace Tapp\FilamentForum\Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Tapp\FilamentForum\Tests\Database\Factories\TeamFactory;
 
 class Team extends Model
 {
@@ -16,6 +17,6 @@ class Team extends Model
      */
     protected static function newFactory()
     {
-        return \Tapp\FilamentForum\Tests\Database\Factories\TeamFactory::new();
+        return TeamFactory::new();
     }
 }

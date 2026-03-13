@@ -3,6 +3,7 @@
 namespace Tapp\FilamentForum\Filament\RichEditor\Plugins;
 
 use Filament\Forms\Components\RichEditor\Plugins\Contracts\RichContentPlugin;
+use Tapp\FilamentForum\TipTap\Extensions\Mention;
 
 class MentionPlugin implements RichContentPlugin
 {
@@ -17,7 +18,7 @@ class MentionPlugin implements RichContentPlugin
     public function getTipTapPhpExtensions(): array
     {
         return [
-            new \Tapp\FilamentForum\TipTap\Extensions\Mention,
+            new Mention,
         ];
     }
 

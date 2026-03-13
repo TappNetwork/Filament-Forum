@@ -63,7 +63,7 @@
         <a href="{{ ForumPostResource::getUrl('view', ['forum' => $record->forum->id, 'record' => $record->id]) }}">
             <div class="mt-4">
                 <p class="text-sm text-gray-600">
-                    {{ Str::limit($record->description, 200) }}
+                    {{ Str::limit(strip_tags($record->description), 200) }}
                 </p>
             </div>
         </a>

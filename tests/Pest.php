@@ -1,10 +1,11 @@
 <?php
 
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tapp\FilamentForum\Tests\TestCase;
 
 uses(
     TestCase::class,
-    Illuminate\Foundation\Testing\LazilyRefreshDatabase::class,
+    LazilyRefreshDatabase::class,
 )->in(__DIR__);
 
 // Pest helper functions

@@ -63,6 +63,8 @@ class ForumPostInfolist
                                 TextEntry::make('description')
                                     ->label(__('filament-forum::filament-forum.forum-post.infolist.label.name'))
                                     ->hiddenLabel()
+                                    ->html()
+                                    ->prose()
                                     ->columnSpanFull(),
                             ]),
 

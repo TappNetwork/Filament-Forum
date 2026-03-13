@@ -5,6 +5,7 @@ namespace Tapp\FilamentForum\Tests\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tapp\FilamentForum\Models\Traits\HasFavoriteForumPost;
+use Tapp\FilamentForum\Tests\Database\Factories\UserFactory;
 
 class User extends Authenticatable
 {
@@ -23,6 +24,6 @@ class User extends Authenticatable
      */
     protected static function newFactory()
     {
-        return \Tapp\FilamentForum\Tests\Database\Factories\UserFactory::new();
+        return UserFactory::new();
     }
 }
