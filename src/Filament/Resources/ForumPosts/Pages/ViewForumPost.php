@@ -20,6 +20,8 @@ class ViewForumPost extends ViewRecord
     {
         return [
             EditAction::make()
+                ->color('gray')
+                ->icon('heroicon-o-pencil-square')
                 ->visible(fn (): bool => Auth::check() && $this->getRecord()->user_id === Auth::id()),
         ];
     }
