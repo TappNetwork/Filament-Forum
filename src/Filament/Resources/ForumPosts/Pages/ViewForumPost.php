@@ -18,12 +18,7 @@ class ViewForumPost extends ViewRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            EditAction::make()
-                ->color('gray')
-                ->icon('heroicon-o-pencil-square')
-                ->visible(fn (): bool => Auth::check() && $this->getRecord()->user_id === Auth::id()),
-        ];
+        return [];
     }
 
     public function getRecord(): ForumPost

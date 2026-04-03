@@ -76,19 +76,11 @@ class ForumComments extends Component implements HasActions, HasSchemas
                     ->fileAttachmentsVisibility('public')
                     ->toolbarButtons([
                         'attachFiles',
-                        'blockquote',
                         'bold',
-                        'bulletList',
-                        'codeBlock',
-                        'h2',
-                        'h3',
                         'italic',
                         'link',
-                        'orderedList',
-                        'redo',
-                        'strike',
-                        'underline',
-                        'undo',
+                        'bulletList',
+                        'blockquote',
                     ])
                     ->columnSpanFull(),
             ])
@@ -109,19 +101,11 @@ class ForumComments extends Component implements HasActions, HasSchemas
                     ->fileAttachmentsVisibility('public')
                     ->toolbarButtons([
                         'attachFiles',
-                        'blockquote',
                         'bold',
-                        'bulletList',
-                        'codeBlock',
-                        'h2',
-                        'h3',
                         'italic',
                         'link',
-                        'orderedList',
-                        'redo',
-                        'strike',
-                        'underline',
-                        'undo',
+                        'bulletList',
+                        'blockquote',
                     ])
                     ->columnSpanFull(),
             ])
