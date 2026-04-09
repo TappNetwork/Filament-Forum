@@ -2,6 +2,10 @@
 
 All notable changes to `Filament Forum` will be documented in this file.
 
+## v2.1.3 - 2026-04-09
+
+Flatten post view: collapsible comment form, no card nesting
+
 ## v2.1.2 - 2026-03-13
 
 ### What's Changed
