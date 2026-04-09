@@ -2,10 +2,8 @@
 
 namespace Tapp\FilamentForum\Filament\Resources\ForumPosts\Pages;
 
-use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Support\Facades\Auth;
 use Tapp\FilamentForum\Concerns\HasCustomForumPostBreadcrumb;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
 use Tapp\FilamentForum\Models\ForumPost;
@@ -18,10 +16,7 @@ class ViewForumPost extends ViewRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            EditAction::make()
-                ->visible(fn (): bool => Auth::check() && $this->getRecord()->user_id === Auth::id()),
-        ];
+        return [];
     }
 
     public function getRecord(): ForumPost

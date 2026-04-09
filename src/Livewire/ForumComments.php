@@ -67,31 +67,25 @@ class ForumComments extends Component implements HasActions, HasSchemas
         return $schema
             ->components([
                 RichEditor::make('content')
-                    ->label(__('filament-forum::filament-forum.comments.add-comment'))
+                    ->hiddenLabel()
                     ->placeholder(__('filament-forum::filament-forum.comments.placeholder'))
                     ->required()
+                    ->extraInputAttributes(['style' => 'min-height: 150px'])
                     ->fileAttachmentsDisk('public')
                     ->fileAttachmentsDirectory('forum-comments')
                     ->fileAttachmentsVisibility('public')
                     ->toolbarButtons([
                         'attachFiles',
-                        'blockquote',
                         'bold',
-                        'bulletList',
-                        'codeBlock',
-                        'h2',
-                        'h3',
                         'italic',
                         'link',
-                        'orderedList',
-                        'redo',
-                        'strike',
-                        'underline',
-                        'undo',
+                        'bulletList',
+                        'blockquote',
                     ])
                     ->columnSpanFull(),
             ])
-            ->statePath('data');
+            ->statePath('data')
+            ->columns(1);
     }
 
     public function editCommentForm(Schema $schema): Schema
@@ -107,19 +101,11 @@ class ForumComments extends Component implements HasActions, HasSchemas
                     ->fileAttachmentsVisibility('public')
                     ->toolbarButtons([
                         'attachFiles',
-                        'blockquote',
                         'bold',
-                        'bulletList',
-                        'codeBlock',
-                        'h2',
-                        'h3',
                         'italic',
                         'link',
-                        'orderedList',
-                        'redo',
-                        'strike',
-                        'underline',
-                        'undo',
+                        'bulletList',
+                        'blockquote',
                     ])
                     ->columnSpanFull(),
             ])
@@ -169,6 +155,8 @@ class ForumComments extends Component implements HasActions, HasSchemas
             ->title(__('filament-forum::filament-forum.comments.created'))
             ->success()
             ->send();
+
+        $this->dispatch('comment-created');
     }
 
     #[On('comment-reaction-toggled')]

@@ -1,71 +1,92 @@
 <div class="space-y-6" @if($pollingInterval) wire:poll.{{ $pollingInterval }}="refreshComments" @endif>
-    {{-- Comment Form --}}
-    @auth
-        <div class="bg-white dark:bg-gray-900 rounded-lg dark:border-gray-700 relative">
-            <div x-load
-                 x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('forum-mentions', 'tapp/filament-forum') }}"
-                 x-data="forumMentions({
-                     mentionables: @js($this->getMentionablesData())
-                 })">
-                <form wire:submit="create" class="space-y-4">
-                    {{ $this->commentForm }}
-                    
-                    <div class="flex justify-end">
-                        <x-filament::button type="submit" wire:loading.attr="disabled">
-                            <x-filament::loading-indicator wire:loading wire:target="create" class="h-4 w-4 mr-2" />
-                            {{ __('filament-forum::filament-forum.comments.post-comment') }}
-                        </x-filament::button>
-                    </div>
-                </form>
+    {{-- Comments Header + Collapsible Form --}}
+    <div x-data="{ showCommentForm: false }" @comment-created.window="showCommentForm = false">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base font-medium text-gray-100">
+                {{ trans_choice('filament-forum::filament-forum.comments.count', $comments->count(), ['count' => $comments->count()]) }}
+            </h3>
+            @auth
+                <x-filament::button
+                    x-on:click="showCommentForm = !showCommentForm"
+                    icon="heroicon-o-chat-bubble-left"
+                    size="sm"
+                    color="gray"
+                    x-show="!showCommentForm"
+                >
+                    {{ __('filament-forum::filament-forum.comments.add-comment') }}
+                </x-filament::button>
+                <x-filament::button
+                    x-on:click="showCommentForm = false"
+                    size="sm"
+                    color="gray"
+                    x-show="showCommentForm"
+                    x-cloak
+                >
+                    {{ __('filament-forum::filament-forum.comments.cancel') }}
+                </x-filament::button>
+            @endauth
+        </div>
 
-                {{-- Mentions Dropdown --}}
-                <div x-show="showDropdown" 
-                     x-cloak
-                     class="mention-dropdown"
-                     style="position: absolute; z-index: 9999;"
-                     :style="`top: ${dropdownPosition.top}px; left: ${dropdownPosition.left}px;`">
-                    <template x-for="(user, index) in filteredMentionables" :key="user.id">
-                        <div class="mention-item"
-                             :class="{ 'bg-gray-100 dark:bg-gray-600': index === selectedIndex }"
-                             @click.stop="selectMention(user)">
-                            <div class="avatar">
-                                <template x-if="user.avatar">
-                                    <img :src="user.avatar" :alt="user.name" class="w-full h-full rounded-full">
-                                </template>
-                                <template x-if="!user.avatar">
-                                    <span x-text="user.name.charAt(0).toUpperCase()" class="text-gray-600 dark:text-gray-300"></span>
-                                </template>
+        @auth
+            <div x-show="showCommentForm" x-collapse x-cloak>
+                <div class="relative mb-4"
+                     x-load
+                     x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('forum-mentions', 'tapp/filament-forum') }}"
+                     x-data="forumMentions({
+                         mentionables: @js($this->getMentionablesData())
+                     })">
+                    <form wire:submit="create" class="space-y-3">
+                        {{ $this->commentForm }}
+
+                        <div class="flex justify-end">
+                            <x-filament::button type="submit" color="gray" wire:loading.attr="disabled">
+                                <x-filament::loading-indicator wire:loading wire:target="create" class="h-4 w-4 mr-2" />
+                                {{ __('filament-forum::filament-forum.comments.post-comment') }}
+                            </x-filament::button>
+                        </div>
+                    </form>
+
+                    {{-- Mentions Dropdown --}}
+                    <div x-show="showDropdown"
+                         x-cloak
+                         class="mention-dropdown"
+                         style="position: absolute; z-index: 9999;"
+                         :style="`top: ${dropdownPosition.top}px; left: ${dropdownPosition.left}px;`">
+                        <template x-for="(user, index) in filteredMentionables" :key="user.id">
+                            <div class="mention-item"
+                                 :class="{ 'bg-gray-100 dark:bg-gray-600': index === selectedIndex }"
+                                 @click.stop="selectMention(user)">
+                                <div class="avatar">
+                                    <template x-if="user.avatar">
+                                        <img :src="user.avatar" :alt="user.name" class="w-full h-full rounded-full">
+                                    </template>
+                                    <template x-if="!user.avatar">
+                                        <span x-text="user.name.charAt(0).toUpperCase()" class="text-gray-600 dark:text-gray-300"></span>
+                                    </template>
+                                </div>
+                                <span class="name" x-html="highlightQuery(user.name, currentQuery || '')"></span>
                             </div>
-                            <span class="name" x-html="highlightQuery(user.name, currentQuery || '')"></span>
-                        </div>
-                    </template>
-                    
-                    <template x-if="filteredMentionables.length === 0">
-                        <div class="mention-item text-gray-500 dark:text-gray-400">
-                            No users found
-                        </div>
-                    </template>
+                        </template>
+
+                        <template x-if="filteredMentionables.length === 0">
+                            <div class="mention-item text-gray-500 dark:text-gray-400">
+                                No users found
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
-        </div>
-    @else
-        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-center">
-            <p class="text-gray-600 dark:text-gray-400">
-                {{ __('filament-forum::filament-forum.comments.login-to-comment') }}
-            </p>
-        </div>
-    @endauth
+        @else
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-center mb-4">
+                <p class="text-gray-600 dark:text-gray-400">
+                    {{ __('filament-forum::filament-forum.comments.login-to-comment') }}
+                </p>
+            </div>
+        @endauth
+    </div>
 
     {{-- Comments List --}}
     <div class="space-y-4">
-        {{-- Comments Count --}}
-        @if($comments->count() > 0)
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-medium text-gray-900 dark:text-gray-100">
-                    {{ trans_choice('filament-forum::filament-forum.comments.count', $comments->count(), ['count' => $comments->count()]) }}
-                </h3>
-            </div>
-        @endif
 
         @forelse($comments as $comment)
             <div class="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4" wire:key="comment-{{ $comment->id }}">
@@ -135,7 +156,7 @@
                                 >
                                     {{ __('filament-forum::filament-forum.comments.cancel') }}
                                 </x-filament::button>
-                                <x-filament::button type="submit" wire:loading.attr="disabled">
+                                <x-filament::button type="submit" color="gray" wire:loading.attr="disabled">
                                     <x-filament::loading-indicator wire:loading wire:target="updateComment" class="h-4 w-4 mr-2" />
                                     {{ __('filament-forum::filament-forum.comments.save') }}
                                 </x-filament::button>
@@ -215,8 +236,8 @@
             </div>
         @empty
             <div class="text-center py-8">
-                <x-heroicon-o-chat-bubble-left class="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                <p class="text-gray-500 dark:text-gray-400">
+                <x-heroicon-o-chat-bubble-left class="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <p class="text-gray-300">
                     {{ __('filament-forum::filament-forum.comments.no-comments') }}
                 </p>
             </div>
