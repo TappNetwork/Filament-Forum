@@ -13,11 +13,13 @@ use Tapp\FilamentForum\Events\ForumPostCreated;
 use Tapp\FilamentForum\Events\PostWasReacted;
 use Tapp\FilamentForum\Models\Traits\BelongsToTenant;
 use Tapp\FilamentForum\Models\Traits\CanFavoriteForumPost;
+use Tapp\FilamentForum\Models\Traits\CanSubscribeToForumPost;
 
 class ForumPost extends Model
 {
     use BelongsToTenant;
     use CanFavoriteForumPost;
+    use CanSubscribeToForumPost;
 
     /** @use HasFactory<ForumPostFactory> */
     use HasFactory;

@@ -17,6 +17,8 @@ return [
     'forum.delete.modal.heading' => 'Delete Forum',
     'forum.delete.modal.description' => 'Are you sure you want to delete this forum? This action cannot be undone.',
     'forum.delete.notification' => 'Forum deleted successfully',
+    'forum.subscribe' => 'Follow forum',
+    'forum.unsubscribe' => 'Unfollow forum',
 
     /*
     |--------------------------------------------------------------------------
@@ -32,6 +34,8 @@ return [
     'forum-post.unknown' => 'Unknown',
     'forum-post.last-reply' => 'Last reply',
     'forum-post.toggle-favorite' => 'Toggle Favorite',
+    'forum-post.subscribe' => 'Follow post',
+    'forum-post.unsubscribe' => 'Unfollow post',
     'forum-post.views' => '{0} No views yet|{1} :value view|[2,*] :value views',
     'forum-post.replies' => '{0} No reply yet|{1} :value reply|[2,*] :value replies',
 

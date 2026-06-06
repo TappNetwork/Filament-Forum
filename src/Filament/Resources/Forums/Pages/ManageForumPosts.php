@@ -3,14 +3,17 @@
 namespace Tapp\FilamentForum\Filament\Resources\Forums\Pages;
 
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Panel;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Auth;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\Tables\ForumPostsTable;
 use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
+use Tapp\FilamentForum\Models\Forum;
 use Tapp\FilamentForum\Models\ForumPost;
 
 class ManageForumPosts extends ManageRelatedRecords
@@ -43,8 +46,20 @@ class ManageForumPosts extends ManageRelatedRecords
     {
         return ForumPostsTable::configure($table)
             ->headerActions([
+                Action::make('subscription')
+                    ->label(fn (): string => $this->forumSubscriptionRecord()->isSubscribed()
+                        ? __('filament-forum::filament-forum.forum.unsubscribe')
+                        : __('filament-forum::filament-forum.forum.subscribe'))
+                    ->icon(fn (): string => $this->forumSubscriptionRecord()->isSubscribed() ? 'heroicon-s-bell' : 'heroicon-o-bell')
+                    ->visible(fn (): bool => Auth::check())
+                    ->action(fn () => $this->toggleForumSubscription()),
                 CreateAction::make(),
             ]);
+    }
+
+    public function toggleForumSubscription(): void
+    {
+        $this->forumSubscriptionRecord()->toggleSubscription();
     }
 
     public function toggleFavorite($recordId)
@@ -53,5 +68,13 @@ class ManageForumPosts extends ManageRelatedRecords
         $forumPostrecord->toggleFavorite();
 
         $this->dispatch('favorite-toggled', recordId: $recordId, isFavorite: $forumPostrecord->isFavorite());
+    }
+
+    protected function forumSubscriptionRecord(): Forum
+    {
+        /** @var Forum $forum */
+        $forum = $this->getOwnerRecord();
+
+        return $forum;
     }
 }
