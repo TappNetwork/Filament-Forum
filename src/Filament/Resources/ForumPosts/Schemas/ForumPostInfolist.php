@@ -28,6 +28,13 @@ class ForumPostInfolist
                             ->tooltip(__('filament-forum::filament-forum.forum-post.toggle-favorite'))
                             ->icon(fn (ForumPost $record) => $record->isFavorite() ? 'heroicon-s-star' : 'heroicon-o-star')
                             ->action(fn (ForumPost $record) => $record->toggleFavorite()),
+                        Action::make('subscription')
+                            ->iconButton()
+                            ->tooltip(fn (ForumPost $record) => $record->isSubscribed()
+                                ? __('filament-forum::filament-forum.forum-post.unsubscribe')
+                                : __('filament-forum::filament-forum.forum-post.subscribe'))
+                            ->icon(fn (ForumPost $record) => $record->isSubscribed() ? 'heroicon-s-bell' : 'heroicon-o-bell')
+                            ->action(fn (ForumPost $record) => $record->toggleSubscription()),
                         Action::make('share')
                             ->icon('heroicon-o-share')
                             ->action(function ($livewire) {

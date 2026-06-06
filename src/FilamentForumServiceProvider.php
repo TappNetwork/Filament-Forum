@@ -34,6 +34,8 @@ class FilamentForumServiceProvider extends PackageServiceProvider
                 'create_forum_user_table',
                 'create_forum_posts_table',
                 'create_favorite_forum_post_table',
+                'create_forum_subscriptions_table',
+                'create_forum_post_subscriptions_table',
                 'create_forum_post_views_table',
                 'create_forum_comments_table',
                 'create_forum_comment_reactions_table',

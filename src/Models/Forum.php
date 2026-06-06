@@ -16,10 +16,12 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Tapp\FilamentForum\Database\Factories\ForumFactory;
 use Tapp\FilamentForum\Models\Traits\BelongsToTenant;
+use Tapp\FilamentForum\Models\Traits\CanSubscribeToForum;
 
 class Forum extends Model implements HasMedia
 {
     use BelongsToTenant;
+    use CanSubscribeToForum;
 
     /** @use HasFactory<ForumFactory> */
     use HasFactory;
