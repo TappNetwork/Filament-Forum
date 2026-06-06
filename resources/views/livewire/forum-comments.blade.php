@@ -113,10 +113,14 @@
                                 @endif
                             </div>
                             
-                            {{-- Edit/Delete Actions --}}
+                            {{-- Report/Edit/Delete Actions --}}
                             @auth
-                                @if($comment->isAuthor(Auth::user()))
-                                    <div class="flex items-center space-x-1">
+                                <div class="flex items-center space-x-1">
+                                    @unless($comment->isAuthor(Auth::user()))
+                                        {{ ($this->reportCommentAction)(['commentId' => $comment->id]) }}
+                                    @endunless
+
+                                    @if($comment->isAuthor(Auth::user()))
                                         @if($editingCommentId !== $comment->id)
                                             <button
                                                 wire:click="editComment({{ $comment->id }})"
@@ -128,8 +132,8 @@
                                             
                                             {{ ($this->deleteCommentAction)(['commentId' => $comment->id]) }}
                                         @endif
-                                    </div>
-                                @endif
+                                    @endif
+                                </div>
                             @endauth
                         </div>
                     </div>

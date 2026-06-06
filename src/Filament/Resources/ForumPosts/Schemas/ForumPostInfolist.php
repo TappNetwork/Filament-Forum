@@ -8,6 +8,7 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Tapp\FilamentForum\Filament\Actions\ReportForumContentAction;
 use Tapp\FilamentForum\Filament\Infolists\Components\ForumCommentsEntry;
 use Tapp\FilamentForum\Filament\Infolists\Components\ForumPostReactionsEntry;
 use Tapp\FilamentForum\Models\ForumPost;
@@ -60,6 +61,7 @@ class ForumPostInfolist
                                     }'
                                 );
                             }),
+                        ReportForumContentAction::make(),
                     ])
                     ->schema([
                         Grid::make([

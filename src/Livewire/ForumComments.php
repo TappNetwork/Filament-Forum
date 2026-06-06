@@ -17,6 +17,7 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use Tapp\FilamentForum\Events\ForumCommentCreated;
 use Tapp\FilamentForum\Events\UserWasMentioned;
+use Tapp\FilamentForum\Filament\Actions\ReportForumContentAction;
 use Tapp\FilamentForum\Models\ForumComment;
 use Tapp\FilamentForum\Models\ForumPost;
 
@@ -283,6 +284,43 @@ class ForumComments extends Component implements HasActions, HasSchemas
 
                 Notification::make()
                     ->title(__('filament-forum::filament-forum.comments.deleted'))
+                    ->success()
+                    ->send();
+            });
+    }
+
+    public function reportCommentAction(): Action
+    {
+        return ReportForumContentAction::make('reportComment')
+            ->action(function (array $arguments, array $data): void {
+                if (! Auth::check()) {
+                    Notification::make()
+                        ->title(__('filament-forum::filament-forum.reports.login-required'))
+                        ->danger()
+                        ->send();
+
+                    return;
+                }
+
+                $comment = ForumComment::findOrFail($arguments['commentId']);
+
+                if ($comment->hasPendingReportBy(Auth::user())) {
+                    Notification::make()
+                        ->title(__('filament-forum::filament-forum.reports.already-reported'))
+                        ->warning()
+                        ->send();
+
+                    return;
+                }
+
+                $comment->reportContent(
+                    reporter: Auth::user(),
+                    reason: $data['reason'] ?? null,
+                    details: $data['details'] ?? null,
+                );
+
+                Notification::make()
+                    ->title(__('filament-forum::filament-forum.reports.submitted'))
                     ->success()
                     ->send();
             });

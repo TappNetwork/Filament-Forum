@@ -115,6 +115,42 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Reports
+    |--------------------------------------------------------------------------
+    */
+
+    'reports.navigation-label' => 'Content Reports',
+    'reports.label' => 'Content Report',
+    'reports.plural-label' => 'Content Reports',
+    'reports.report' => 'Report',
+    'reports.actions' => 'Report actions',
+    'reports.resolve' => 'Resolve',
+    'reports.dismiss' => 'Dismiss',
+    'reports.reason' => 'Reason',
+    'reports.details' => 'Details',
+    'reports.status' => 'Status',
+    'reports.content' => 'Reported content',
+    'reports.review' => 'Review',
+    'reports.reviewer' => 'Reviewer',
+    'reports.resolution-note' => 'Resolution note',
+    'reports.no-details' => 'No details provided',
+    'reports.no-resolution-note' => 'No resolution note',
+    'reports.not-reviewed' => 'Not reviewed yet',
+    'reports.login-required' => 'You must be logged in to report content',
+    'reports.already-reported' => 'You already reported this content',
+    'reports.submitted' => 'Report submitted',
+    'reports.modal.heading' => 'Report content',
+    'reports.modal.description' => 'Send this to moderators for review.',
+    'reports.modal.submit' => 'Submit report',
+    'reports.status.pending' => 'Pending',
+    'reports.status.resolved' => 'Resolved',
+    'reports.status.dismissed' => 'Dismissed',
+    'reports.table.content-type' => 'Content type',
+    'reports.table.reporter' => 'Reporter',
+    'reports.table.reported-at' => 'Reported',
+
+    /*
+    |--------------------------------------------------------------------------
     | Reactions
     |--------------------------------------------------------------------------
     */
