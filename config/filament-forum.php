@@ -1,5 +1,6 @@
 <?php
 
+use Tapp\FilamentForum\Filament\Resources\Admin\ForumContentReportResource;
 use Tapp\FilamentForum\Filament\Resources\ForumPosts\ForumPostResource;
 use Tapp\FilamentForum\Filament\Resources\Forums\ForumResource;
 
@@ -13,6 +14,7 @@ return [
     'admin-resources' => [
         'adminForumResource' => Tapp\FilamentForum\Filament\Resources\Admin\ForumResource::class,
         'adminForumPostResource' => Tapp\FilamentForum\Filament\Resources\Admin\ForumPostResource::class,
+        'adminForumContentReportResource' => ForumContentReportResource::class,
     ],
 
     'user' => [
@@ -57,6 +59,16 @@ return [
             '😮' => 'Wow',
             '😢' => 'Sad',
             '😡' => 'Angry',
+        ],
+    ],
+
+    'reports' => [
+        'reasons' => [
+            'spam' => 'Spam',
+            'harassment' => 'Harassment',
+            'inappropriate' => 'Inappropriate content',
+            'misinformation' => 'Misinformation',
+            'other' => 'Other',
         ],
     ],
 

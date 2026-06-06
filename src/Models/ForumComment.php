@@ -16,6 +16,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Tapp\FilamentForum\Events\CommentWasReacted;
 use Tapp\FilamentForum\Models\Traits\BelongsToTenant;
+use Tapp\FilamentForum\Models\Traits\CanReportForumContent;
 
 /**
  * @property int $id
@@ -31,6 +32,7 @@ use Tapp\FilamentForum\Models\Traits\BelongsToTenant;
 class ForumComment extends Model implements HasMedia
 {
     use BelongsToTenant;
+    use CanReportForumContent;
     use HasFactory;
     use InteractsWithMedia;
 
