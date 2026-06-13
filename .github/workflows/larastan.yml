@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '**.php'
+      - '.github/workflows/larastan.yml'
       - 'phpstan.neon.dist'
 
 jobs:
@@ -21,7 +22,7 @@ jobs:
           coverage: none
 
       - name: Install composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
             dependency-versions: "highest"
             composer-options: "--no-scripts"
