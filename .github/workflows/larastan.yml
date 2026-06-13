@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '**.php'
+      - '.github/workflows/larastan.yml'
       - 'phpstan.neon.dist'
 
 jobs:
