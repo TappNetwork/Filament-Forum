@@ -4,7 +4,12 @@ All notable changes to `Filament Forum` will be documented in this file.
 
 ## Unreleased
 
-Add reusable forum content reports and moderation review workflow.
+## v2.4.2 - 2026-07-08
+
+### What's Changed
+
+* Fix near-invisible comment count heading on post detail pages
+* Expand post card clickable area using stretched-link pattern so the entire card navigates to the post while keeping favorite and reaction controls interactive
 
 ## v2.1.3 - 2026-04-09
 
