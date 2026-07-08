@@ -82,3 +82,24 @@
 .dark .mention-item .name {
     color: #f9fafb;
 }
+
+.forum-post-card {
+    position: relative;
+}
+
+.forum-post-card__link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.forum-post-card__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.forum-post-card__control {
+    position: relative;
+    z-index: 2;
+}

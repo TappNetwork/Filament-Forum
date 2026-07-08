@@ -2,7 +2,7 @@
     {{-- Comments Header + Collapsible Form --}}
     <div x-data="{ showCommentForm: false }" @comment-created.window="showCommentForm = false">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="text-base font-medium text-gray-100">
+            <h3 class="text-base font-medium text-gray-900 dark:text-gray-100">
                 {{ trans_choice('filament-forum::filament-forum.comments.count', $comments->count(), ['count' => $comments->count()]) }}
             </h3>
             @auth
